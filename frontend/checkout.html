@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - Dhivagar Mart</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header>
+    <div class="nav-container">
+      <a href="index.html" class="brand">🛒 Dhivagar Mart</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li>
+          <a href="cart.html">
+            Cart <span id="cart-badge" class="badge">0</span>
+          </a>
+        </li>
+      </ul>
+      <ul class="nav-links" id="nav-auth-container"></ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1 style="font-size:2rem; font-weight:800; margin-bottom:1.5rem;">Secure Checkout</h1>
+
+    <div style="display:grid; grid-template-columns: 1.5fr 1fr; gap:2.5rem;">
+      <div class="form-card" style="margin:0; max-width:none;">
+        <h2 style="font-size:1.3rem; font-weight:700; margin-bottom:1.2rem;">1. Delivery Address</h2>
+        <form id="checkout-form" onsubmit="handlePlaceOrder(event)">
+          <div class="form-group">
+            <label for="shipping-address">Full Street Address, Apartment, City, Postal Code:</label>
+            <textarea id="shipping-address" class="form-control" rows="3" placeholder="Enter complete delivery destination address..." required></textarea>
+          </div>
+
+          <h2 style="font-size:1.3rem; font-weight:700; margin: 1.5rem 0 0.8rem;">2. Payment Method</h2>
+          <div style="background:#f3f4f6; padding:1rem; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:1.5rem;">
+            <div style="display:flex; align-items:center; gap:0.6rem; font-weight:600;">
+              <span>💳 Instant Mock Payment Gateway</span>
+              <span class="badge" style="background:#10b981;">Simulated Sandbox</span>
+            </div>
+            <p style="font-size:0.85rem; color:#6b7280; margin-top:0.4rem;">
+              Per Capstone scope constraints, no real credit cards are processed. An atomic database transaction will safely verify stock, confirm payment, create the order, and reduce inventory.
+            </p>
+          </div>
+
+          <button type="submit" id="place-order-btn" class="btn btn-primary" style="width:100%; padding:0.85rem; font-size:1.1rem;">
+            Confirm Order & Pay (Mock)
+          </button>
+        </form>
+      </div>
+
+      <div class="form-card" style="margin:0; max-width:none; height:fit-content;" id="checkout-summary">
+        <p style="color:#6b7280;">Loading order details...</p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2026 Dhivagar Mart. Native C++20 Marketplace.</p>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/checkout.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', initCheckout);
+  </script>
+</body>
+</html>

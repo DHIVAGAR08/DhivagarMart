@@ -1,0 +1,14 @@
+{
+  "name": "dhivagarmart",
+  "version-string": "1.0.0",
+  "description": "Dhivagar Mart - Native C++20 Drogon and PostgreSQL Marketplace Backend",
+  "dependencies": [
+    "drogon",
+    "libpqxx",
+    "libsodium",
+    "nlohmann-json",
+    "spdlog",
+    "cpp-httplib",
+    "gtest"
+  ]
+}

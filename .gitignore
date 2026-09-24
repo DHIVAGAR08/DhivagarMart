@@ -1,0 +1,35 @@
+# Build artifacts
+build/
+build_*/
+bin/
+out/
+cmake-build-*/
+.cache/
+vcpkg_installed/
+
+# Environment secrets and credentials
+.env
+config.json
+*.key
+*.pem
+
+# IDE & Editor artifacts
+.vscode/
+.vs/
+*.user
+*.suo
+*.sln
+*.vcxproj*
+.idea/
+*.swp
+*.swo
+
+# Runtime data & logs
+logs/
+*.log
+data/
+
+# OS artifacts
+Thumbs.db
+Desktop.ini
+.DS_Store

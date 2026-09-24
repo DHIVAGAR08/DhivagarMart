@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Dhivagar Mart</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header>
+    <div class="nav-container">
+      <a href="index.html" class="brand">🛒 Dhivagar Mart</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+      </ul>
+      <ul class="nav-links">
+        <li><a href="register.html" class="btn btn-primary btn-sm">Register</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="form-card">
+      <h1 style="font-size:1.8rem; font-weight:800; margin-bottom:0.5rem; text-align:center;">Welcome Back</h1>
+      <p style="text-align:center; color:#6b7280; margin-bottom:1.8rem;">Login to your Dhivagar Mart account</p>
+
+      <div id="login-error" style="display:none; background:#fee2e2; color:#b91c1c; padding:0.7rem; border-radius:6px; margin-bottom:1.2rem; font-size:0.9rem;"></div>
+
+      <form id="login-form" onsubmit="handleLoginSubmit(event)">
+        <div class="form-group">
+          <label for="email">Email Address:</label>
+          <input type="email" id="email" class="form-control" placeholder="name@example.com" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+        </div>
+        <button type="submit" id="login-btn" class="btn btn-primary" style="width:100%; padding:0.75rem; font-size:1rem; margin-top:0.5rem;">
+          Sign In
+        </button>
+      </form>
+
+      <!-- Quick Demo Credentials Selector -->
+      <div style="margin-top:2rem; padding-top:1.5rem; border-top:1px solid var(--border-color);">
+        <p style="font-size:0.85rem; font-weight:700; color:#4b5563; margin-bottom:0.6rem; text-align:center;">
+          ⚡ Quick Demo Credentials:
+        </p>
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.5rem;">
+          <button onclick="fillDemo('buyer@dhivagarmart.com', 'Buyer@123')" class="btn btn-secondary btn-sm" style="font-size:0.75rem;">
+            👤 Buyer
+          </button>
+          <button onclick="fillDemo('seller@dhivagarmart.com', 'Seller@123')" class="btn btn-secondary btn-sm" style="font-size:0.75rem;">
+            🏪 Seller
+          </button>
+          <button onclick="fillDemo('admin@dhivagarmart.com', 'Admin@123')" class="btn btn-secondary btn-sm" style="font-size:0.75rem;">
+            🛡️ Admin
+          </button>
+        </div>
+      </div>
+
+      <p style="text-align:center; font-size:0.9rem; margin-top:1.5rem; color:#6b7280;">
+        Don't have an account? <a href="register.html" style="color:var(--primary); font-weight:600; text-decoration:none;">Register here</a>
+      </p>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2026 Dhivagar Mart. Native C++20 Marketplace.</p>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script>
+    function fillDemo(email, pass) {
+      document.getElementById('email').value = email;
+      document.getElementById('password').value = pass;
+    }
+
+    async function handleLoginSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const errorDiv = document.getElementById('login-error');
+      const submitBtn = document.getElementById('login-btn');
+
+      errorDiv.style.display = 'none';
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Signing in...';
+
+      try {
+        const user = await api.login({ email, password });
+        if (user.role === 'SELLER') {
+          window.location.href = 'seller.html';
+        } else if (user.role === 'ADMIN') {
+          window.location.href = 'admin.html';
+        } else {
+          window.location.href = 'index.html';
+        }
+      } catch (err) {
+        errorDiv.textContent = err.message || 'Invalid email or password';
+        errorDiv.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Sign In';
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - Dhivagar Mart</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header>
+    <div class="nav-container">
+      <a href="index.html" class="brand">🛒 Dhivagar Mart</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+      </ul>
+      <ul class="nav-links">
+        <li><a href="login.html" class="btn btn-secondary btn-sm">Login</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="form-card">
+      <h1 style="font-size:1.8rem; font-weight:800; margin-bottom:0.5rem; text-align:center;">Create an Account</h1>
+      <p style="text-align:center; color:#6b7280; margin-bottom:1.8rem;">Join Dhivagar Mart today</p>
+
+      <div id="register-error" style="display:none; background:#fee2e2; color:#b91c1c; padding:0.7rem; border-radius:6px; margin-bottom:1.2rem; font-size:0.9rem;"></div>
+      <div id="register-success" style="display:none; background:#dcfce7; color:#15803d; padding:0.7rem; border-radius:6px; margin-bottom:1.2rem; font-size:0.9rem;"></div>
+
+      <form id="register-form" onsubmit="handleRegisterSubmit(event)">
+        <div class="form-group">
+          <label for="name">Full Name:</label>
+          <input type="text" id="name" class="form-control" placeholder="John Doe" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address:</label>
+          <input type="email" id="email" class="form-control" placeholder="name@example.com" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Password (min 6 characters):</label>
+          <input type="password" id="password" class="form-control" placeholder="••••••••" required minlength="6">
+        </div>
+        <div class="form-group">
+          <label for="role">Register as:</label>
+          <select id="role" class="form-control" required>
+            <option value="BUYER">🛒 Buyer (Shop fresh groceries)</option>
+            <option value="SELLER">🏪 Seller (Sell products on marketplace)</option>
+          </select>
+        </div>
+        <button type="submit" id="reg-btn" class="btn btn-primary" style="width:100%; padding:0.75rem; font-size:1rem; margin-top:0.5rem;">
+          Create Account
+        </button>
+      </form>
+
+      <p style="text-align:center; font-size:0.9rem; margin-top:1.5rem; color:#6b7280;">
+        Already registered? <a href="login.html" style="color:var(--primary); font-weight:600; text-decoration:none;">Login here</a>
+      </p>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2026 Dhivagar Mart. Native C++20 Marketplace.</p>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script>
+    async function handleRegisterSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const role = document.getElementById('role').value;
+
+      const errorDiv = document.getElementById('register-error');
+      const successDiv = document.getElementById('register-success');
+      const btn = document.getElementById('reg-btn');
+
+      errorDiv.style.display = 'none';
+      successDiv.style.display = 'none';
+      btn.disabled = true;
+      btn.textContent = 'Creating account...';
+
+      try {
+        await api.register({ name, email, password, role });
+        successDiv.textContent = 'Account created successfully! Redirecting to login...';
+        successDiv.style.display = 'block';
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 1500);
+      } catch (err) {
+        errorDiv.textContent = err.message || 'Registration failed';
+        errorDiv.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Create Account';
+      }
+    }
+  </script>
+</body>
+</html>

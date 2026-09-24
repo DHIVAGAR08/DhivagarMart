@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details - Dhivagar Mart</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header>
+    <div class="nav-container">
+      <a href="index.html" class="brand">🛒 Dhivagar Mart</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li>
+          <a href="cart.html">
+            Cart <span id="cart-badge" class="badge">0</span>
+          </a>
+        </li>
+      </ul>
+      <ul class="nav-links" id="nav-auth-container">
+        <li><a href="login.html" class="btn btn-secondary btn-sm">Login</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div id="product-detail-view" style="display:grid; grid-template-columns:1fr 1fr; gap:3rem; margin-bottom:3rem;">
+      <div style="text-align:center; padding: 2rem;">Loading product details...</div>
+    </div>
+
+    <!-- Verified Customer Reviews Section -->
+    <section id="reviews" style="background:white; padding:2rem; border-radius:var(--radius-md); box-shadow:var(--shadow-sm); border:1px solid var(--border-color);">
+      <h2 style="font-size:1.4rem; font-weight:800; margin-bottom:1.5rem;">Customer Reviews & Ratings</h2>
+      
+      <div style="display:grid; grid-template-columns: 1.5fr 1fr; gap:2.5rem;">
+        <div id="reviews-list">
+          <p style="color:#6b7280;">Loading customer reviews...</p>
+        </div>
+
+        <div style="background:#f9fafb; padding:1.5rem; border-radius:var(--radius-md); border:1px solid var(--border-color);">
+          <h3 style="font-size:1.1rem; font-weight:700; margin-bottom:0.8rem;">Write a Review</h3>
+          <p style="font-size:0.85rem; color:#6b7280; margin-bottom:1rem;">
+            Only verified buyers who completed an order containing this product may submit a review.
+          </p>
+          <form id="review-form" onsubmit="handleReviewSubmit(event)">
+            <div class="form-group">
+              <label for="review-rating">Rating (1 to 5 Stars):</label>
+              <select id="review-rating" class="form-control" required>
+                <option value="5">⭐⭐⭐⭐⭐ (5 - Excellent)</option>
+                <option value="4">⭐⭐⭐⭐ (4 - Very Good)</option>
+                <option value="3">⭐⭐⭐ (3 - Average)</option>
+                <option value="2">⭐⭐ (2 - Below Average)</option>
+                <option value="1">⭐ (1 - Poor)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="review-comment">Your Comments:</label>
+              <textarea id="review-comment" class="form-control" rows="4" placeholder="Share your experience with this grocery item..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%;">Submit Verified Review</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Floating AI Assistant -->
+  <button class="chat-launcher" onclick="toggleChat()">💬</button>
+  <div id="chat-panel" class="chat-panel">
+    <div class="chat-header">
+      <h3>🤖 Shopping Assistant</h3>
+      <button onclick="toggleChat()" style="background:transparent; border:none; color:white; font-size:1.2rem; cursor:pointer;">✕</button>
+    </div>
+    <div id="chat-messages" class="chat-messages">
+      <div class="chat-bubble bot">Have questions about this item? Ask me anytime!</div>
+    </div>
+    <div class="chat-input-bar">
+      <input type="text" id="chat-input" placeholder="Ask about this product..." onkeypress="handleChatKeyPress(event)">
+      <button onclick="sendChatMessage()" class="btn btn-primary btn-sm">Send</button>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Dhivagar Mart. Native C++20 Marketplace.</p>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/chat.js"></script>
+  <script>
+    let currentProdId = null;
+
+    async function loadDetails() {
+      const params = new URLSearchParams(window.location.search);
+      currentProdId = params.get('id');
+      if (!currentProdId) {
+        window.location.href = 'products.html';
+        return;
+      }
+
+      try {
+        const prod = await api.getProductById(currentProdId);
+        document.title = `${prod.name} - Dhivagar Mart`;
+
+        document.getElementById('product-detail-view').innerHTML = `
+          <div>
+            <img src="${prod.image_url || 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=800'}" 
+                 alt="${prod.name}" 
+                 style="width:100%; max-height:420px; object-fit:cover; border-radius:var(--radius-lg); box-shadow:var(--shadow-md);">
+          </div>
+          <div style="display:flex; flex-direction:column; justify-content:center;">
+            <div style="font-size:0.85rem; text-transform:uppercase; font-weight:700; color:var(--primary); margin-bottom:0.5rem;">
+              ${prod.category}
+            </div>
+            <h1 style="font-size:2rem; font-weight:800; margin-bottom:0.8rem; letter-spacing:-0.5px;">${prod.name}</h1>
+            <div style="font-size:1.8rem; font-weight:800; color:var(--primary); margin-bottom:1rem;">
+              ${prod.price_formatted}
+            </div>
+            <p style="font-size:1rem; color:#4b5563; line-height:1.6; margin-bottom:1.5rem;">
+              ${prod.description}
+            </p>
+            <div style="margin-bottom:1.5rem;">
+              <span class="badge" style="background:${prod.stock_qty > 0 ? '#10b981' : '#ef4444'}; font-size:0.9rem; padding:0.4rem 0.8rem;">
+                ${prod.stock_qty > 0 ? `In Stock (${prod.stock_qty} available)` : 'Out of Stock'}
+              </span>
+            </div>
+            <div style="display:flex; gap:1rem; align-items:center;">
+              <input type="number" id="detail-qty" min="1" max="${prod.stock_qty}" value="1" 
+                     class="form-control" style="width:80px; text-align:center;">
+              <button onclick="handleAddFromDetails()" class="btn btn-primary" ${prod.stock_qty <= 0 ? 'disabled' : ''} style="flex:1;">
+                🛒 Add to Shopping Cart
+              </button>
+            </div>
+          </div>
+        `;
+
+        loadReviews();
+      } catch (err) {
+        document.getElementById('product-detail-view').innerHTML = `<div style="color:red;">Error loading product: ${err.message}</div>`;
+      }
+    }
+
+    async function loadReviews() {
+      try {
+        const reviews = await api.getProductReviews(currentProdId);
+        const container = document.getElementById('reviews-list');
+        if (reviews.length === 0) {
+          container.innerHTML = '<p style="color:#6b7280;">No customer reviews yet. Be the first verified buyer to share your feedback!</p>';
+          return;
+        }
+
+        container.innerHTML = reviews.map(r => `
+          <div style="border-bottom: 1px solid var(--border-color); padding: 1rem 0;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:0.3rem;">
+              <strong>👤 ${r.user_name}</strong>
+              <span style="color:#f59e0b; font-size:1rem;">${'⭐'.repeat(r.rating)}</span>
+            </div>
+            <p style="color:#374151; font-size:0.95rem; margin-bottom:0.4rem;">${r.comment}</p>
+            <span style="font-size:0.75rem; color:#9ca3af;">Posted: ${r.created_at}</span>
+          </div>
+        `).join('');
+      } catch (err) {
+        document.getElementById('reviews-list').innerHTML = `<p style="color:red;">Failed to load reviews: ${err.message}</p>`;
+      }
+    }
+
+    async function handleAddFromDetails() {
+      const qtyInput = document.getElementById('detail-qty');
+      const qty = parseInt(qtyInput.value, 10) || 1;
+      try {
+        await api.addToCart(currentProdId, qty);
+        updateCartCount();
+        alert('Product added to your cart!');
+      } catch (err) {
+        if (err.status === 401) {
+          alert('Please log in to add items to your cart.');
+          window.location.href = 'login.html';
+        } else {
+          alert('Failed to add item: ' + err.message);
+        }
+      }
+    }
+
+    async function handleReviewSubmit(e) {
+      e.preventDefault();
+      const rating = parseInt(document.getElementById('review-rating').value, 10);
+      const comment = document.getElementById('review-comment').value;
+
+      try {
+        await api.addReview(currentProdId, rating, comment);
+        alert('Thank you! Your verified review has been posted.');
+        document.getElementById('review-form').reset();
+        loadReviews();
+      } catch (err) {
+        if (err.status === 401) {
+          alert('Please log in to submit a review.');
+          window.location.href = 'login.html';
+        } else if (err.status === 403) {
+          alert('Review Authorization: You can only review products that you have purchased in a completed order.');
+        } else {
+          alert('Review error: ' + err.message);
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadDetails);
+  </script>
+</body>
+</html>

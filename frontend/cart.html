@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Cart - Dhivagar Mart</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header>
+    <div class="nav-container">
+      <a href="index.html" class="brand">🛒 Dhivagar Mart</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li>
+          <a href="cart.html" class="active">
+            Cart <span id="cart-badge" class="badge">0</span>
+          </a>
+        </li>
+      </ul>
+      <ul class="nav-links" id="nav-auth-container">
+        <li><a href="login.html" class="btn btn-secondary btn-sm">Login</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1 style="font-size:2rem; font-weight:800; margin-bottom:1.5rem;">Your Shopping Cart</h1>
+    <div id="cart-container">
+      <div style="text-align:center; padding:3rem;">Loading cart items...</div>
+    </div>
+  </main>
+
+  <!-- Floating AI Assistant -->
+  <button class="chat-launcher" onclick="toggleChat()">💬</button>
+  <div id="chat-panel" class="chat-panel">
+    <div class="chat-header">
+      <h3>🤖 Shopping Assistant</h3>
+      <button onclick="toggleChat()" style="background:transparent; border:none; color:white; font-size:1.2rem; cursor:pointer;">✕</button>
+    </div>
+    <div id="chat-messages" class="chat-messages">
+      <div class="chat-bubble bot">Need help checking out or questions about your order total? Ask me!</div>
+    </div>
+    <div class="chat-input-bar">
+      <input type="text" id="chat-input" placeholder="Ask a question..." onkeypress="handleChatKeyPress(event)">
+      <button onclick="sendChatMessage()" class="btn btn-primary btn-sm">Send</button>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Dhivagar Mart. Native C++20 Marketplace.</p>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/chat.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', loadCartPage);
+  </script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products Catalog - Dhivagar Mart</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header>
+    <div class="nav-container">
+      <a href="index.html" class="brand">🛒 Dhivagar Mart</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="products.html" class="active">Products</a></li>
+        <li>
+          <a href="cart.html">
+            Cart <span id="cart-badge" class="badge">0</span>
+          </a>
+        </li>
+      </ul>
+      <ul class="nav-links" id="nav-auth-container">
+        <li><a href="login.html" class="btn btn-secondary btn-sm">Login</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem;">
+      <h1 style="font-size:1.8rem; font-weight:800;">Grocery Catalog</h1>
+      <form class="search-box" style="max-width:350px; margin:0;" onsubmit="handleSearch(event)">
+        <input type="text" id="search-input" placeholder="Search products...">
+        <button type="submit" class="btn btn-primary btn-sm">Search</button>
+      </form>
+    </div>
+
+    <!-- Category Filter Chips -->
+    <div class="categories-bar">
+      <button class="category-chip active" onclick="filterCategory('All', this)">All</button>
+      <button class="category-chip" onclick="filterCategory('Fruits', this)">Fruits</button>
+      <button class="category-chip" onclick="filterCategory('Dairy', this)">Dairy</button>
+      <button class="category-chip" onclick="filterCategory('Rice & Grains', this)">Rice & Grains</button>
+      <button class="category-chip" onclick="filterCategory('Vegetables', this)">Vegetables</button>
+      <button class="category-chip" onclick="filterCategory('Snacks', this)">Snacks</button>
+      <button class="category-chip" onclick="filterCategory('Beverages', this)">Beverages</button>
+    </div>
+
+    <div id="products-grid" class="product-grid"></div>
+  </main>
+
+  <!-- Floating AI Assistant -->
+  <button class="chat-launcher" onclick="toggleChat()">💬</button>
+  <div id="chat-panel" class="chat-panel">
+    <div class="chat-header">
+      <h3>🤖 Shopping Assistant</h3>
+      <button onclick="toggleChat()" style="background:transparent; border:none; color:white; font-size:1.2rem; cursor:pointer;">✕</button>
+    </div>
+    <div id="chat-messages" class="chat-messages">
+      <div class="chat-bubble bot">How can I assist you with your grocery shopping today?</div>
+    </div>
+    <div class="chat-input-bar">
+      <input type="text" id="chat-input" placeholder="Ask a question..." onkeypress="handleChatKeyPress(event)">
+      <button onclick="sendChatMessage()" class="btn btn-primary btn-sm">Send</button>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Dhivagar Mart. Native C++20 Marketplace.</p>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/chat.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const cat = urlParams.get('category') || 'All';
+      const search = urlParams.get('search') || '';
+      
+      const searchInput = document.getElementById('search-input');
+      if (searchInput && search) searchInput.value = search;
+
+      document.querySelectorAll('.category-chip').forEach(el => {
+        if (el.textContent.trim().toLowerCase() === cat.toLowerCase()) {
+          el.classList.add('active');
+        } else if (cat !== 'All') {
+          el.classList.remove('active');
+        }
+      });
+
+      loadProducts(cat, search);
+    });
+  </script>
+</body>
+</html>
