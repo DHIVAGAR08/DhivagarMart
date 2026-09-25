@@ -49,6 +49,7 @@ int main() {
         drogon::app()
             .addListener(host, port)
             .setDocumentRoot("frontend")
+            .setHomePage("index.html")
             .enableSession(session_timeout)
             .setServerHeaderField("DhivagarMart/1.0.0");
 
@@ -57,7 +58,7 @@ int main() {
             "/",
             [](const drogon::HttpRequestPtr &,
                std::function<void(const drogon::HttpResponsePtr &)> &&callback) {
-                auto resp = drogon::HttpResponse::newHttpViewResponse("index.html");
+                auto resp = drogon::HttpResponse::newFileResponse("frontend/index.html");
                 callback(resp);
             },
             {drogon::Get}
