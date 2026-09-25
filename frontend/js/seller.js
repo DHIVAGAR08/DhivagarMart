@@ -136,7 +136,7 @@ async function handleUpdateStatus(orderId, status) {
 
 function openAddModal() {
   document.getElementById('product-modal-id').value = '';
-  document.getElementById('product-modal-title').textContent = 'Add New Grocery Product';
+  document.getElementById('product-modal-title').textContent = 'Add New Tech Product';
   document.getElementById('product-form').reset();
   document.getElementById('product-modal').style.display = 'flex';
 }

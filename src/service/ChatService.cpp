@@ -20,19 +20,37 @@ std::string MockChatProvider::GetReply(const std::string& user_message, const st
     std::transform(msg.begin(), msg.end(), msg.begin(), ::tolower);
 
     if (msg.find("hello") != std::string::npos || msg.find("hi") != std::string::npos || msg.find("hey") != std::string::npos) {
-        return "Hello! Welcome to Dhivagar Mart. How can I help you find fresh groceries today?";
+        return "Hello! Welcome to Dhivagar Mart. How can I help you find smartphones, laptops, electronics, and tech accessories today?";
     }
-    if (msg.find("fruit") != std::string::npos || msg.find("apple") != std::string::npos || msg.find("mango") != std::string::npos || msg.find("banana") != std::string::npos) {
-        return "We offer premium fresh fruits! For example: Organic Gala Apples ($3.99/kg), Cavendish Bananas ($1.99/bunch), and Alphonso Mangoes ($8.99/box). Check out the Fruits category in our catalog!";
+    if (msg.find("mobile") != std::string::npos || msg.find("phone") != std::string::npos || msg.find("samsung") != std::string::npos || msg.find("iphone") != std::string::npos || msg.find("oneplus") != std::string::npos || msg.find("redmi") != std::string::npos) {
+        return "We offer flagship smartphones including Samsung Galaxy S24 Ultra 5G, Apple iPhone 15 Pro Max, OnePlus 12 5G, and Redmi Note 13 Pro+. Explore the Mobiles category in our catalog!";
     }
-    if (msg.find("milk") != std::string::npos || msg.find("dairy") != std::string::npos || msg.find("butter") != std::string::npos || msg.find("yogurt") != std::string::npos) {
-        return "Our Dairy section includes Farm Fresh Whole Milk ($4.49/gallon), Organic Salted Butter ($5.29/500g), and Authentic Greek Yogurt ($5.99).";
+    if (msg.find("laptop") != std::string::npos || msg.find("dell") != std::string::npos || msg.find("hp") != std::string::npos || msg.find("lenovo") != std::string::npos || msg.find("asus") != std::string::npos || msg.find("acer") != std::string::npos) {
+        return "Our Laptops category features top models: Dell Inspiron 15, HP Pavilion 15, Lenovo IdeaPad Slim 3, ASUS Vivobook 16X, and Acer Aspire 5.";
     }
-    if (msg.find("rice") != std::string::npos || msg.find("grain") != std::string::npos || msg.find("flour") != std::string::npos || msg.find("atta") != std::string::npos) {
-        return "We stock Royal Aged Basmati Rice 5kg ($14.99), 100% Whole Wheat Atta 5kg ($9.49), and Organic Tri-Color Quinoa ($7.99).";
+    if (msg.find("electrical") != std::string::npos || msg.find("tv") != std::string::npos || msg.find("kettle") != std::string::npos || msg.find("fan") != std::string::npos || msg.find("ac") != std::string::npos || msg.find("air conditioner") != std::string::npos) {
+        return "In Electrical appliances, we offer 55-inch 4K Smart TVs, 1.5 Ton Inverter ACs, Fast-Boil Kettles, Silent BLDC Ceiling Fans, and 750W Mixer Grinders.";
+    }
+    if (msg.find("audio") != std::string::npos || msg.find("headphone") != std::string::npos || msg.find("earbud") != std::string::npos || msg.find("speaker") != std::string::npos || msg.find("soundbar") != std::string::npos) {
+        return "Explore high-fidelity Audio gear including ANC Wireless Earbuds, Studio Headphones, 20W Waterproof Bluetooth Speakers, and 160W Dolby Soundbars.";
+    }
+    if (msg.find("watch") != std::string::npos || msg.find("smart watch") != std::string::npos || msg.find("fitness") != std::string::npos) {
+        return "Track your fitness with Smart Watches including Waterproof GPS Fitness Watches, Bluetooth Calling Smartwatches, and Luxury AMOLED Smart Watches.";
+    }
+    if (msg.find("gaming") != std::string::npos || msg.find("keyboard") != std::string::npos || msg.find("mouse") != std::string::npos || msg.find("controller") != std::string::npos) {
+        return "Level up with Gaming gear: 16000 DPI Optical Gaming Mouse, TKL Mechanical RGB Keyboard, Vibration Game Controller, and 7.1 Surround Gaming Headsets.";
+    }
+    if (msg.find("camera") != std::string::npos || msg.find("webcam") != std::string::npos) {
+        return "Capture every moment with 4K Mirrorless Cameras, 4K 60FPS Action Cams, and 1080P HD Streaming Webcams.";
+    }
+    if (msg.find("accessory") != std::string::npos || msg.find("accessories") != std::string::npos || msg.find("cable") != std::string::npos || msg.find("power bank") != std::string::npos || msg.find("backpack") != std::string::npos) {
+        return "Check out Tech Accessories: 100W Fast Charging Braided USB-C Cables, 20000mAh Power Banks, Ergonomic Wireless Mice, and Padded Laptop Backpacks.";
+    }
+    if (msg.find("fruit") != std::string::npos || msg.find("grocery") != std::string::npos || msg.find("dairy") != std::string::npos || msg.find("rice") != std::string::npos) {
+        return "Dhivagar Mart has upgraded to a modern Electronics & Technology marketplace! We now offer Mobiles, Laptops, Electrical appliances, Audio, Smart Watches, Gaming, Cameras, and Accessories.";
     }
     if (msg.find("delivery") != std::string::npos || msg.find("ship") != std::string::npos || msg.find("time") != std::string::npos) {
-        return "Orders placed on Dhivagar Mart are packed fresh and typically delivered within 2 hours or same-day standard delivery!";
+        return "Orders placed on Dhivagar Mart are processed promptly and shipped with expedited express tech delivery!";
     }
     if (msg.find("order") != std::string::npos || msg.find("buy") != std::string::npos || msg.find("checkout") != std::string::npos) {
         return "To place an order: Browse products, add desired items to your cart, proceed to Checkout, enter your delivery address, and confirm your mock payment!";
@@ -41,7 +59,7 @@ std::string MockChatProvider::GetReply(const std::string& user_message, const st
         return "We currently support mock payment confirmation for instant, hassle-free checkout demonstrations.";
     }
     if (msg.find("seller") != std::string::npos || msg.find("sell") != std::string::npos) {
-        return "Interested in selling on Dhivagar Mart? Register an account with the 'SELLER' role to list and manage your own grocery products and view incoming orders!";
+        return "Interested in selling tech on Dhivagar Mart? Register an account with the 'SELLER' role to list and manage your electronics catalog and view incoming orders!";
     }
     if (msg.find("track") != std::string::npos || msg.find("status") != std::string::npos) {
         return "You can track your orders by navigating to 'My Orders' in the top menu to view real-time status: PENDING, CONFIRMED, SHIPPED, or DELIVERED.";
@@ -50,7 +68,7 @@ std::string MockChatProvider::GetReply(const std::string& user_message, const st
         return "Verified buyers can submit a 1 to 5 star rating and comment on any product they have purchased from their order history.";
     }
 
-    return "I am Dhivagar Mart's shopping assistant. You can ask me about our fresh fruits, dairy, rice, vegetables, snacks, prices, placing orders, delivery, or becoming a seller!";
+    return "I am Dhivagar Mart's technology shopping assistant. You can ask me about mobiles, laptops, electrical appliances, audio, smart watches, gaming gear, cameras, accessories, prices, placing orders, or becoming a seller!";
 }
 
 // -------------------------------------------------------------

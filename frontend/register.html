@@ -3,74 +3,110 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Register - Dhivagar Mart</title>
+  <title>Create Account - Dhivagar Mart | Electronics & Technology</title>
   <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.skipAutoAuthCheck = true;
+  </script>
 </head>
-<body>
+<body style="background: radial-gradient(circle at top right, #1e293b 0%, #0f172a 100%); min-height: 100vh;">
 
-  <header>
+  <!-- Header -->
+  <header style="background: rgba(15, 23, 42, 0.85); border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
     <div class="nav-container">
-      <a href="index.html" class="brand">🛒 Dhivagar Mart</a>
+      <a href="login.html" class="brand" style="color: white;">
+        <span class="logo-icon">⚡</span>
+        <span>Dhivagar <span class="brand-tech" style="color: #38bdf8;">Mart</span></span>
+      </a>
       <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="products.html">Products</a></li>
-      </ul>
-      <ul class="nav-links">
-        <li><a href="login.html" class="btn btn-secondary btn-sm">Login</a></li>
+        <li>
+          <a href="login.html" class="btn btn-secondary btn-sm" style="border-radius:9999px;">
+            Sign In
+          </a>
+        </li>
       </ul>
     </div>
   </header>
 
-  <main class="container">
-    <div class="form-card">
-      <h1 style="font-size:1.8rem; font-weight:800; margin-bottom:0.5rem; text-align:center;">Create an Account</h1>
-      <p style="text-align:center; color:#6b7280; margin-bottom:1.8rem;">Join Dhivagar Mart today</p>
+  <!-- Register Form Container -->
+  <main class="auth-wrapper">
+    <div class="form-card" style="box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border: 1px solid rgba(226, 232, 240, 0.8); max-width: 500px;">
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <div style="width: 52px; height: 52px; background: var(--accent-light); color: var(--accent-hover); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 0.8rem;">
+          🚀
+        </div>
+        <h1 style="font-size: 1.85rem; font-weight: 800; color: var(--secondary); letter-spacing: -0.5px;">Create Your Account</h1>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.25rem;">
+          Join the Dhivagar Mart technology community
+        </p>
+      </div>
 
-      <div id="register-error" style="display:none; background:#fee2e2; color:#b91c1c; padding:0.7rem; border-radius:6px; margin-bottom:1.2rem; font-size:0.9rem;"></div>
-      <div id="register-success" style="display:none; background:#dcfce7; color:#15803d; padding:0.7rem; border-radius:6px; margin-bottom:1.2rem; font-size:0.9rem;"></div>
+      <!-- Alerts -->
+      <div id="register-error" style="display: none; background: var(--danger-light); color: var(--danger); padding: 0.75rem 1rem; border-radius: var(--radius-md); margin-bottom: 1.25rem; font-size: 0.9rem; border: 1px solid #fecaca; font-weight: 500;"></div>
+      <div id="register-success" style="display: none; background: var(--success-light); color: #065f46; padding: 0.85rem 1rem; border-radius: var(--radius-md); margin-bottom: 1.25rem; font-size: 0.92rem; border: 1px solid #a7f3d0; font-weight: 600;"></div>
 
       <form id="register-form" onsubmit="handleRegisterSubmit(event)">
         <div class="form-group">
-          <label for="name">Full Name:</label>
-          <input type="text" id="name" class="form-control" placeholder="John Doe" required>
+          <label for="name">Full Name</label>
+          <input type="text" id="name" class="form-control" placeholder="e.g. Alex Rivera" required autocomplete="name">
         </div>
+
         <div class="form-group">
-          <label for="email">Email Address:</label>
-          <input type="email" id="email" class="form-control" placeholder="name@example.com" required>
+          <label for="email">Email Address</label>
+          <input type="email" id="email" class="form-control" placeholder="e.g. alex@example.com" required autocomplete="email">
         </div>
-        <div class="form-group">
-          <label for="password">Password (min 6 characters):</label>
-          <input type="password" id="password" class="form-control" placeholder="••••••••" required minlength="6">
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" class="form-control" placeholder="Min. 6 chars" required minlength="6" autocomplete="new-password">
+          </div>
+          <div class="form-group">
+            <label for="confirm-password">Confirm Password</label>
+            <input type="password" id="confirm-password" class="form-control" placeholder="Re-enter password" required minlength="6" autocomplete="new-password">
+          </div>
         </div>
+
+        <!-- Role Selection strictly BUYER and SELLER only -->
         <div class="form-group">
-          <label for="role">Register as:</label>
-          <select id="role" class="form-control" required>
-            <option value="BUYER">🛒 Buyer (Shop fresh groceries)</option>
-            <option value="SELLER">🏪 Seller (Sell products on marketplace)</option>
+          <label for="role">Account Type</label>
+          <select id="role" class="form-control" required style="font-weight: 600;">
+            <option value="BUYER">🛒 Tech Buyer (Shop devices, components & gadgets)</option>
+            <option value="SELLER">🏪 Electronics Seller (List & sell tech products)</option>
           </select>
+          <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.35rem;">
+            * Administrative roles are strictly provisioned by internal system administrators.
+          </p>
         </div>
-        <button type="submit" id="reg-btn" class="btn btn-primary" style="width:100%; padding:0.75rem; font-size:1rem; margin-top:0.5rem;">
+
+        <button type="submit" id="reg-btn" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 0.5rem;">
           Create Account
         </button>
       </form>
 
-      <p style="text-align:center; font-size:0.9rem; margin-top:1.5rem; color:#6b7280;">
-        Already registered? <a href="login.html" style="color:var(--primary); font-weight:600; text-decoration:none;">Login here</a>
-      </p>
+      <!-- Return to Login Link -->
+      <div style="text-align: center; margin-top: 1.75rem; padding-top: 1.25rem; border-top: 1px solid var(--border-color); font-size: 0.92rem; color: var(--text-muted);">
+        Already have an account?
+        <a href="login.html" style="color: var(--primary); font-weight: 700; text-decoration: none; margin-left: 0.35rem;">
+          Sign in here
+        </a>
+      </div>
     </div>
   </main>
 
   <footer>
-    <p>© 2026 Dhivagar Mart. Native C++20 Marketplace.</p>
+    <p>© 2026 Dhivagar Mart. Native C++20 Drogon Marketplace.</p>
   </footer>
 
   <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
   <script>
     async function handleRegisterSubmit(e) {
       e.preventDefault();
       const name = document.getElementById('name').value.trim();
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
       const role = document.getElementById('role').value;
 
       const errorDiv = document.getElementById('register-error');
@@ -79,18 +115,26 @@
 
       errorDiv.style.display = 'none';
       successDiv.style.display = 'none';
+
+      // Validate password confirmation
+      if (password !== confirmPassword) {
+        errorDiv.textContent = 'Passwords do not match. Please ensure both passwords match.';
+        errorDiv.style.display = 'block';
+        return;
+      }
+
       btn.disabled = true;
       btn.textContent = 'Creating account...';
 
       try {
         await api.register({ name, email, password, role });
-        successDiv.textContent = 'Account created successfully! Redirecting to login...';
+        successDiv.textContent = 'Registration successful! Redirecting to login...';
         successDiv.style.display = 'block';
         setTimeout(() => {
           window.location.href = 'login.html';
-        }, 1500);
+        }, 1200);
       } catch (err) {
-        errorDiv.textContent = err.message || 'Registration failed';
+        errorDiv.textContent = err.message || 'Registration failed. Please check your information.';
         errorDiv.style.display = 'block';
         btn.disabled = false;
         btn.textContent = 'Create Account';

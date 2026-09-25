@@ -5,18 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Checkout - Dhivagar Mart</title>
   <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.skipAutoAuthCheck = true;
+  </script>
 </head>
 <body>
 
+  <!-- Top Navigation -->
   <header>
     <div class="nav-container">
-      <a href="index.html" class="brand">🛒 Dhivagar Mart</a>
+      <a href="index.html" class="brand">
+        <span class="logo-icon">⚡</span>
+        <span>Dhivagar <span class="brand-tech">Mart</span></span>
+      </a>
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
-        <li><a href="products.html">Products</a></li>
+        <li><a href="products.html">All Products</a></li>
         <li>
           <a href="cart.html">
-            Cart <span id="cart-badge" class="badge">0</span>
+            🛒 Cart <span id="cart-badge" class="badge">0</span>
           </a>
         </li>
       </ul>
@@ -25,49 +32,65 @@
   </header>
 
   <main class="container">
-    <h1 style="font-size:2rem; font-weight:800; margin-bottom:1.5rem;">Secure Checkout</h1>
+    <div style="margin-bottom:2rem;">
+      <h1 style="font-size:2rem; font-weight:800; color:var(--secondary); letter-spacing:-0.5px;">
+        ⚡ Instant Express Checkout
+      </h1>
+      <p style="color:var(--text-muted); font-size:0.95rem;">
+        Complete your order with ACID-compliant transaction safety
+      </p>
+    </div>
 
     <div style="display:grid; grid-template-columns: 1.5fr 1fr; gap:2.5rem;">
-      <div class="form-card" style="margin:0; max-width:none;">
-        <h2 style="font-size:1.3rem; font-weight:700; margin-bottom:1.2rem;">1. Delivery Address</h2>
+      <div class="form-card" style="margin:0; max-width:none; box-shadow:var(--shadow-md);">
+        <h2 style="font-size:1.3rem; font-weight:700; margin-bottom:1.2rem; color:var(--secondary);">
+          1. Express Delivery Address
+        </h2>
         <form id="checkout-form" onsubmit="handlePlaceOrder(event)">
           <div class="form-group">
-            <label for="shipping-address">Full Street Address, Apartment, City, Postal Code:</label>
-            <textarea id="shipping-address" class="form-control" rows="3" placeholder="Enter complete delivery destination address..." required></textarea>
+            <label for="shipping-address">Delivery Destination (Street, Building, City, PIN/ZIP):</label>
+            <textarea id="shipping-address" class="form-control" rows="3" placeholder="Enter complete hardware delivery address..." required></textarea>
           </div>
 
-          <h2 style="font-size:1.3rem; font-weight:700; margin: 1.5rem 0 0.8rem;">2. Payment Method</h2>
-          <div style="background:#f3f4f6; padding:1rem; border-radius:var(--radius-sm); border:1px solid var(--border-color); margin-bottom:1.5rem;">
-            <div style="display:flex; align-items:center; gap:0.6rem; font-weight:600;">
+          <h2 style="font-size:1.3rem; font-weight:700; margin: 1.75rem 0 0.8rem; color:var(--secondary);">
+            2. Payment Method
+          </h2>
+          <div style="background:var(--bg-subtle); padding:1.25rem; border-radius:var(--radius-md); border:1px solid var(--border-color); margin-bottom:1.5rem;">
+            <div style="display:flex; align-items:center; gap:0.6rem; font-weight:700; color:var(--secondary);">
               <span>💳 Instant Mock Payment Gateway</span>
               <span class="badge" style="background:#10b981;">Simulated Sandbox</span>
             </div>
-            <p style="font-size:0.85rem; color:#6b7280; margin-top:0.4rem;">
-              Per Capstone scope constraints, no real credit cards are processed. An atomic database transaction will safely verify stock, confirm payment, create the order, and reduce inventory.
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.5rem; line-height:1.5;">
+              Native C++20 transactional engine guarantees atomic stock reduction, order creation, and mock payment settlement.
             </p>
           </div>
 
-          <button type="submit" id="place-order-btn" class="btn btn-primary" style="width:100%; padding:0.85rem; font-size:1.1rem;">
+          <button type="submit" id="place-order-btn" class="btn btn-primary btn-lg" style="width:100%; font-weight:700;">
             Confirm Order & Pay (Mock)
           </button>
         </form>
       </div>
 
-      <div class="form-card" style="margin:0; max-width:none; height:fit-content;" id="checkout-summary">
-        <p style="color:#6b7280;">Loading order details...</p>
+      <div class="form-card" style="margin:0; max-width:none; height:fit-content; box-shadow:var(--shadow-md);" id="checkout-summary">
+        <p style="color:var(--text-muted);">Calculating hardware summary...</p>
       </div>
     </div>
   </main>
 
   <footer>
-    <p>© 2026 Dhivagar Mart. Native C++20 Marketplace.</p>
+    <p>© 2026 Dhivagar Mart. Native C++20 Drogon Marketplace.</p>
   </footer>
 
   <script src="js/api.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/checkout.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', initCheckout);
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = await requireAuth();
+      if (user) {
+        initCheckout();
+      }
+    });
   </script>
 </body>
 </html>

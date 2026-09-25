@@ -3,23 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Products Catalog - Dhivagar Mart</title>
+  <title>Electronics Catalog - Dhivagar Mart</title>
   <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.skipAutoAuthCheck = true;
+  </script>
 </head>
 <body>
 
+  <!-- Top Navigation -->
   <header>
     <div class="nav-container">
-      <a href="index.html" class="brand">🛒 Dhivagar Mart</a>
+      <a href="index.html" class="brand">
+        <span class="logo-icon">⚡</span>
+        <span>Dhivagar <span class="brand-tech">Mart</span></span>
+      </a>
+
+      <!-- Header Search Bar -->
+      <form class="nav-search-bar" onsubmit="handleSearch(event)">
+        <input type="text" id="nav-search-input" placeholder="Search products, models, keywords (e.g. 5G, OLED, 16GB)...">
+        <button type="submit">Search</button>
+      </form>
+
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
-        <li><a href="products.html" class="active">Products</a></li>
+        <li><a href="products.html" class="active">All Products</a></li>
         <li>
           <a href="cart.html">
-            Cart <span id="cart-badge" class="badge">0</span>
+            🛒 Cart <span id="cart-badge" class="badge">0</span>
           </a>
         </li>
       </ul>
+
       <ul class="nav-links" id="nav-auth-container">
         <li><a href="login.html" class="btn btn-secondary btn-sm">Login</a></li>
       </ul>
@@ -28,45 +43,50 @@
 
   <main class="container">
     <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem;">
-      <h1 style="font-size:1.8rem; font-weight:800;">Grocery Catalog</h1>
-      <form class="search-box" style="max-width:350px; margin:0;" onsubmit="handleSearch(event)">
-        <input type="text" id="search-input" placeholder="Search products...">
-        <button type="submit" class="btn btn-primary btn-sm">Search</button>
-      </form>
+      <div>
+        <h1 style="font-size:2rem; font-weight:800; color:var(--secondary); letter-spacing:-0.5px;">
+          Electronics & Technology Catalog
+        </h1>
+        <p style="color:var(--text-muted); font-size:0.95rem;">
+          Explore smartphones, ultrabooks, audio devices, and smart accessories
+        </p>
+      </div>
     </div>
 
-    <!-- Category Filter Chips -->
+    <!-- Category Filter Chips (8 Categories) -->
     <div class="categories-bar">
-      <button class="category-chip active" onclick="filterCategory('All', this)">All</button>
-      <button class="category-chip" onclick="filterCategory('Fruits', this)">Fruits</button>
-      <button class="category-chip" onclick="filterCategory('Dairy', this)">Dairy</button>
-      <button class="category-chip" onclick="filterCategory('Rice & Grains', this)">Rice & Grains</button>
-      <button class="category-chip" onclick="filterCategory('Vegetables', this)">Vegetables</button>
-      <button class="category-chip" onclick="filterCategory('Snacks', this)">Snacks</button>
-      <button class="category-chip" onclick="filterCategory('Beverages', this)">Beverages</button>
+      <button class="category-chip active" onclick="filterCategory('All', this)">All Hardware</button>
+      <button class="category-chip" onclick="filterCategory('Mobiles', this)">📱 Mobiles</button>
+      <button class="category-chip" onclick="filterCategory('Laptops', this)">💻 Laptops</button>
+      <button class="category-chip" onclick="filterCategory('Electrical', this)">⚡ Electrical</button>
+      <button class="category-chip" onclick="filterCategory('Audio', this)">🎧 Audio</button>
+      <button class="category-chip" onclick="filterCategory('Smart Watches', this)">⌚ Smart Watches</button>
+      <button class="category-chip" onclick="filterCategory('Gaming', this)">🎮 Gaming</button>
+      <button class="category-chip" onclick="filterCategory('Cameras', this)">📷 Cameras</button>
+      <button class="category-chip" onclick="filterCategory('Accessories', this)">🔌 Accessories</button>
     </div>
 
     <div id="products-grid" class="product-grid"></div>
   </main>
 
   <!-- Floating AI Assistant -->
-  <button class="chat-launcher" onclick="toggleChat()">💬</button>
+  <button class="chat-launcher" onclick="toggleChat()" title="Ask Dhivagar Mart Tech Assistant">🤖</button>
   <div id="chat-panel" class="chat-panel">
     <div class="chat-header">
-      <h3>🤖 Shopping Assistant</h3>
+      <h3>⚡ Tech Shopping Assistant</h3>
       <button onclick="toggleChat()" style="background:transparent; border:none; color:white; font-size:1.2rem; cursor:pointer;">✕</button>
     </div>
     <div id="chat-messages" class="chat-messages">
-      <div class="chat-bubble bot">How can I assist you with your grocery shopping today?</div>
+      <div class="chat-bubble bot">Need technical recommendations or help comparing products? Just ask!</div>
     </div>
     <div class="chat-input-bar">
-      <input type="text" id="chat-input" placeholder="Ask a question..." onkeypress="handleChatKeyPress(event)">
+      <input type="text" id="chat-input" placeholder="Ask about tech specs..." onkeypress="handleChatKeyPress(event)">
       <button onclick="sendChatMessage()" class="btn btn-primary btn-sm">Send</button>
     </div>
   </div>
 
   <footer>
-    <p>© 2026 Dhivagar Mart. Native C++20 Marketplace.</p>
+    <p>© 2026 Dhivagar Mart. Native C++20 Drogon Marketplace.</p>
   </footer>
 
   <script src="js/api.js"></script>
@@ -74,16 +94,20 @@
   <script src="js/products.js"></script>
   <script src="js/chat.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = await requireAuth();
+      if (!user) return;
+
       const urlParams = new URLSearchParams(window.location.search);
       const cat = urlParams.get('category') || 'All';
       const search = urlParams.get('search') || '';
       
-      const searchInput = document.getElementById('search-input');
+      const searchInput = document.getElementById('nav-search-input');
       if (searchInput && search) searchInput.value = search;
 
       document.querySelectorAll('.category-chip').forEach(el => {
-        if (el.textContent.trim().toLowerCase() === cat.toLowerCase()) {
+        const text = el.textContent.replace(/[^a-zA-Z &]/g, '').trim().toLowerCase();
+        if (text === cat.toLowerCase()) {
           el.classList.add('active');
         } else if (cat !== 'All') {
           el.classList.remove('active');

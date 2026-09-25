@@ -5,18 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Orders - Dhivagar Mart</title>
   <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.skipAutoAuthCheck = true;
+  </script>
 </head>
 <body>
 
+  <!-- Top Navigation -->
   <header>
     <div class="nav-container">
-      <a href="index.html" class="brand">🛒 Dhivagar Mart</a>
+      <a href="index.html" class="brand">
+        <span class="logo-icon">⚡</span>
+        <span>Dhivagar <span class="brand-tech">Mart</span></span>
+      </a>
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
-        <li><a href="products.html">Products</a></li>
+        <li><a href="products.html">All Products</a></li>
         <li>
           <a href="cart.html">
-            Cart <span id="cart-badge" class="badge">0</span>
+            🛒 Cart <span id="cart-badge" class="badge">0</span>
           </a>
         </li>
       </ul>
@@ -25,21 +32,36 @@
   </header>
 
   <main class="container">
-    <h1 style="font-size:2rem; font-weight:800; margin-bottom:1.5rem;">My Order History</h1>
+    <div style="margin-bottom: 2rem;">
+      <h1 style="font-size:2rem; font-weight:800; color:var(--secondary); letter-spacing:-0.5px;">
+        📦 My Tech Orders & Tracking
+      </h1>
+      <p style="color:var(--text-muted); font-size:0.95rem;">
+        Track fulfillment, view invoices, and submit verified reviews
+      </p>
+    </div>
+
     <div id="orders-container">
-      <p style="color:#6b7280; text-align:center; padding:3rem;">Loading your orders...</p>
+      <p style="color:var(--text-muted); text-align:center; padding:3rem;">
+        <span style="font-size:2rem;">⏳</span><br>Loading your orders...
+      </p>
     </div>
   </main>
 
   <footer>
-    <p>© 2026 Dhivagar Mart. Native C++20 Marketplace.</p>
+    <p>© 2026 Dhivagar Mart. Native C++20 Drogon Marketplace.</p>
   </footer>
 
   <script src="js/api.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/orders.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', loadOrders);
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = await requireAuth();
+      if (user) {
+        loadOrders();
+      }
+    });
   </script>
 </body>
 </html>

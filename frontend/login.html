@@ -3,78 +3,147 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Dhivagar Mart</title>
+  <title>Login - Dhivagar Mart | Electronics & Technology</title>
   <link rel="stylesheet" href="css/style.css">
+  <script>
+    // Prevent flash of login page if already authenticated
+    window.skipAutoAuthCheck = true;
+  </script>
 </head>
-<body>
+<body style="background: radial-gradient(circle at top right, #1e293b 0%, #0f172a 100%); min-height: 100vh;">
 
-  <header>
+  <!-- Header -->
+  <header style="background: rgba(15, 23, 42, 0.85); border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
     <div class="nav-container">
-      <a href="index.html" class="brand">🛒 Dhivagar Mart</a>
+      <a href="login.html" class="brand" style="color: white;">
+        <span class="logo-icon">⚡</span>
+        <span>Dhivagar <span class="brand-tech" style="color: #38bdf8;">Mart</span></span>
+      </a>
       <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="products.html">Products</a></li>
-      </ul>
-      <ul class="nav-links">
-        <li><a href="register.html" class="btn btn-primary btn-sm">Register</a></li>
+        <li>
+          <a href="register.html" class="btn btn-primary btn-sm" style="border-radius:9999px;">
+            Create Account
+          </a>
+        </li>
       </ul>
     </div>
   </header>
 
-  <main class="container">
-    <div class="form-card">
-      <h1 style="font-size:1.8rem; font-weight:800; margin-bottom:0.5rem; text-align:center;">Welcome Back</h1>
-      <p style="text-align:center; color:#6b7280; margin-bottom:1.8rem;">Login to your Dhivagar Mart account</p>
+  <!-- Login Form Container -->
+  <main class="auth-wrapper">
+    <div class="form-card" style="box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border: 1px solid rgba(226, 232, 240, 0.8);">
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <div style="width: 52px; height: 52px; background: var(--primary-light); color: var(--primary); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 0.8rem;">
+          ⚡
+        </div>
+        <h1 style="font-size: 1.85rem; font-weight: 800; color: var(--secondary); letter-spacing: -0.5px;">Welcome Back!</h1>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.25rem;">
+          Sign in to your Dhivagar Mart tech account
+        </p>
+      </div>
 
-      <div id="login-error" style="display:none; background:#fee2e2; color:#b91c1c; padding:0.7rem; border-radius:6px; margin-bottom:1.2rem; font-size:0.9rem;"></div>
+      <!-- Error Banner -->
+      <div id="login-error" style="display: none; background: var(--danger-light); color: var(--danger); padding: 0.75rem 1rem; border-radius: var(--radius-md); margin-bottom: 1.25rem; font-size: 0.9rem; border: 1px solid #fecaca; font-weight: 500;"></div>
 
       <form id="login-form" onsubmit="handleLoginSubmit(event)">
         <div class="form-group">
-          <label for="email">Email Address:</label>
-          <input type="email" id="email" class="form-control" placeholder="name@example.com" required>
+          <label for="email">Email Address</label>
+          <input type="email" id="email" class="form-control" placeholder="e.g. buyer@dhivagarmart.com" required autocomplete="email">
         </div>
+
         <div class="form-group">
-          <label for="password">Password:</label>
-          <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+            <label for="password" style="margin-bottom:0;">Password</label>
+            <a href="javascript:void(0)" onclick="openForgotModal()" style="font-size:0.8rem; color:var(--primary); font-weight:600; text-decoration:none;">
+              Forgot password?
+            </a>
+          </div>
+          <input type="password" id="password" class="form-control" placeholder="••••••••" required autocomplete="current-password">
         </div>
-        <button type="submit" id="login-btn" class="btn btn-primary" style="width:100%; padding:0.75rem; font-size:1rem; margin-top:0.5rem;">
+
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+          <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-muted); cursor: pointer;">
+            <input type="checkbox" id="remember-me" checked style="accent-color: var(--primary); cursor: pointer;">
+            Remember me
+          </label>
+          <span style="font-size: 0.8rem; color: #10b981; font-weight: 600;">🔒 Secure Argon2id</span>
+        </div>
+
+        <button type="submit" id="login-btn" class="btn btn-primary btn-lg" style="width: 100%;">
           Sign In
         </button>
       </form>
 
-      <!-- Quick Demo Credentials Selector -->
-      <div style="margin-top:2rem; padding-top:1.5rem; border-top:1px solid var(--border-color);">
-        <p style="font-size:0.85rem; font-weight:700; color:#4b5563; margin-bottom:0.6rem; text-align:center;">
-          ⚡ Quick Demo Credentials:
+      <!-- Quick Demo Credentials Box -->
+      <div style="margin-top: 2rem; padding: 1.25rem; background: var(--bg-subtle); border-radius: var(--radius-md); border: 1px dashed var(--border-color);">
+        <p style="font-size: 0.82rem; font-weight: 700; color: var(--secondary); margin-bottom: 0.75rem; text-align: center; text-transform: uppercase; letter-spacing: 0.5px;">
+          ⚡ Quick Demo Profiles
         </p>
-        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.5rem;">
-          <button onclick="fillDemo('buyer@dhivagarmart.com', 'Buyer@123')" class="btn btn-secondary btn-sm" style="font-size:0.75rem;">
-            👤 Buyer
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem;">
+          <button type="button" onclick="fillDemo('buyer@dhivagarmart.com', 'Buyer@123')" class="btn btn-secondary btn-sm" title="Login as Standard Tech Buyer">
+            🛒 Buyer
           </button>
-          <button onclick="fillDemo('seller@dhivagarmart.com', 'Seller@123')" class="btn btn-secondary btn-sm" style="font-size:0.75rem;">
+          <button type="button" onclick="fillDemo('seller@dhivagarmart.com', 'Seller@123')" class="btn btn-secondary btn-sm" title="Login as Tech Merchant">
             🏪 Seller
           </button>
-          <button onclick="fillDemo('admin@dhivagarmart.com', 'Admin@123')" class="btn btn-secondary btn-sm" style="font-size:0.75rem;">
+          <button type="button" onclick="fillDemo('admin@dhivagarmart.com', 'Admin@123')" class="btn btn-secondary btn-sm" title="Login as System Admin">
             🛡️ Admin
           </button>
         </div>
       </div>
 
-      <p style="text-align:center; font-size:0.9rem; margin-top:1.5rem; color:#6b7280;">
-        Don't have an account? <a href="register.html" style="color:var(--primary); font-weight:600; text-decoration:none;">Register here</a>
-      </p>
+      <!-- Register Link -->
+      <div style="text-align: center; margin-top: 1.75rem; padding-top: 1.25rem; border-top: 1px solid var(--border-color); font-size: 0.92rem; color: var(--text-muted);">
+        New to Dhivagar Mart?
+        <a href="register.html" style="color: var(--primary); font-weight: 700; text-decoration: none; margin-left: 0.35rem;">
+          Create an account
+        </a>
+      </div>
     </div>
   </main>
 
+  <!-- Forgot Password Modal -->
+  <div id="forgot-modal" class="modal-overlay" style="display: none;">
+    <div class="form-card" style="margin: 0; max-width: 400px; padding: 2rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h3 style="font-size: 1.2rem; font-weight: 800;">Password Recovery</h3>
+        <button onclick="closeForgotModal()" style="background: none; border: none; font-size: 1.4rem; cursor: pointer;">✕</button>
+      </div>
+      <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.2rem;">
+        For demo purposes, all seeded passwords are predefined. You can use the quick demo credentials buttons on the login card:
+      </p>
+      <ul style="font-size: 0.85rem; color: var(--secondary); margin-left: 1.2rem; margin-bottom: 1.5rem; line-height: 1.6;">
+        <li><strong>Buyer:</strong> buyer@dhivagarmart.com / <code>Buyer@123</code></li>
+        <li><strong>Seller:</strong> seller@dhivagarmart.com / <code>Seller@123</code></li>
+        <li><strong>Admin:</strong> admin@dhivagarmart.com / <code>Admin@123</code></li>
+      </ul>
+      <button onclick="closeForgotModal()" class="btn btn-primary" style="width: 100%;">Got It</button>
+    </div>
+  </div>
+
   <footer>
-    <p>© 2026 Dhivagar Mart. Native C++20 Marketplace.</p>
+    <p>© 2026 Dhivagar Mart. Native C++20 Drogon Marketplace.</p>
   </footer>
 
   <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
   <script>
+    // Redirect immediately if already logged in
+    document.addEventListener('DOMContentLoaded', () => {
+      redirectIfAuthenticated();
+    });
+
     function fillDemo(email, pass) {
       document.getElementById('email').value = email;
       document.getElementById('password').value = pass;
+    }
+
+    function openForgotModal() {
+      document.getElementById('forgot-modal').style.display = 'flex';
+    }
+
+    function closeForgotModal() {
+      document.getElementById('forgot-modal').style.display = 'none';
     }
 
     async function handleLoginSubmit(e) {
@@ -86,10 +155,11 @@
 
       errorDiv.style.display = 'none';
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Signing in...';
+      submitBtn.textContent = 'Verifying credentials...';
 
       try {
         const user = await api.login({ email, password });
+        // Role-based navigation
         if (user.role === 'SELLER') {
           window.location.href = 'seller.html';
         } else if (user.role === 'ADMIN') {
@@ -98,7 +168,7 @@
           window.location.href = 'index.html';
         }
       } catch (err) {
-        errorDiv.textContent = err.message || 'Invalid email or password';
+        errorDiv.textContent = err.message || 'Invalid email or password. Please try again.';
         errorDiv.style.display = 'block';
         submitBtn.disabled = false;
         submitBtn.textContent = 'Sign In';

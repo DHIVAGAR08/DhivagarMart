@@ -37,7 +37,7 @@ Write-Host "    -> Order Placed Successfully! Order #$($order.data.id) | Status:
 
 # 6. Post Verified Review
 Write-Host "`n[6] Submitting 5-Star Verified Purchase Review for Product #$($product.id)..." -ForegroundColor Yellow
-$reviewBody = @{ rating = 5; comment = "Outstanding crispness and flavor! Fast delivery from Dhivagar Mart." } | ConvertTo-Json
+$reviewBody = @{ rating = 5; comment = "Exceptional build quality, ultra-fast performance, and brilliant display! Fast delivery from Dhivagar Mart." } | ConvertTo-Json
 try {
     $review = Invoke-RestMethod -Uri "$baseUrl/api/v1/products/$($product.id)/reviews" -Method Post -Body $reviewBody -ContentType "application/json" -WebSession $session
     Write-Host "    -> Review Accepted! Reviewer: $($review.data.user_name), Rating: $($review.data.rating)/5" -ForegroundColor Green
@@ -56,7 +56,7 @@ Write-Host "    -> Seller Updated Order #$($order.data.id) Status: $($updatedOrd
 
 # 8. AI Chatbot
 Write-Host "`n[8] Inquiring with AI Shopping Assistant..." -ForegroundColor Yellow
-$chatBody = @{ message = "Do you have fresh fruit recommendations?" } | ConvertTo-Json
+$chatBody = @{ message = "What flagship smartphones do you offer?" } | ConvertTo-Json
 $aiResp = Invoke-RestMethod -Uri "$baseUrl/api/v1/ai/chat" -Method Post -Body $chatBody -ContentType "application/json"
 Write-Host "    -> AI Assistant: `"$($aiResp.data.reply)`"" -ForegroundColor Green
 

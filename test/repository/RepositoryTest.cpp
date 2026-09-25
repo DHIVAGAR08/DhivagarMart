@@ -33,13 +33,13 @@ TEST_F(RepositoryTest, ProductFindAllAndFilter) {
     auto all_prods = repo.FindAll(std::nullopt, std::nullopt);
     EXPECT_GE(all_prods.size(), 10u);
 
-    auto fruit_prods = repo.FindAll("Fruits", std::nullopt);
-    EXPECT_GE(fruit_prods.size(), 2u);
-    for (const auto& p : fruit_prods) {
-        EXPECT_EQ(p.category, "Fruits");
+    auto mobile_prods = repo.FindAll("Mobiles", std::nullopt);
+    EXPECT_GE(mobile_prods.size(), 2u);
+    for (const auto& p : mobile_prods) {
+        EXPECT_EQ(p.category, "Mobiles");
     }
 
-    auto search_prods = repo.FindAll(std::nullopt, "Rice");
+    auto search_prods = repo.FindAll(std::nullopt, "Laptop");
     EXPECT_GE(search_prods.size(), 1u);
 }
 

@@ -3,20 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shopping Cart - Dhivagar Mart</title>
+  <title>Your Shopping Cart - Dhivagar Mart</title>
   <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.skipAutoAuthCheck = true;
+  </script>
 </head>
 <body>
 
+  <!-- Top Navigation -->
   <header>
     <div class="nav-container">
-      <a href="index.html" class="brand">🛒 Dhivagar Mart</a>
+      <a href="index.html" class="brand">
+        <span class="logo-icon">⚡</span>
+        <span>Dhivagar <span class="brand-tech">Mart</span></span>
+      </a>
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
-        <li><a href="products.html">Products</a></li>
+        <li><a href="products.html">All Products</a></li>
         <li>
           <a href="cart.html" class="active">
-            Cart <span id="cart-badge" class="badge">0</span>
+            🛒 Cart <span id="cart-badge" class="badge">0</span>
           </a>
         </li>
       </ul>
@@ -27,17 +34,27 @@
   </header>
 
   <main class="container">
-    <h1 style="font-size:2rem; font-weight:800; margin-bottom:1.5rem;">Your Shopping Cart</h1>
+    <div style="margin-bottom: 2rem;">
+      <h1 style="font-size:2rem; font-weight:800; color:var(--secondary); letter-spacing:-0.5px;">
+        🛒 Shopping Cart & Tech Hardware
+      </h1>
+      <p style="color:var(--text-muted); font-size:0.95rem;">
+        Review your items before proceeding to instant mock checkout
+      </p>
+    </div>
+
     <div id="cart-container">
-      <div style="text-align:center; padding:3rem;">Loading cart items...</div>
+      <div style="text-align:center; padding:3rem; color:var(--text-muted);">
+        <span style="font-size:2rem;">⏳</span><br>Loading cart items...
+      </div>
     </div>
   </main>
 
   <!-- Floating AI Assistant -->
-  <button class="chat-launcher" onclick="toggleChat()">💬</button>
+  <button class="chat-launcher" onclick="toggleChat()" title="Ask Dhivagar Mart Tech Assistant">🤖</button>
   <div id="chat-panel" class="chat-panel">
     <div class="chat-header">
-      <h3>🤖 Shopping Assistant</h3>
+      <h3>⚡ Tech Shopping Assistant</h3>
       <button onclick="toggleChat()" style="background:transparent; border:none; color:white; font-size:1.2rem; cursor:pointer;">✕</button>
     </div>
     <div id="chat-messages" class="chat-messages">
@@ -50,7 +67,7 @@
   </div>
 
   <footer>
-    <p>© 2026 Dhivagar Mart. Native C++20 Marketplace.</p>
+    <p>© 2026 Dhivagar Mart. Native C++20 Drogon Marketplace.</p>
   </footer>
 
   <script src="js/api.js"></script>
@@ -58,7 +75,12 @@
   <script src="js/cart.js"></script>
   <script src="js/chat.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', loadCartPage);
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = await requireAuth();
+      if (user) {
+        loadCartPage();
+      }
+    });
   </script>
 </body>
 </html>

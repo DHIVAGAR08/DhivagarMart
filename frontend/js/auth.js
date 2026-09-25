@@ -14,6 +14,54 @@ async function checkAuthState() {
   }
 }
 
+/**
+ * Enforces authentication on protected pages.
+ * If user is not logged in, redirects immediately to login.html.
+ * If allowedRoles is provided and user role does not match, redirects to index.html.
+ */
+async function requireAuth(allowedRoles = []) {
+  try {
+    const user = await api.getCurrentUser();
+    if (!user) {
+      window.location.replace('login.html');
+      return null;
+    }
+    if (allowedRoles.length > 0 && !allowedRoles.includes(user.role)) {
+      alert(`Access Restricted: This page requires one of the following roles: ${allowedRoles.join(', ')}`);
+      window.location.replace('index.html');
+      return null;
+    }
+    currentUser = user;
+    updateNavbar(user);
+    updateCartCount();
+    return user;
+  } catch (err) {
+    // Session expired or unauthenticated -> redirect to login
+    window.location.replace('login.html');
+    return null;
+  }
+}
+
+/**
+ * Used on login.html to prevent already-logged-in users from seeing login again.
+ */
+async function redirectIfAuthenticated() {
+  try {
+    const user = await api.getCurrentUser();
+    if (user) {
+      if (user.role === 'SELLER') {
+        window.location.replace('seller.html');
+      } else if (user.role === 'ADMIN') {
+        window.location.replace('admin.html');
+      } else {
+        window.location.replace('index.html');
+      }
+    }
+  } catch {
+    // Unauthenticated, stay on login page
+  }
+}
+
 function updateNavbar(user) {
   const authNav = document.getElementById('nav-auth-container');
   if (!authNav) return;
@@ -23,18 +71,18 @@ function updateNavbar(user) {
     let roleLinks = '';
 
     if (user.role === 'SELLER') {
-      roleBadge = '<span class="badge" style="background:#0284c7">Seller</span>';
-      roleLinks = '<li><a href="seller.html">Seller Portal</a></li>';
+      roleBadge = '<span class="badge" style="background:#0284c7">SELLER</span>';
+      roleLinks = '<li><a href="seller.html">🏪 Seller Portal</a></li>';
     } else if (user.role === 'ADMIN') {
-      roleBadge = '<span class="badge" style="background:#dc2626">Admin</span>';
-      roleLinks = '<li><a href="admin.html">Admin Center</a></li>';
+      roleBadge = '<span class="badge" style="background:#dc2626">ADMIN</span>';
+      roleLinks = '<li><a href="admin.html">🛡️ Admin Center</a></li>';
     } else {
-      roleLinks = '<li><a href="orders.html">My Orders</a></li>';
+      roleLinks = '<li><a href="orders.html">📦 My Orders</a></li>';
     }
 
     authNav.innerHTML = `
       ${roleLinks}
-      <li style="display:flex; align-items:center; gap:0.5rem; font-weight:600;">
+      <li style="display:flex; align-items:center; gap:0.4rem; font-weight:600; font-size:0.9rem;">
         <span>👤 ${user.name}</span>
         ${roleBadge}
       </li>
@@ -69,5 +117,9 @@ async function handleLogout() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  checkAuthState();
+  // If the page doesn't explicitly invoke requireAuth or redirectIfAuthenticated,
+  // we still populate auth status in navbar
+  if (!window.skipAutoAuthCheck) {
+    checkAuthState();
+  }
 });

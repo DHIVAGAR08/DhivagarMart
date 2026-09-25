@@ -5,12 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Center - Dhivagar Mart</title>
   <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.skipAutoAuthCheck = true;
+  </script>
 </head>
 <body>
 
+  <!-- Top Navigation -->
   <header>
     <div class="nav-container">
-      <a href="index.html" class="brand">🛒 Dhivagar Mart</a>
+      <a href="index.html" class="brand">
+        <span class="logo-icon">⚡</span>
+        <span>Dhivagar <span class="brand-tech">Mart</span></span>
+      </a>
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="products.html">Browse Store</a></li>
@@ -21,33 +28,39 @@
 
   <main class="container">
     <div style="margin-bottom:2rem;">
-      <h1 style="font-size:2rem; font-weight:800;">🛡️ Marketplace Admin Center</h1>
-      <p style="color:#6b7280;">Global metrics, user accounts, catalog moderation, and order operations</p>
+      <h1 style="font-size:2rem; font-weight:800; color:var(--secondary); letter-spacing:-0.5px;">
+        🛡️ System Administration & Governance
+      </h1>
+      <p style="color:var(--text-muted); font-size:0.95rem;">
+        Marketplace telemetry, user directories, catalog moderation, and financial audits
+      </p>
     </div>
 
     <!-- Metrics Cards Grid -->
     <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:1.5rem; margin-bottom:3rem;">
-      <div class="form-card" style="margin:0; padding:1.5rem; text-align:center;">
-        <span style="font-size:0.85rem; color:#6b7280; font-weight:600; text-transform:uppercase;">Registered Users</span>
-        <div id="stat-users" style="font-size:2.2rem; font-weight:800; color:var(--primary); margin-top:0.4rem;">-</div>
+      <div class="form-card" style="margin:0; padding:1.5rem; text-align:center; box-shadow:var(--shadow-sm);">
+        <span style="font-size:0.85rem; color:var(--text-muted); font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">Registered Users</span>
+        <div id="stat-users" style="font-size:2.2rem; font-weight:900; color:var(--primary); margin-top:0.4rem;">-</div>
       </div>
-      <div class="form-card" style="margin:0; padding:1.5rem; text-align:center;">
-        <span style="font-size:0.85rem; color:#6b7280; font-weight:600; text-transform:uppercase;">Active Listings</span>
-        <div id="stat-products" style="font-size:2.2rem; font-weight:800; color:#0284c7; margin-top:0.4rem;">-</div>
+      <div class="form-card" style="margin:0; padding:1.5rem; text-align:center; box-shadow:var(--shadow-sm);">
+        <span style="font-size:0.85rem; color:var(--text-muted); font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">Active Tech Listings</span>
+        <div id="stat-products" style="font-size:2.2rem; font-weight:900; color:#0284c7; margin-top:0.4rem;">-</div>
       </div>
-      <div class="form-card" style="margin:0; padding:1.5rem; text-align:center;">
-        <span style="font-size:0.85rem; color:#6b7280; font-weight:600; text-transform:uppercase;">Total Orders</span>
-        <div id="stat-orders" style="font-size:2.2rem; font-weight:800; color:#f59e0b; margin-top:0.4rem;">-</div>
+      <div class="form-card" style="margin:0; padding:1.5rem; text-align:center; box-shadow:var(--shadow-sm);">
+        <span style="font-size:0.85rem; color:var(--text-muted); font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">Total Orders</span>
+        <div id="stat-orders" style="font-size:2.2rem; font-weight:900; color:#f59e0b; margin-top:0.4rem;">-</div>
       </div>
-      <div class="form-card" style="margin:0; padding:1.5rem; text-align:center;">
-        <span style="font-size:0.85rem; color:#6b7280; font-weight:600; text-transform:uppercase;">Gross Revenue</span>
-        <div id="stat-revenue" style="font-size:2.2rem; font-weight:800; color:#10b981; margin-top:0.4rem;">-</div>
+      <div class="form-card" style="margin:0; padding:1.5rem; text-align:center; box-shadow:var(--shadow-sm);">
+        <span style="font-size:0.85rem; color:var(--text-muted); font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">Gross Revenue</span>
+        <div id="stat-revenue" style="font-size:2.2rem; font-weight:900; color:#10b981; margin-top:0.4rem;">-</div>
       </div>
     </div>
 
     <!-- Users Management -->
     <section style="margin-bottom:3rem;">
-      <h2 style="font-size:1.3rem; font-weight:700; margin-bottom:1rem;">👥 User Directory</h2>
+      <h2 style="font-size:1.3rem; font-weight:700; margin-bottom:1rem; color:var(--secondary);">
+        👥 User Directory & Roles
+      </h2>
       <div style="overflow-x:auto;">
         <table>
           <thead>
@@ -68,7 +81,9 @@
 
     <!-- Catalog Moderation -->
     <section style="margin-bottom:3rem;">
-      <h2 style="font-size:1.3rem; font-weight:700; margin-bottom:1rem;">📦 Catalog Moderation</h2>
+      <h2 style="font-size:1.3rem; font-weight:700; margin-bottom:1rem; color:var(--secondary);">
+        📦 Tech Catalog Moderation
+      </h2>
       <div style="overflow-x:auto;">
         <table>
           <thead>
@@ -91,7 +106,9 @@
 
     <!-- All Orders -->
     <section>
-      <h2 style="font-size:1.3rem; font-weight:700; margin-bottom:1rem;">📑 Global Order Monitor</h2>
+      <h2 style="font-size:1.3rem; font-weight:700; margin-bottom:1rem; color:var(--secondary);">
+        📑 Global Order Monitor
+      </h2>
       <div style="overflow-x:auto;">
         <table>
           <thead>
@@ -112,14 +129,19 @@
   </main>
 
   <footer>
-    <p>© 2026 Dhivagar Mart. Native C++20 Marketplace.</p>
+    <p>© 2026 Dhivagar Mart. Native C++20 Drogon Marketplace.</p>
   </footer>
 
   <script src="js/api.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/admin.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', initAdminDashboard);
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = await requireAuth(['ADMIN']);
+      if (user) {
+        initAdminDashboard();
+      }
+    });
   </script>
 </body>
 </html>
