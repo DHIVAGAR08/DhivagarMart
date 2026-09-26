@@ -6,7 +6,7 @@
 databases:
   - name: dhivagarmart-db
     databaseName: dhivagarmart
-    user: postgres
+    user: dhivagarmart_user
     region: oregon
     plan: free
 
@@ -23,6 +23,26 @@ services:
         value: 8080
       - key: PORT
         value: 8080
+      - key: DATABASE_HOST
+        fromDatabase:
+          name: dhivagarmart-db
+          property: host
+      - key: DATABASE_PORT
+        fromDatabase:
+          name: dhivagarmart-db
+          property: port
+      - key: DATABASE_NAME
+        fromDatabase:
+          name: dhivagarmart-db
+          property: database
+      - key: DATABASE_USER
+        fromDatabase:
+          name: dhivagarmart-db
+          property: user
+      - key: DATABASE_PASSWORD
+        fromDatabase:
+          name: dhivagarmart-db
+          property: password
       - key: DB_HOST
         fromDatabase:
           name: dhivagarmart-db
