@@ -1,0 +1,49 @@
+# ============================================================
+# DHIVAGAR MART — RENDER BLUEPRINT SPECIFICATION
+# Deploy C++20 Drogon Web Service + Managed PostgreSQL Database
+# ============================================================
+
+databases:
+  - name: dhivagarmart-db
+    databaseName: dhivagarmart
+    user: postgres
+    region: oregon
+    plan: free
+
+services:
+  - type: web
+    name: dhivagarmart
+    env: docker
+    dockerfilePath: ./Dockerfile
+    region: oregon
+    plan: free
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: APP_PORT
+        value: 8080
+      - key: PORT
+        value: 8080
+      - key: DB_HOST
+        fromDatabase:
+          name: dhivagarmart-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: dhivagarmart-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: dhivagarmart-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: dhivagarmart-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: dhivagarmart-db
+          property: password
+      - key: SESSION_TIMEOUT_SECONDS
+        value: 1200
+      - key: AI_PROVIDER
+        value: mock
