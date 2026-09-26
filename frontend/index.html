@@ -16,7 +16,7 @@
   <header>
     <div class="nav-container">
       <a href="index.html" class="brand">
-        <span class="logo-icon">⚡</span>
+        <span class="logo-icon">🛒</span>
         <span>Dhivagar <span class="brand-tech">Mart</span></span>
       </a>
 
@@ -28,7 +28,14 @@
 
       <ul class="nav-links">
         <li><a href="index.html" class="active">Home</a></li>
-        <li><a href="products.html">All Products</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="#categories-section">Categories</a></li>
+        <li><a href="products.html?offers=true">Offers</a></li>
+        <li>
+          <a href="wishlist.html">
+            ❤️ Wishlist <span id="wishlist-badge" class="badge" style="background:#e11d48;">0</span>
+          </a>
+        </li>
         <li>
           <a href="cart.html" style="position:relative;">
             🛒 Cart <span id="cart-badge" class="badge">0</span>
@@ -64,7 +71,7 @@
     </section>
 
     <!-- Visual 8 Category Cards Section -->
-    <section style="margin-bottom: 2.5rem;">
+    <section id="categories-section" style="margin-bottom: 2.5rem;">
       <div class="section-header">
         <div>
           <h2>Explore Categories</h2>
@@ -181,7 +188,7 @@
   </div>
 
   <footer>
-    <p>© 2026 Dhivagar Mart. Native C++20 Drogon Marketplace. All rights reserved.</p>
+    <p>© 2026 Dhivagar Mart. All rights reserved. Native C++20 • Drogon • PostgreSQL</p>
   </footer>
 
   <script src="js/api.js"></script>

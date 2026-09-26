@@ -24,6 +24,7 @@ public:
     bool Delete(int64_t id, int64_t seller_id, const std::string& request_id = "") override;
     bool AdminDelete(int64_t id, const std::string& request_id = "") override;
     bool ReduceStockInTransaction(pqxx::work& tx, int64_t product_id, int32_t quantity, const std::string& request_id = "") override;
+    bool RestoreStockInTransaction(pqxx::work& tx, int64_t product_id, int32_t quantity, const std::string& request_id = "") override;
 };
 
 } // namespace dhivagar::dhivagarmart::repository

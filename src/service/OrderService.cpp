@@ -38,7 +38,21 @@ dto::OrderResponseDto OrderService::Checkout(int64_t buyer_id, const dto::Create
     }
 
     // 3. Mock Payment Confirmation step
-    spdlog::info("[{}] Mock payment processed successfully for amount {}", request_id, total_amount.ToString());
+    std::string method = req.payment_method.empty() ? "CASH_ON_DELIVERY" : req.payment_method;
+    std::string payment_status = "PENDING";
+    if (method == "UPI" || method == "CARD" || method == "ONLINE") {
+        payment_status = "PAID";
+    }
+
+    std::string delivery_address = req.shipping_address;
+    if (!req.city.empty() || !req.state.empty() || !req.pincode.empty()) {
+        if (!delivery_address.empty()) delivery_address += ", ";
+        if (!req.city.empty()) delivery_address += req.city + ", ";
+        if (!req.state.empty()) delivery_address += req.state + " - ";
+        if (!req.pincode.empty()) delivery_address += req.pincode;
+    }
+
+    spdlog::info("[{}] Payment processed ({}) for amount {}", request_id, method, total_amount.ToString());
 
     // 4. Atomic Database Transaction for Order creation, Stock reduction, Cart clear
     int64_t order_id = 0;
@@ -48,7 +62,8 @@ dto::OrderResponseDto OrderService::Checkout(int64_t buyer_id, const dto::Create
 
         // a. Create Order header
         order_id = order_repo_->CreateOrderInTransaction(
-            tx, buyer_id, total_amount.GetCents(), model::OrderStatus::kConfirmed, request_id
+            tx, buyer_id, total_amount.GetCents(), model::OrderStatus::kConfirmed,
+            method, payment_status, delivery_address, req.phone, req.full_name, request_id
         );
 
         // b. Create Order items and reduce stock
@@ -111,6 +126,57 @@ dto::OrderResponseDto OrderService::GetOrderById(int64_t order_id, int64_t user_
     }
 
     return dto::OrderResponseDto::FromModel(*order_opt);
+}
+
+dto::OrderResponseDto OrderService::CancelOrder(int64_t order_id, int64_t user_id, bool is_admin, const std::string& request_id) {
+    spdlog::info("[{}] OrderService::CancelOrder order_id={} user_id={} is_admin={}", 
+                 request_id, order_id, user_id, is_admin);
+
+    if (order_id <= 0) {
+        throw exception::ValidationException("Invalid order ID");
+    }
+
+    auto order_opt = order_repo_->FindById(order_id, request_id);
+    if (!order_opt.has_value()) {
+        throw exception::NotFoundException("Order not found");
+    }
+
+    if (!is_admin && order_opt->buyer_id != user_id) {
+        throw exception::AuthorizationException("You are not authorized to cancel this order");
+    }
+
+    if (order_opt->status == model::OrderStatus::kCancelled) {
+        throw exception::ValidationException("Order is already cancelled");
+    }
+
+    if (order_opt->status == model::OrderStatus::kShipped || order_opt->status == model::OrderStatus::kDelivered) {
+        throw exception::ValidationException("Cannot cancel an order that has already been shipped or delivered");
+    }
+
+    try {
+        auto conn = plugin::DatabasePlugin::GetConnection();
+        pqxx::work tx(*conn);
+
+        // Restore inventory for all items in order
+        for (const auto& item : order_opt->items) {
+            product_repo_->RestoreStockInTransaction(tx, item.product_id, item.quantity, request_id);
+        }
+
+        // Update status to CANCELLED and payment status to REFUNDED if was PAID
+        std::string update_sql = (order_opt->payment_status == "PAID")
+            ? "UPDATE orders SET status = 'CANCELLED', payment_status = 'REFUNDED' WHERE id = $1;"
+            : "UPDATE orders SET status = 'CANCELLED' WHERE id = $1;";
+        tx.exec_params(update_sql, order_id);
+
+        tx.commit();
+        spdlog::info("[{}] Order {} successfully cancelled and stock restored", request_id, order_id);
+    } catch (const std::exception& e) {
+        spdlog::error("[{}] Failed to cancel order {}: {}", request_id, order_id, e.what());
+        throw exception::InternalServerException("Failed to cancel order: " + std::string(e.what()));
+    }
+
+    auto updated = order_repo_->FindById(order_id, request_id);
+    return dto::OrderResponseDto::FromModel(*updated);
 }
 
 } // namespace dhivagar::dhivagarmart::service

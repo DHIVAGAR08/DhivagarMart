@@ -31,6 +31,7 @@ public:
     MOCK_METHOD(bool, Delete, (int64_t id, int64_t seller_id, const std::string& request_id), (override));
     MOCK_METHOD(bool, AdminDelete, (int64_t id, const std::string& request_id), (override));
     MOCK_METHOD(bool, ReduceStockInTransaction, (pqxx::work& tx, int64_t product_id, int32_t quantity, const std::string& request_id), (override));
+    MOCK_METHOD(bool, RestoreStockInTransaction, (pqxx::work& tx, int64_t product_id, int32_t quantity, const std::string& request_id), (override));
 };
 
 TEST(CartServiceTest, AddItemInsufficientStockThrowsValidationException) {
@@ -89,6 +90,6 @@ TEST(CartServiceTest, RunningTotalCalculation) {
 
     auto cart = cart_service.GetCart(3);
     EXPECT_EQ(cart.total_items, 3);
-    EXPECT_EQ(cart.total_cents, 1247); // 798 + 449 = 1247 ($12.47)
-    EXPECT_EQ(cart.total_formatted, "$12.47");
+    EXPECT_EQ(cart.total_cents, 1247); // 798 + 449 = 1247 (₹12.47)
+    EXPECT_EQ(cart.total_formatted, "₹12.47");
 }

@@ -169,4 +169,39 @@ dto::OrderResponseDto SellerService::UpdateOrderStatus(
     return dto::OrderResponseDto::FromModel(*updated);
 }
 
+SellerStatsDto SellerService::GetSellerStats(int64_t seller_id, const std::string& request_id) {
+    spdlog::info("[{}] SellerService::GetSellerStats seller_id={}", request_id, seller_id);
+    auto products = product_repo_->FindBySellerId(seller_id, request_id);
+    auto orders = order_repo_->FindBySellerId(seller_id, request_id);
+
+    std::unordered_set<int64_t> seller_product_ids;
+    for (const auto& p : products) {
+        seller_product_ids.insert(p.id);
+    }
+
+    SellerStatsDto stats;
+    stats.total_products = static_cast<int64_t>(products.size());
+    stats.total_orders = static_cast<int64_t>(orders.size());
+
+    int64_t rev_cents = 0;
+    int64_t items_sold = 0;
+
+    for (const auto& order : orders) {
+        if (order.status != model::OrderStatus::kCancelled) {
+            for (const auto& item : order.items) {
+                if (seller_product_ids.count(item.product_id)) {
+                    items_sold += item.quantity;
+                    rev_cents += (item.unit_price * item.quantity).GetCents();
+                }
+            }
+        }
+    }
+
+    stats.total_items_sold = items_sold;
+    stats.total_revenue_cents = rev_cents;
+    stats.total_revenue_formatted = model::Money::FromCents(rev_cents).ToString();
+
+    return stats;
+}
+
 } // namespace dhivagar::dhivagarmart::service

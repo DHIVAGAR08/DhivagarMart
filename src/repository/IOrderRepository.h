@@ -21,6 +21,11 @@ public:
     virtual int64_t CreateOrderInTransaction(pqxx::work& tx, int64_t buyer_id, 
                                              int64_t total_amount_cents, 
                                              model::OrderStatus status, 
+                                             const std::string& payment_method = "CASH_ON_DELIVERY",
+                                             const std::string& payment_status = "PENDING",
+                                             const std::string& delivery_address = "",
+                                             const std::string& phone = "",
+                                             const std::string& full_name = "",
                                              const std::string& request_id = "") = 0;
 
     virtual void CreateOrderItemInTransaction(pqxx::work& tx, int64_t order_id, 

@@ -78,6 +78,16 @@ AdminStatsDto AdminService::GetStatistics(const std::string& request_id) {
     auto products = product_repo_->FindAll(std::nullopt, std::nullopt, request_id);
     auto orders = order_repo_->FindAll(request_id);
 
+    int64_t buyers = 0;
+    int64_t sellers = 0;
+    for (const auto& u : users) {
+        if (u.role == model::UserRole::kBuyer) {
+            buyers++;
+        } else if (u.role == model::UserRole::kSeller) {
+            sellers++;
+        }
+    }
+
     model::Money total_rev{model::Money::FromCents(0)};
     for (const auto& order : orders) {
         if (order.status != model::OrderStatus::kCancelled) {
@@ -87,6 +97,8 @@ AdminStatsDto AdminService::GetStatistics(const std::string& request_id) {
 
     AdminStatsDto stats;
     stats.total_users = static_cast<int64_t>(users.size());
+    stats.buyers_count = buyers;
+    stats.sellers_count = sellers;
     stats.total_products = static_cast<int64_t>(products.size());
     stats.total_orders = static_cast<int64_t>(orders.size());
     stats.total_revenue_cents = total_rev.GetCents();

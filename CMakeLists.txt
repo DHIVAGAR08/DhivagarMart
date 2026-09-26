@@ -62,11 +62,13 @@ set(DHIVAGARMART_CORE_SOURCES
     src/repository/CartRepository.cpp
     src/repository/OrderRepository.cpp
     src/repository/ReviewRepository.cpp
+    src/repository/WishlistRepository.cpp
     src/service/AuthService.cpp
     src/service/ProductService.cpp
     src/service/CartService.cpp
     src/service/OrderService.cpp
     src/service/ReviewService.cpp
+    src/service/WishlistService.cpp
     src/service/SellerService.cpp
     src/service/AdminService.cpp
     src/service/MigrationService.cpp
@@ -79,6 +81,7 @@ set(DHIVAGARMART_CORE_SOURCES
     src/controller/CartController.cpp
     src/controller/OrderController.cpp
     src/controller/ReviewController.cpp
+    src/controller/WishlistController.cpp
     src/controller/SellerController.cpp
     src/controller/AdminController.cpp
     src/controller/ChatController.cpp

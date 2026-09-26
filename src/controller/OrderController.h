@@ -20,6 +20,10 @@ public:
                   "dhivagar::dhivagarmart::filter::LoggingFilter", "dhivagar::dhivagarmart::filter::AuthFilter");
     ADD_METHOD_TO(OrderController::GetOrderById, "/api/v1/orders/{1}", drogon::Get, 
                   "dhivagar::dhivagarmart::filter::LoggingFilter", "dhivagar::dhivagarmart::filter::AuthFilter");
+    ADD_METHOD_TO(OrderController::CancelOrder, "/api/v1/orders/{1}/cancel", drogon::Put, 
+                  "dhivagar::dhivagarmart::filter::LoggingFilter", "dhivagar::dhivagarmart::filter::AuthFilter");
+    ADD_METHOD_TO(OrderController::CancelOrder, "/api/v1/orders/{1}/cancel", drogon::Post, 
+                  "dhivagar::dhivagarmart::filter::LoggingFilter", "dhivagar::dhivagarmart::filter::AuthFilter");
     METHOD_LIST_END
 
     OrderController();
@@ -27,6 +31,7 @@ public:
     void Checkout(const drogon::HttpRequestPtr &req, std::function<void(const drogon::HttpResponsePtr &)> &&callback);
     void GetOrders(const drogon::HttpRequestPtr &req, std::function<void(const drogon::HttpResponsePtr &)> &&callback);
     void GetOrderById(const drogon::HttpRequestPtr &req, std::function<void(const drogon::HttpResponsePtr &)> &&callback, int64_t order_id);
+    void CancelOrder(const drogon::HttpRequestPtr &req, std::function<void(const drogon::HttpResponsePtr &)> &&callback, int64_t order_id);
 
 private:
     std::shared_ptr<service::OrderService> order_service_;

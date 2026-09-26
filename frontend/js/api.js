@@ -1,5 +1,24 @@
-// Dhivagar Mart - Shared API Client
 const API_BASE = '/api/v1';
+
+// Universal Indian Rupee Currency Formatter
+const inrFormatter = new Intl.NumberFormat("en-IN", {
+  style: "currency",
+  currency: "INR",
+  maximumFractionDigits: 0
+});
+
+function formatINR(cents) {
+  if (cents === null || cents === undefined || isNaN(cents)) return '₹0';
+  const rupees = cents / 100;
+  if (cents % 100 === 0) {
+    return inrFormatter.format(rupees);
+  }
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 2
+  }).format(rupees);
+}
 
 async function apiRequest(endpoint, method = 'GET', body = null) {
   const options = {
@@ -56,6 +75,13 @@ const api = {
   checkout: (payload) => apiRequest('/orders', 'POST', payload),
   getOrders: () => apiRequest('/orders', 'GET'),
   getOrderById: (id) => apiRequest(`/orders/${id}`, 'GET'),
+  cancelOrder: (id) => apiRequest(`/orders/${id}/cancel`, 'PUT'),
+
+  // Wishlist
+  getWishlist: () => apiRequest('/wishlist', 'GET'),
+  addToWishlist: (productId) => apiRequest('/wishlist', 'POST', { product_id: productId }),
+  removeFromWishlist: (productId) => apiRequest(`/wishlist/${productId}`, 'DELETE'),
+  moveWishlistToCart: (productId) => apiRequest(`/wishlist/${productId}/move-to-cart`, 'POST'),
 
   // Reviews
   getProductReviews: (productId) => apiRequest(`/products/${productId}/reviews`, 'GET'),
@@ -68,6 +94,7 @@ const api = {
   deleteSellerProduct: (id) => apiRequest(`/seller/products/${id}`, 'DELETE'),
   getSellerOrders: () => apiRequest('/seller/orders', 'GET'),
   updateSellerOrderStatus: (id, status) => apiRequest(`/seller/orders/${id}/status`, 'PUT', { status }),
+  getSellerStats: () => apiRequest('/seller/stats', 'GET'),
 
   // Admin
   getAdminUsers: () => apiRequest('/admin/users', 'GET'),

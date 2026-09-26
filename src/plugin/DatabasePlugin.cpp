@@ -22,7 +22,7 @@ DatabasePlugin::~DatabasePlugin() {
 std::string DatabasePlugin::BuildConnectionString() {
     util::Environment::LoadEnvFile(".env");
     std::string host = util::Environment::Get("DATABASE_HOST", "127.0.0.1");
-    std::string port = util::Environment::Get("DATABASE_PORT", "5433");
+    std::string port = util::Environment::Get("DATABASE_PORT", "5432");
     std::string dbname = util::Environment::Get("DATABASE_NAME", "dhivagarmart");
     std::string user = util::Environment::Get("DATABASE_USER", "postgres");
     std::string password = util::Environment::Get("DATABASE_PASSWORD", "");

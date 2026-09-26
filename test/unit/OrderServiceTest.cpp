@@ -14,7 +14,10 @@ using ::testing::Return;
 class MockOrderRepository : public repository::IOrderRepository {
 public:
     MOCK_METHOD(int64_t, CreateOrderInTransaction, 
-                (pqxx::work& tx, int64_t buyer_id, int64_t total_amount_cents, model::OrderStatus status, const std::string& request_id), (override));
+                (pqxx::work& tx, int64_t buyer_id, int64_t total_amount_cents, model::OrderStatus status,
+                 const std::string& payment_method, const std::string& payment_status,
+                 const std::string& delivery_address, const std::string& phone,
+                 const std::string& full_name, const std::string& request_id), (override));
     MOCK_METHOD(void, CreateOrderItemInTransaction, 
                 (pqxx::work& tx, int64_t order_id, int64_t product_id, int32_t quantity, int64_t unit_price_cents, const std::string& request_id), (override));
     MOCK_METHOD(std::optional<model::Order>, FindById, (int64_t id, const std::string& request_id), (override));
@@ -46,6 +49,7 @@ public:
     MOCK_METHOD(bool, Delete, (int64_t id, int64_t seller_id, const std::string& request_id), (override));
     MOCK_METHOD(bool, AdminDelete, (int64_t id, const std::string& request_id), (override));
     MOCK_METHOD(bool, ReduceStockInTransaction, (pqxx::work& tx, int64_t product_id, int32_t quantity, const std::string& request_id), (override));
+    MOCK_METHOD(bool, RestoreStockInTransaction, (pqxx::work& tx, int64_t product_id, int32_t quantity, const std::string& request_id), (override));
 };
 
 TEST(OrderServiceTest, CheckoutEmptyCartThrowsValidationException) {

@@ -26,10 +26,13 @@ public:
                   "dhivagar::dhivagarmart::filter::LoggingFilter", "dhivagar::dhivagarmart::filter::SellerFilter");
     ADD_METHOD_TO(SellerController::UpdateOrderStatus, "/api/v1/seller/orders/{1}/status", drogon::Put, 
                   "dhivagar::dhivagarmart::filter::LoggingFilter", "dhivagar::dhivagarmart::filter::SellerFilter");
+    ADD_METHOD_TO(SellerController::GetStats, "/api/v1/seller/stats", drogon::Get, 
+                  "dhivagar::dhivagarmart::filter::LoggingFilter", "dhivagar::dhivagarmart::filter::SellerFilter");
     METHOD_LIST_END
 
     SellerController();
 
+    void GetStats(const drogon::HttpRequestPtr &req, std::function<void(const drogon::HttpResponsePtr &)> &&callback);
     void GetProducts(const drogon::HttpRequestPtr &req, std::function<void(const drogon::HttpResponsePtr &)> &&callback);
     void CreateProduct(const drogon::HttpRequestPtr &req, std::function<void(const drogon::HttpResponsePtr &)> &&callback);
     void UpdateProduct(const drogon::HttpRequestPtr &req, std::function<void(const drogon::HttpResponsePtr &)> &&callback, int64_t product_id);

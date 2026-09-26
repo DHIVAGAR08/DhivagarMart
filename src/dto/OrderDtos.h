@@ -10,12 +10,24 @@ namespace dhivagar::dhivagarmart::dto {
 
 struct CreateOrderRequestDto {
     std::string shipping_address;
-    std::string payment_method{"MOCK_PAYMENT"}; // Mock payment confirmation
+    std::string full_name;
+    std::string phone;
+    std::string city;
+    std::string state;
+    std::string pincode;
+    std::string payment_method{"CASH_ON_DELIVERY"};
+    std::string payment_nonce;
 };
 
 inline void from_json(const nlohmann::json& j, CreateOrderRequestDto& dto) {
     dto.shipping_address = j.value("shipping_address", "");
-    dto.payment_method = j.value("payment_method", "MOCK_PAYMENT");
+    dto.full_name = j.value("full_name", "");
+    dto.phone = j.value("phone", "");
+    dto.city = j.value("city", "");
+    dto.state = j.value("state", "");
+    dto.pincode = j.value("pincode", "");
+    dto.payment_method = j.value("payment_method", "CASH_ON_DELIVERY");
+    dto.payment_nonce = j.value("payment_nonce", "");
 }
 
 struct UpdateOrderStatusRequestDto {
@@ -71,6 +83,11 @@ struct OrderResponseDto {
     std::string status;
     int64_t total_amount_cents{0};
     std::string total_amount_formatted;
+    std::string payment_method{"CASH_ON_DELIVERY"};
+    std::string payment_status{"PENDING"};
+    std::string delivery_address;
+    std::string phone;
+    std::string full_name;
     std::string created_at;
     std::vector<OrderItemResponseDto> items;
 
@@ -83,6 +100,11 @@ struct OrderResponseDto {
         dto.status = model::OrderStatusToString(order.status);
         dto.total_amount_cents = order.total_amount.GetCents();
         dto.total_amount_formatted = order.total_amount.ToString();
+        dto.payment_method = order.payment_method.empty() ? "CASH_ON_DELIVERY" : order.payment_method;
+        dto.payment_status = order.payment_status.empty() ? "PENDING" : order.payment_status;
+        dto.delivery_address = order.delivery_address;
+        dto.phone = order.phone;
+        dto.full_name = order.full_name;
         dto.created_at = order.created_at;
         for (const auto& item : order.items) {
             dto.items.push_back(OrderItemResponseDto::FromModel(item));
@@ -100,6 +122,11 @@ inline void to_json(nlohmann::json& j, const OrderResponseDto& dto) {
         {"status", dto.status},
         {"total_amount_cents", dto.total_amount_cents},
         {"total_amount_formatted", dto.total_amount_formatted},
+        {"payment_method", dto.payment_method},
+        {"payment_status", dto.payment_status},
+        {"delivery_address", dto.delivery_address},
+        {"phone", dto.phone},
+        {"full_name", dto.full_name},
         {"created_at", dto.created_at},
         {"items", dto.items}
     };

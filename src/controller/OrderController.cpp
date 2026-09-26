@@ -84,4 +84,23 @@ void OrderController::GetOrderById(const drogon::HttpRequestPtr &req,
     }
 }
 
+void OrderController::CancelOrder(const drogon::HttpRequestPtr &req, 
+                                 std::function<void(const drogon::HttpResponsePtr &)> &&callback, 
+                                 int64_t order_id) {
+    std::string request_id = GetRequestId(req);
+    try {
+        int64_t user_id = req->session()->get<int64_t>("user_id");
+        std::string role = req->session()->get<std::string>("role");
+        bool is_admin = (role == "ADMIN");
+
+        auto order = order_service_->CancelOrder(order_id, user_id, is_admin, request_id);
+
+        nlohmann::json data;
+        to_json(data, order);
+        callback(util::JsonUtil::CreateSuccessResponse(data, drogon::k200OK));
+    } catch (const std::exception& e) {
+        callback(exception::GlobalExceptionHandler::HandleException(e, request_id));
+    }
+}
+
 } // namespace dhivagar::dhivagarmart::controller

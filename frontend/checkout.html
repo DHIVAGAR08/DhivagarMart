@@ -15,12 +15,19 @@
   <header>
     <div class="nav-container">
       <a href="index.html" class="brand">
-        <span class="logo-icon">⚡</span>
+        <span class="logo-icon">🛒</span>
         <span>Dhivagar <span class="brand-tech">Mart</span></span>
       </a>
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
-        <li><a href="products.html">All Products</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="index.html#categories-section">Categories</a></li>
+        <li><a href="products.html?offers=true">Offers</a></li>
+        <li>
+          <a href="wishlist.html">
+            ❤️ Wishlist <span id="wishlist-badge" class="badge" style="background:#e11d48;">0</span>
+          </a>
+        </li>
         <li>
           <a href="cart.html">
             🛒 Cart <span id="cart-badge" class="badge">0</span>
@@ -43,30 +50,99 @@
 
     <div style="display:grid; grid-template-columns: 1.5fr 1fr; gap:2.5rem;">
       <div class="form-card" style="margin:0; max-width:none; box-shadow:var(--shadow-md);">
-        <h2 style="font-size:1.3rem; font-weight:700; margin-bottom:1.2rem; color:var(--secondary);">
-          1. Express Delivery Address
-        </h2>
         <form id="checkout-form" onsubmit="handlePlaceOrder(event)">
-          <div class="form-group">
-            <label for="shipping-address">Delivery Destination (Street, Building, City, PIN/ZIP):</label>
-            <textarea id="shipping-address" class="form-control" rows="3" placeholder="Enter complete hardware delivery address..." required></textarea>
+          <!-- Section 1: Customer Contact & Shipping Details -->
+          <h2 style="font-size:1.3rem; font-weight:700; margin-bottom:1.2rem; color:var(--secondary);">
+            1. Recipient & Delivery Details
+          </h2>
+          
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
+            <div class="form-group" style="margin-bottom:0;">
+              <label for="full-name">Full Name:</label>
+              <input type="text" id="full-name" class="form-control" placeholder="e.g. John Doe" required>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label for="phone-number">Mobile / Contact Phone:</label>
+              <input type="tel" id="phone-number" class="form-control" placeholder="e.g. +91 98765 43210" required>
+            </div>
           </div>
 
+          <div class="form-group">
+            <label for="shipping-address">Street Address / Building / Area:</label>
+            <textarea id="shipping-address" class="form-control" rows="2" placeholder="House/Flat number, Building name, Street..." required></textarea>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; margin-bottom:1.5rem;">
+            <div class="form-group" style="margin-bottom:0;">
+              <label for="city">City / District:</label>
+              <input type="text" id="city" class="form-control" placeholder="e.g. Chennai" required>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label for="state">State / Region:</label>
+              <input type="text" id="state" class="form-control" placeholder="e.g. Tamil Nadu" required>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label for="pincode">Postal / PIN Code:</label>
+              <input type="text" id="pincode" class="form-control" placeholder="e.g. 600032" required>
+            </div>
+          </div>
+
+          <!-- Section 2: Payment Method Selection -->
           <h2 style="font-size:1.3rem; font-weight:700; margin: 1.75rem 0 0.8rem; color:var(--secondary);">
             2. Payment Method
           </h2>
-          <div style="background:var(--bg-subtle); padding:1.25rem; border-radius:var(--radius-md); border:1px solid var(--border-color); margin-bottom:1.5rem;">
-            <div style="display:flex; align-items:center; gap:0.6rem; font-weight:700; color:var(--secondary);">
-              <span>💳 Instant Mock Payment Gateway</span>
-              <span class="badge" style="background:#10b981;">Simulated Sandbox</span>
+
+          <div style="display:flex; flex-direction:column; gap:0.75rem; margin-bottom:1.5rem;">
+            <label style="display:flex; align-items:center; gap:0.75rem; padding:0.9rem 1.1rem; border:1px solid var(--border-color); border-radius:var(--radius-md); cursor:pointer; background:var(--bg-subtle);">
+              <input type="radio" name="payment-method" value="CASH_ON_DELIVERY" checked onchange="togglePaymentInputs('COD')">
+              <div>
+                <strong>💵 Cash on Delivery (COD)</strong>
+                <div style="font-size:0.82rem; color:var(--text-muted);">Pay with cash or digital payment when hardware arrives</div>
+              </div>
+            </label>
+
+            <label style="display:flex; align-items:center; gap:0.75rem; padding:0.9rem 1.1rem; border:1px solid var(--border-color); border-radius:var(--radius-md); cursor:pointer; background:var(--bg-subtle);">
+              <input type="radio" name="payment-method" value="UPI" onchange="togglePaymentInputs('UPI')">
+              <div>
+                <strong>⚡ Instant UPI (Google Pay / PhonePe / Paytm)</strong>
+                <div style="font-size:0.82rem; color:var(--text-muted);">Direct digital payment via UPI VPA</div>
+              </div>
+            </label>
+
+            <label style="display:flex; align-items:center; gap:0.75rem; padding:0.9rem 1.1rem; border:1px solid var(--border-color); border-radius:var(--radius-md); cursor:pointer; background:var(--bg-subtle);">
+              <input type="radio" name="payment-method" value="CARD" onchange="togglePaymentInputs('CARD')">
+              <div>
+                <strong>💳 Credit / Debit Card (Visa, MasterCard, RuPay)</strong>
+                <div style="font-size:0.82rem; color:var(--text-muted);">Secure payment via Credit or Debit Card</div>
+              </div>
+            </label>
+          </div>
+
+          <!-- Conditional Payment Sub-Inputs -->
+          <div id="payment-input-upi" style="display:none; background:white; border:1px dashed var(--primary); padding:1rem; border-radius:var(--radius-md); margin-bottom:1.5rem;">
+            <label for="upi-id" style="font-size:0.88rem; font-weight:600;">Virtual Payment Address (VPA / UPI ID):</label>
+            <input type="text" id="upi-id" class="form-control" placeholder="username@okhdfcbank" style="margin-top:0.3rem;">
+          </div>
+
+          <div id="payment-input-card" style="display:none; background:white; border:1px dashed var(--primary); padding:1rem; border-radius:var(--radius-md); margin-bottom:1.5rem;">
+            <div class="form-group" style="margin-bottom:0.75rem;">
+              <label for="mock-card-num" style="font-size:0.88rem; font-weight:600;">Card Number:</label>
+              <input type="text" id="mock-card-num" class="form-control" placeholder="4111 •••• •••• 1111" maxlength="19">
             </div>
-            <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.5rem; line-height:1.5;">
-              Native C++20 transactional engine guarantees atomic stock reduction, order creation, and mock payment settlement.
-            </p>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+              <div>
+                <label for="mock-card-exp" style="font-size:0.88rem; font-weight:600;">Expiry (MM/YY):</label>
+                <input type="text" id="mock-card-exp" class="form-control" placeholder="12/28" maxlength="5">
+              </div>
+              <div>
+                <label for="mock-card-cvv" style="font-size:0.88rem; font-weight:600;">CVV:</label>
+                <input type="password" id="mock-card-cvv" class="form-control" placeholder="•••" maxlength="4">
+              </div>
+            </div>
           </div>
 
           <button type="submit" id="place-order-btn" class="btn btn-primary btn-lg" style="width:100%; font-weight:700;">
-            Confirm Order & Pay (Mock)
+            Place Order Now
           </button>
         </form>
       </div>
@@ -77,8 +153,54 @@
     </div>
   </main>
 
+  <!-- Order Confirmation Modal -->
+  <div id="order-confirm-modal" class="modal-overlay" style="display:none;">
+    <div class="form-card" style="margin:0; width:92%; max-width:540px; box-shadow:var(--shadow-xl); text-align:center;">
+      <div style="font-size:3.5rem; margin-bottom:0.5rem;">🎉</div>
+      <h2 style="font-size:1.6rem; font-weight:800; color:var(--secondary); margin-bottom:0.5rem;">
+        Order Placed Successfully!
+      </h2>
+      <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:1.5rem;">
+        Thank you for shopping with Dhivagar Mart. Your electronics are being prepared.
+      </p>
+
+      <div style="background:var(--bg-subtle); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:1.25rem; text-align:left; margin-bottom:1.5rem;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:0.6rem;">
+          <span style="color:var(--text-muted);">Order Tracking ID:</span>
+          <strong id="confirm-order-id" style="color:var(--primary);">#DHV-1001</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:0.6rem;">
+          <span style="color:var(--text-muted);">Payment Method:</span>
+          <strong id="confirm-payment-method">CASH_ON_DELIVERY</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:0.6rem;">
+          <span style="color:var(--text-muted);">Payment Status:</span>
+          <span id="confirm-payment-status" class="badge" style="background:#10b981;">PAID</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:0.6rem;">
+          <span style="color:var(--text-muted);">Delivery Address:</span>
+          <span id="confirm-address" style="font-size:0.85rem; max-width:240px; text-align:right;"></span>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-size:1.1rem; font-weight:800; border-top:1px solid var(--border-color); padding-top:0.6rem;">
+          <span>Grand Total:</span>
+          <strong id="confirm-total" style="color:var(--primary);">₹0</strong>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+        <a href="orders.html" class="btn btn-primary" style="font-weight:700;">
+          📦 View My Orders
+        </a>
+        <a href="products.html" class="btn btn-secondary" style="font-weight:700;">
+          Continue Shopping
+        </a>
+      </div>
+    </div>
+  </div>
+  </main>
+
   <footer>
-    <p>© 2026 Dhivagar Mart. Native C++20 Drogon Marketplace.</p>
+    <p>© 2026 Dhivagar Mart. All rights reserved. Native C++20 • Drogon • PostgreSQL</p>
   </footer>
 
   <script src="js/api.js"></script>

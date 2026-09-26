@@ -10,8 +10,8 @@ async function loadCartPage() {
       container.innerHTML = `
         <div style="text-align: center; padding: 4rem 1rem;">
           <div style="font-size: 3rem; margin-bottom: 1rem;">🛒</div>
-          <h2>Your cart is currently empty</h2>
-          <p style="color: #6b7280; margin: 1rem 0 2rem;">Explore our fresh groceries and great daily deals!</p>
+          <h2>Your cart is empty.</h2>
+          <p style="color: var(--text-muted); margin: 1rem 0 2rem;">Explore our high-performance electronics, gadgets, and accessories!</p>
           <a href="products.html" class="btn btn-primary">Start Shopping</a>
         </div>
       `;
@@ -44,7 +44,7 @@ async function loadCartPage() {
                       </div>
                     </div>
                   </td>
-                  <td>${item.unit_price_formatted}</td>
+                  <td>${formatINR(item.unit_price_cents)}</td>
                   <td>
                     <div style="display: flex; align-items: center; gap: 0.4rem;">
                       <button onclick="changeQuantity(${item.product_id}, ${item.quantity - 1})" class="btn btn-secondary btn-sm">-</button>
@@ -52,7 +52,7 @@ async function loadCartPage() {
                       <button onclick="changeQuantity(${item.product_id}, ${item.quantity + 1})" class="btn btn-secondary btn-sm" ${item.quantity >= item.available_stock ? 'disabled' : ''}>+</button>
                     </div>
                   </td>
-                  <td style="font-weight: 700; color: var(--primary);">${item.subtotal_formatted}</td>
+                  <td style="font-weight: 700; color: var(--primary);">${formatINR(item.subtotal_cents)}</td>
                   <td>
                     <button onclick="removeItem(${item.product_id})" class="btn btn-danger btn-sm">✕</button>
                   </td>
@@ -64,25 +64,30 @@ async function loadCartPage() {
 
         <div>
           <div class="form-card" style="margin: 0; max-width: none;">
-            <h3 style="margin-bottom: 1.2rem;">Order Summary</h3>
+            <h3 style="margin-bottom: 1.2rem; color:var(--secondary);">Order Summary</h3>
             <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem;">
               <span>Total Items:</span>
               <strong>${cart.total_items}</strong>
             </div>
             <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem;">
               <span>Subtotal:</span>
-              <strong>${cart.total_formatted}</strong>
+              <strong>${formatINR(cart.total_cents)}</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; color: var(--success);">
+              <span>Delivery:</span>
+              <strong>FREE</strong>
             </div>
             <div style="display: flex; justify-content: space-between; margin-bottom: 1.2rem; color: var(--success);">
-              <span>Delivery Fee:</span>
-              <strong>FREE</strong>
+              <span>Discount:</span>
+              <strong>FREE Shipping</strong>
             </div>
             <hr style="border: 0; border-top: 1px solid var(--border-color); margin-bottom: 1.2rem;">
             <div style="display: flex; justify-content: space-between; margin-bottom: 1.5rem; font-size: 1.25rem;">
-              <span>Total:</span>
-              <strong style="color: var(--primary);">${cart.total_formatted}</strong>
+              <span style="font-weight:700;">Grand Total:</span>
+              <strong style="color: var(--primary); font-size:1.4rem;">${formatINR(cart.total_cents)}</strong>
             </div>
-            <a href="checkout.html" class="btn btn-primary" style="width: 100%;">Proceed to Checkout →</a>
+            <a href="checkout.html" class="btn btn-primary" style="width: 100%; text-align:center; display:block; margin-bottom:0.75rem; font-weight:700;">Proceed to Checkout →</a>
+            <a href="products.html" class="btn btn-secondary" style="width: 100%; text-align:center; display:block; font-weight:600;">← Continue Shopping</a>
           </div>
         </div>
       </div>

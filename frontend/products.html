@@ -15,19 +15,26 @@
   <header>
     <div class="nav-container">
       <a href="index.html" class="brand">
-        <span class="logo-icon">⚡</span>
+        <span class="logo-icon">🛒</span>
         <span>Dhivagar <span class="brand-tech">Mart</span></span>
       </a>
 
       <!-- Header Search Bar -->
       <form class="nav-search-bar" onsubmit="handleSearch(event)">
-        <input type="text" id="nav-search-input" placeholder="Search products, models, keywords (e.g. 5G, OLED, 16GB)...">
+        <input type="text" id="nav-search-input" placeholder="Search smartphones, laptops, audio, accessories...">
         <button type="submit">Search</button>
       </form>
 
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
-        <li><a href="products.html" class="active">All Products</a></li>
+        <li><a href="products.html" class="active">Products</a></li>
+        <li><a href="index.html#categories-section">Categories</a></li>
+        <li><a href="products.html?offers=true">Offers</a></li>
+        <li>
+          <a href="wishlist.html">
+            ❤️ Wishlist <span id="wishlist-badge" class="badge" style="background:#e11d48;">0</span>
+          </a>
+        </li>
         <li>
           <a href="cart.html">
             🛒 Cart <span id="cart-badge" class="badge">0</span>
@@ -66,6 +73,26 @@
       <button class="category-chip" onclick="filterCategory('Accessories', this)">🔌 Accessories</button>
     </div>
 
+    <!-- Sort & In-Stock Toolbar -->
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem; background:white; padding:0.75rem 1.25rem; border-radius:var(--radius-lg); border:1px solid var(--border-color); box-shadow:var(--shadow-sm);">
+      <div style="display:flex; align-items:center; gap:0.5rem; font-size:0.9rem;">
+        <label for="sort-select" style="font-weight:600; color:var(--secondary);">Sort By:</label>
+        <select id="sort-select" onchange="handleSortChange(this.value)" class="form-control" style="width:auto; padding:0.35rem 0.8rem; font-size:0.88rem;">
+          <option value="featured">Featured / Default</option>
+          <option value="price-asc">Price: Low → High</option>
+          <option value="price-desc">Price: High → Low</option>
+          <option value="newest">Newest Arrivals</option>
+        </select>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:0.5rem; font-size:0.9rem;">
+        <label style="display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-weight:600; color:var(--secondary);">
+          <input type="checkbox" id="instock-filter" onchange="handleInStockFilter(this.checked)">
+          <span>In Stock Only</span>
+        </label>
+      </div>
+    </div>
+
     <div id="products-grid" class="product-grid"></div>
   </main>
 
@@ -86,7 +113,7 @@
   </div>
 
   <footer>
-    <p>© 2026 Dhivagar Mart. Native C++20 Drogon Marketplace.</p>
+    <p>© 2026 Dhivagar Mart. All rights reserved. Native C++20 • Drogon • PostgreSQL</p>
   </footer>
 
   <script src="js/api.js"></script>

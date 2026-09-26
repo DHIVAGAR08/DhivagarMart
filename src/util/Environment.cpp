@@ -14,7 +14,10 @@ std::unordered_map<std::string, std::string>& Environment::GetCache() {
 void Environment::LoadEnvFile(const std::string& filepath) {
     std::ifstream file(filepath);
     if (!file.is_open()) {
-        return;
+        file.open("../" + filepath);
+        if (!file.is_open()) {
+            return;
+        }
     }
 
     std::string line;

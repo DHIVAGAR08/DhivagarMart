@@ -187,4 +187,15 @@ bool ProductRepository::ReduceStockInTransaction(pqxx::work& tx, int64_t product
     return res.affected_rows() > 0;
 }
 
+bool ProductRepository::RestoreStockInTransaction(pqxx::work& tx, int64_t product_id, int32_t quantity, const std::string& request_id) {
+    spdlog::debug("[{}] ProductRepository::RestoreStockInTransaction: id={} qty={}", request_id, product_id, quantity);
+    auto res = tx.exec_params(
+        "UPDATE products "
+        "SET stock_qty = stock_qty + $1 "
+        "WHERE id = $2;",
+        quantity, product_id
+    );
+    return res.affected_rows() > 0;
+}
+
 } // namespace dhivagar::dhivagarmart::repository

@@ -15,7 +15,7 @@
   <header>
     <div class="nav-container">
       <a href="index.html" class="brand">
-        <span class="logo-icon">⚡</span>
+        <span class="logo-icon">🛒</span>
         <span>Dhivagar <span class="brand-tech">Mart</span></span>
       </a>
       <ul class="nav-links">
@@ -39,6 +39,26 @@
       <button onclick="openAddModal()" class="btn btn-primary" style="font-weight:700;">
         + Add Tech Product
       </button>
+    </div>
+
+    <!-- Real PostgreSQL Sales Telemetry Summary -->
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:1.25rem; margin-bottom:2.5rem;">
+      <div class="form-card" style="margin:0; max-width:none; padding:1.25rem; box-shadow:var(--shadow-sm); border-left:4px solid var(--primary);">
+        <div style="font-size:0.82rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">Active Listings</div>
+        <div id="seller-stat-products" style="font-size:1.8rem; font-weight:800; color:var(--secondary); margin-top:0.3rem;">...</div>
+      </div>
+      <div class="form-card" style="margin:0; max-width:none; padding:1.25rem; box-shadow:var(--shadow-sm); border-left:4px solid #10b981;">
+        <div style="font-size:0.82rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">Customer Orders</div>
+        <div id="seller-stat-orders" style="font-size:1.8rem; font-weight:800; color:var(--secondary); margin-top:0.3rem;">...</div>
+      </div>
+      <div class="form-card" style="margin:0; max-width:none; padding:1.25rem; box-shadow:var(--shadow-sm); border-left:4px solid #f59e0b;">
+        <div style="font-size:0.82rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">Hardware Units Sold</div>
+        <div id="seller-stat-sold" style="font-size:1.8rem; font-weight:800; color:var(--secondary); margin-top:0.3rem;">...</div>
+      </div>
+      <div class="form-card" style="margin:0; max-width:none; padding:1.25rem; box-shadow:var(--shadow-sm); border-left:4px solid #8b5cf6;">
+        <div style="font-size:0.82rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">Store Revenue</div>
+        <div id="seller-stat-revenue" style="font-size:1.8rem; font-weight:800; color:var(--primary); margin-top:0.3rem;">...</div>
+      </div>
     </div>
 
     <!-- Product Inventory Section -->
@@ -117,8 +137,8 @@
         </div>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
           <div class="form-group">
-            <label for="product-price">Price in USD ($):</label>
-            <input type="number" id="product-price" step="0.01" min="0.01" class="form-control" placeholder="699.99" required>
+            <label for="product-price">Price in INR (₹):</label>
+            <input type="number" id="product-price" step="1" min="1" class="form-control" placeholder="49999" required>
           </div>
           <div class="form-group">
             <label for="product-stock">Available Units in Stock:</label>
@@ -142,7 +162,7 @@
   </div>
 
   <footer>
-    <p>© 2026 Dhivagar Mart. Native C++20 Drogon Marketplace.</p>
+    <p>© 2026 Dhivagar Mart. All rights reserved. Native C++20 • Drogon • PostgreSQL</p>
   </footer>
 
   <script src="js/api.js"></script>

@@ -1,7 +1,25 @@
 // Dhivagar Mart - Seller Portal
 async function initSellerDashboard() {
+  await loadSellerStats();
   await loadSellerProducts();
   await loadSellerOrders();
+}
+
+async function loadSellerStats() {
+  try {
+    const stats = await api.getSellerStats();
+    const prodEl = document.getElementById('seller-stat-products');
+    const orderEl = document.getElementById('seller-stat-orders');
+    const soldEl = document.getElementById('seller-stat-sold');
+    const revEl = document.getElementById('seller-stat-revenue');
+
+    if (prodEl) prodEl.textContent = stats.total_products;
+    if (orderEl) orderEl.textContent = stats.total_orders;
+    if (soldEl) soldEl.textContent = stats.total_items_sold;
+    if (revEl) revEl.textContent = formatINR(stats.total_revenue_cents);
+  } catch (err) {
+    console.error('Failed to load seller stats:', err);
+  }
 }
 
 async function loadSellerProducts() {
@@ -25,7 +43,7 @@ async function loadSellerProducts() {
           </div>
         </td>
         <td><span class="badge" style="background:#e5e7eb; color:#374151;">${p.category}</span></td>
-        <td><strong>${p.price_formatted}</strong></td>
+        <td><strong>${formatINR(p.price_cents)}</strong></td>
         <td>
           <span style="font-weight:600; color: ${p.stock_qty < 10 ? 'var(--danger)' : 'var(--success)'};">
             ${p.stock_qty} in stock
@@ -64,11 +82,12 @@ async function loadSellerOrders() {
       <tr>
         <td><strong>#${ord.id}</strong></td>
         <td>${ord.buyer_name} (${ord.buyer_email})</td>
-        <td><strong>${ord.total_amount_formatted}</strong></td>
+        <td><strong>${formatINR(ord.total_amount_cents)}</strong></td>
         <td>
           <select onchange="handleUpdateStatus(${ord.id}, this.value)" class="form-control" style="width: auto; padding: 0.3rem 0.6rem;">
             <option value="PENDING" ${ord.status === 'PENDING' ? 'selected' : ''}>PENDING</option>
             <option value="CONFIRMED" ${ord.status === 'CONFIRMED' ? 'selected' : ''}>CONFIRMED</option>
+            <option value="PROCESSING" ${ord.status === 'PROCESSING' ? 'selected' : ''}>PROCESSING</option>
             <option value="SHIPPED" ${ord.status === 'SHIPPED' ? 'selected' : ''}>SHIPPED</option>
             <option value="DELIVERED" ${ord.status === 'DELIVERED' ? 'selected' : ''}>DELIVERED</option>
             <option value="CANCELLED" ${ord.status === 'CANCELLED' ? 'selected' : ''}>CANCELLED</option>
@@ -87,7 +106,7 @@ async function handleSaveProduct(e) {
   const id = document.getElementById('product-modal-id').value;
   const name = document.getElementById('product-name').value;
   const category = document.getElementById('product-category').value;
-  const priceDollars = parseFloat(document.getElementById('product-price').value);
+  const priceRupees = parseFloat(document.getElementById('product-price').value);
   const stock = parseInt(document.getElementById('product-stock').value, 10);
   const desc = document.getElementById('product-desc').value;
   const imgUrl = document.getElementById('product-image').value;
@@ -95,7 +114,7 @@ async function handleSaveProduct(e) {
   const payload = {
     name,
     category,
-    price_cents: Math.round(priceDollars * 100),
+    price_cents: Math.round(priceRupees * 100),
     stock_qty: stock,
     description: desc,
     image_url: imgUrl
@@ -109,6 +128,7 @@ async function handleSaveProduct(e) {
     }
     closeProductModal();
     loadSellerProducts();
+    loadSellerStats();
   } catch (err) {
     alert('Failed to save product: ' + err.message);
   }
@@ -119,6 +139,7 @@ async function handleDeleteProduct(id) {
   try {
     await api.deleteSellerProduct(id);
     loadSellerProducts();
+    loadSellerStats();
   } catch (err) {
     alert('Delete failed: ' + err.message);
   }
@@ -129,6 +150,7 @@ async function handleUpdateStatus(orderId, status) {
     await api.updateSellerOrderStatus(orderId, status);
     alert(`Order #${orderId} status updated to ${status}`);
     loadSellerOrders();
+    loadSellerStats();
   } catch (err) {
     alert('Status update failed: ' + err.message);
   }
@@ -146,7 +168,7 @@ function openEditModal(prod) {
   document.getElementById('product-modal-title').textContent = `Edit Product #${prod.id}`;
   document.getElementById('product-name').value = prod.name;
   document.getElementById('product-category').value = prod.category;
-  document.getElementById('product-price').value = (prod.price_cents / 100).toFixed(2);
+  document.getElementById('product-price').value = Math.round(prod.price_cents / 100);
   document.getElementById('product-stock').value = prod.stock_qty;
   document.getElementById('product-desc').value = prod.description;
   document.getElementById('product-image').value = prod.image_url;

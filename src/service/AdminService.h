@@ -17,6 +17,8 @@ namespace dhivagar::dhivagarmart::service {
 
 struct AdminStatsDto {
     int64_t total_users{0};
+    int64_t buyers_count{0};
+    int64_t sellers_count{0};
     int64_t total_products{0};
     int64_t total_orders{0};
     int64_t total_revenue_cents{0};
@@ -26,6 +28,8 @@ struct AdminStatsDto {
 inline void to_json(nlohmann::json& j, const AdminStatsDto& s) {
     j = nlohmann::json{
         {"total_users", s.total_users},
+        {"buyers_count", s.buyers_count},
+        {"sellers_count", s.sellers_count},
         {"total_products", s.total_products},
         {"total_orders", s.total_orders},
         {"total_revenue_cents", s.total_revenue_cents},

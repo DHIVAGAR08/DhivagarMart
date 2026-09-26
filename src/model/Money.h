@@ -35,7 +35,7 @@ public:
         if (cents_ < 0) {
             oss << "-";
         }
-        oss << "$" << (abs_cents / 100) << "." << std::setw(2) << std::setfill('0') << (abs_cents % 100);
+        oss << "₹" << (abs_cents / 100) << "." << std::setw(2) << std::setfill('0') << (abs_cents % 100);
         return oss.str();
     }
 

@@ -20,6 +20,7 @@ public:
     MOCK_METHOD(bool, Delete, (int64_t id, int64_t seller_id, const std::string& request_id), (override));
     MOCK_METHOD(bool, AdminDelete, (int64_t id, const std::string& request_id), (override));
     MOCK_METHOD(bool, ReduceStockInTransaction, (pqxx::work& tx, int64_t product_id, int32_t quantity, const std::string& request_id), (override));
+    MOCK_METHOD(bool, RestoreStockInTransaction, (pqxx::work& tx, int64_t product_id, int32_t quantity, const std::string& request_id), (override));
 };
 
 TEST(ProductServiceTest, GetProductByIdSuccess) {
@@ -45,7 +46,7 @@ TEST(ProductServiceTest, GetProductByIdSuccess) {
     EXPECT_EQ(res.id, 1);
     EXPECT_EQ(res.name, "Fresh Organic Apples");
     EXPECT_EQ(res.price_cents, 399);
-    EXPECT_EQ(res.price_formatted, "$3.99");
+    EXPECT_EQ(res.price_formatted, "₹3.99");
 }
 
 TEST(ProductServiceTest, GetProductByIdNotFoundThrows) {

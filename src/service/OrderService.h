@@ -41,6 +41,11 @@ public:
      */
     dto::OrderResponseDto GetOrderById(int64_t order_id, int64_t user_id, bool is_admin, const std::string& request_id = "");
 
+    /**
+     * @brief Cancels an order, verifies permissions, restores inventory, and updates status to CANCELLED.
+     */
+    dto::OrderResponseDto CancelOrder(int64_t order_id, int64_t user_id, bool is_admin, const std::string& request_id = "");
+
 private:
     std::shared_ptr<repository::IOrderRepository> order_repo_;
     std::shared_ptr<repository::ICartRepository> cart_repo_;

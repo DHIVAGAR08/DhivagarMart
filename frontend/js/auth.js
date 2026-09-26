@@ -6,6 +6,7 @@ async function checkAuthState() {
     currentUser = await api.getCurrentUser();
     updateNavbar(currentUser);
     updateCartCount();
+    updateWishlistCount();
     return currentUser;
   } catch (err) {
     currentUser = null;
@@ -34,6 +35,7 @@ async function requireAuth(allowedRoles = []) {
     currentUser = user;
     updateNavbar(user);
     updateCartCount();
+    updateWishlistCount();
     return user;
   } catch (err) {
     // Session expired or unauthenticated -> redirect to login
@@ -72,12 +74,14 @@ function updateNavbar(user) {
 
     if (user.role === 'SELLER') {
       roleBadge = '<span class="badge" style="background:#0284c7">SELLER</span>';
-      roleLinks = '<li><a href="seller.html">🏪 Seller Portal</a></li>';
+      roleLinks = '<li><a href="seller.html">🏪 Seller Dashboard</a></li>';
     } else if (user.role === 'ADMIN') {
       roleBadge = '<span class="badge" style="background:#dc2626">ADMIN</span>';
-      roleLinks = '<li><a href="admin.html">🛡️ Admin Center</a></li>';
+      roleLinks = '<li><a href="admin.html">🛡️ Admin Dashboard</a></li>';
     } else {
-      roleLinks = '<li><a href="orders.html">📦 My Orders</a></li>';
+      roleLinks = `
+        <li><a href="orders.html">📦 My Orders</a></li>
+      `;
     }
 
     authNav.innerHTML = `
@@ -102,6 +106,17 @@ async function updateCartCount() {
   try {
     const cart = await api.getCart();
     badge.textContent = cart.total_items || 0;
+  } catch {
+    badge.textContent = 0;
+  }
+}
+
+async function updateWishlistCount() {
+  const badge = document.getElementById('wishlist-badge');
+  if (!badge) return;
+  try {
+    const list = await api.getWishlist();
+    badge.textContent = list.length || 0;
   } catch {
     badge.textContent = 0;
   }

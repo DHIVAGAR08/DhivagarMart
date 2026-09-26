@@ -28,6 +28,7 @@ public:
     virtual bool Delete(int64_t id, int64_t seller_id, const std::string& request_id = "") = 0;
     virtual bool AdminDelete(int64_t id, const std::string& request_id = "") = 0;
     virtual bool ReduceStockInTransaction(pqxx::work& tx, int64_t product_id, int32_t quantity, const std::string& request_id = "") = 0;
+    virtual bool RestoreStockInTransaction(pqxx::work& tx, int64_t product_id, int32_t quantity, const std::string& request_id = "") = 0;
 };
 
 } // namespace dhivagar::dhivagarmart::repository

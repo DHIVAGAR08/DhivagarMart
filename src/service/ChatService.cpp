@@ -56,7 +56,7 @@ std::string MockChatProvider::GetReply(const std::string& user_message, const st
         return "To place an order: Browse products, add desired items to your cart, proceed to Checkout, enter your delivery address, and confirm your mock payment!";
     }
     if (msg.find("payment") != std::string::npos || msg.find("pay") != std::string::npos) {
-        return "We currently support mock payment confirmation for instant, hassle-free checkout demonstrations.";
+        return "We support Cash on Delivery (COD), UPI (GPay/PhonePe/Paytm), and Credit/Debit Cards for fast, secure checkout in Indian Rupees (₹).";
     }
     if (msg.find("seller") != std::string::npos || msg.find("sell") != std::string::npos) {
         return "Interested in selling tech on Dhivagar Mart? Register an account with the 'SELLER' role to list and manage your electronics catalog and view incoming orders!";

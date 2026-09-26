@@ -10,9 +10,11 @@ async function loadAdminStats() {
   try {
     const stats = await api.getAdminStats();
     document.getElementById('stat-users').textContent = stats.total_users;
+    if (document.getElementById('stat-buyers')) document.getElementById('stat-buyers').textContent = stats.buyers_count || 0;
+    if (document.getElementById('stat-sellers')) document.getElementById('stat-sellers').textContent = stats.sellers_count || 0;
     document.getElementById('stat-products').textContent = stats.total_products;
     document.getElementById('stat-orders').textContent = stats.total_orders;
-    document.getElementById('stat-revenue').textContent = stats.total_revenue_formatted;
+    document.getElementById('stat-revenue').textContent = formatINR(stats.total_revenue_cents);
   } catch (err) {
     console.error('Failed to load stats', err);
   }
@@ -59,7 +61,7 @@ async function loadAdminProducts() {
         <td>Seller #${p.seller_id}</td>
         <td>${p.name}</td>
         <td><span class="badge" style="background:#e5e7eb; color:#374151;">${p.category}</span></td>
-        <td><strong>${p.price_formatted}</strong></td>
+        <td><strong>${formatINR(p.price_cents)}</strong></td>
         <td>${p.stock_qty}</td>
         <td>
           <button onclick="handleAdminDeleteProduct(${p.id})" class="btn btn-danger btn-sm">Remove Listing</button>
@@ -92,11 +94,12 @@ async function loadAdminOrders() {
       <tr>
         <td><strong>#${ord.id}</strong></td>
         <td>${ord.buyer_name} (${ord.buyer_email})</td>
-        <td><strong>${ord.total_amount_formatted}</strong></td>
+        <td><strong>${formatINR(ord.total_amount_cents)}</strong></td>
         <td>
           <select onchange="handleAdminUpdateStatus(${ord.id}, this.value)" class="form-control" style="width: auto; padding: 0.3rem 0.6rem;">
             <option value="PENDING" ${ord.status === 'PENDING' ? 'selected' : ''}>PENDING</option>
             <option value="CONFIRMED" ${ord.status === 'CONFIRMED' ? 'selected' : ''}>CONFIRMED</option>
+            <option value="PROCESSING" ${ord.status === 'PROCESSING' ? 'selected' : ''}>PROCESSING</option>
             <option value="SHIPPED" ${ord.status === 'SHIPPED' ? 'selected' : ''}>SHIPPED</option>
             <option value="DELIVERED" ${ord.status === 'DELIVERED' ? 'selected' : ''}>DELIVERED</option>
             <option value="CANCELLED" ${ord.status === 'CANCELLED' ? 'selected' : ''}>CANCELLED</option>

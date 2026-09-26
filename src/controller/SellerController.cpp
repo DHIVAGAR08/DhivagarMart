@@ -22,6 +22,21 @@ SellerController::SellerController() {
     seller_service_ = std::make_shared<service::SellerService>(product_repo, order_repo);
 }
 
+void SellerController::GetStats(const drogon::HttpRequestPtr &req, 
+                                std::function<void(const drogon::HttpResponsePtr &)> &&callback) {
+    std::string request_id = GetRequestId(req);
+    try {
+        int64_t seller_id = req->session()->get<int64_t>("user_id");
+        auto stats = seller_service_->GetSellerStats(seller_id, request_id);
+
+        nlohmann::json data;
+        to_json(data, stats);
+        callback(util::JsonUtil::CreateSuccessResponse(data, drogon::k200OK));
+    } catch (const std::exception& e) {
+        callback(exception::GlobalExceptionHandler::HandleException(e, request_id));
+    }
+}
+
 void SellerController::GetProducts(const drogon::HttpRequestPtr &req, 
                                    std::function<void(const drogon::HttpResponsePtr &)> &&callback) {
     std::string request_id = GetRequestId(req);

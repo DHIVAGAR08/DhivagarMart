@@ -1,23 +1,23 @@
-# 🛒 Dhivagar Mart - Native C++20 Marketplace Backend
+# 🛒 Dhivagar Mart - Native C++20 Electronics Marketplace
 
-A high-performance, secure, and modern grocery e-commerce marketplace web application built natively in **C++20** using the **Drogon** web framework, **PostgreSQL** (via `libpqxx`), and vanilla JavaScript frontend.
+A high-performance, secure, and modern electronics & technology e-commerce marketplace web application built natively in **C++20** using the **Drogon** web framework, **PostgreSQL** (via `libpqxx`), and modern HTML5/CSS3/vanilla JavaScript frontend.
 
 Strictly engineered in compliance with the **R2025_Sem3_C++_CapstoneProject** specification.
 
 ---
 
 ## 1. Project Overview
-**Dhivagar Mart** is a native C++ multi-seller grocery e-commerce platform. It provides role-based access for Buyers, Sellers, and Administrators. Buyers can search, filter, add groceries to carts, place orders through an atomic ACID transaction with mock payment, and submit verified reviews. Sellers manage inventory and fulfill customer orders. Administrators have full moderation control over listings, user accounts, and financial metrics. The platform also features an intelligent server-side AI Shopping Assistant.
+**Dhivagar Mart** is a native C++ multi-seller electronics and consumer technology marketplace designed for India (with native Indian Rupee `₹` pricing). It provides role-based access for Buyers, Sellers, and Administrators. Buyers can search, filter, add hardware to cart and wishlist, place orders through an atomic ACID transaction with Cash on Delivery (COD) or mock payment, track orders, and submit verified reviews. Sellers manage inventory and fulfill customer orders. Administrators have full moderation control over listings, user accounts, and financial metrics. The platform also features an intelligent server-side AI Shopping Assistant.
 
 ---
 
 ## 2. Features
 - **Authentication & Roles**: Secure Argon2id password hashing via libsodium; Drogon server-side session management with automatic pre-auth session invalidation. Roles: `BUYER`, `SELLER`, `ADMIN`.
-- **Product Catalog**: Multi-category grocery catalog (Fruits, Dairy, Rice & Grains, Vegetables, Snacks, Beverages) with full-text keyword search and real-time category filters.
-- **Shopping Cart**: Dynamic cart management, real-time stock validation, and running subtotal calculation using an immutable `Money` value type.
-- **ACID Checkout & Mock Payment**: Single-transaction atomic checkout that verifies inventory, processes simulated payment confirmation, creates order items, reduces stock, and clears the cart—with 100% rollback guarantee on any failure.
+- **Product Catalog**: Multi-category electronics catalog (Mobiles, Laptops, Electrical, Audio, Gaming, Cameras, Smart Watches, Accessories) with full-text keyword search, real-time category filters, and authentic Indian Rupee (`₹`) pricing.
+- **Shopping Cart & Wishlist**: Database-backed cart and wishlist (`cart_items`, `wishlist_items`), real-time stock validation, wishlist-to-cart migration, and running subtotal calculation using an immutable `Money` value type.
+- **ACID Checkout & Payment**: Single-transaction atomic checkout that verifies inventory, supports Cash on Delivery (COD), Mock UPI, and Mock Card, creates order items, reduces stock, and clears the cart—with 100% rollback guarantee on any failure.
 - **Verified Product Reviews**: 1 to 5 star ratings and reviews restricted strictly to verified buyers who have completed an order containing the product.
-- **Seller Portal**: Dedicated dashboard for sellers to manage inventory (CRUD) and update fulfillment status (`CONFIRMED` → `SHIPPED` → `DELIVERED`).
+- **Seller Portal**: Dedicated dashboard for sellers to manage inventory (CRUD), view incoming customer orders, and update fulfillment status (`CONFIRMED` → `SHIPPED` → `DELIVERED`).
 - **Admin Control Center**: System metrics dashboard (users, products, orders, gross revenue), user directory, global order monitoring, and catalog moderation.
 - **AI Shopping Assistant**: Server-side AI assistant using the Strategy pattern (`GeminiChatProvider` and `MockChatProvider`), equipped with sliding rate limiting (10 msg/min), domain-restricted prompt guardrails, in-memory question caching, and timeout fallbacks.
 - **Security & Integrity**: 100% parameterized SQL queries via `libpqxx` (no string interpolation), HTML output escaping, and masked error messages that prevent leaking database internals or stack traces.
@@ -77,21 +77,22 @@ dhivagarmart/
 │
 ├── db/
 │   ├── schema.sql              # Complete baseline PostgreSQL schema
-│   ├── seed.sql                # Seed data for demo users and grocery products
-│   └── migrations/             # Numbered transactional migrations (V1, V2, V3)
+│   ├── seed.sql                # Seed data for default platform accounts & electronics catalog
+│   └── migrations/             # Numbered transactional migrations (V1 through V6)
 │
-├── frontend/                   # Responsive web application (HTML/CSS/Vanilla JS)
+├── frontend/                   # Responsive web application (HTML5/CSS3/Vanilla JS)
 │   ├── index.html              # Marketplace home & featured catalog
-│   ├── products.html           # Full grocery catalog with search & filters
+│   ├── products.html           # Full electronics catalog with search & filters
 │   ├── product-details.html    # Product specs, verified reviews & ratings
 │   ├── cart.html               # Shopping cart & running totals
-│   ├── checkout.html           # Delivery address & mock payment confirmation
-│   ├── login.html              # Sign in with quick-demo credentials
+│   ├── checkout.html           # Delivery address & payment method selection
+│   ├── wishlist.html           # Saved items and move-to-cart workflow
+│   ├── login.html              # Sign in with registered credentials
 │   ├── register.html           # Buyer and seller account registration
-│   ├── orders.html             # Customer order history
+│   ├── orders.html             # Customer order history & tracking invoices
 │   ├── seller.html             # Seller inventory & fulfillment dashboard
 │   ├── admin.html              # Admin statistics, user directory & moderation
-│   ├── css/style.css           # Modern grocery aesthetic stylesheet
+│   ├── css/style.css           # Modern technology aesthetic stylesheet
 │   └── js/                     # Modular API client, auth, and view controllers
 │
 └── test/
@@ -146,7 +147,7 @@ sudo systemctl enable --now postgresql
 ## 8. PostgreSQL Database Creation
 Run `psql` to create the project database:
 ```bash
-psql -U postgres -h localhost -p 5433 -c "CREATE DATABASE dhivagarmart;"
+psql -U postgres -h localhost -p 5432 -c "CREATE DATABASE dhivagarmart;"
 ```
 
 ---
@@ -158,8 +159,8 @@ cp .env.example .env
 ```
 Configure your credentials in `.env`:
 ```ini
-DATABASE_HOST=127.0.0.1
-DATABASE_PORT=5433
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
 DATABASE_NAME=dhivagarmart
 DATABASE_USER=postgres
 DATABASE_PASSWORD=your_password_here
@@ -179,20 +180,26 @@ Dhivagar Mart includes an automatic `MigrationService`. On every application sta
 - `V1__init_schema.sql`: Core schema (users, products, orders, items, cart)
 - `V2__add_reviews_table.sql`: Verified customer reviews table
 - `V3__add_indexes.sql`: Performance indexes on all foreign keys and search columns
+- `V4__update_electronics_catalog.sql`: Electronics marketplace catalog upgrade
+- `V5__add_order_details_and_wishlist.sql`: Order contact/address attributes and wishlist support
+- `V6__realistic_electronics_pricing.sql`: Realistic Indian Rupee market pricing
 
 You can also apply them manually via `psql`:
 ```bash
-psql -U postgres -h 127.0.0.1 -p 5433 -d dhivagarmart -f db/migrations/V1__init_schema.sql
-psql -U postgres -h 127.0.0.1 -p 5433 -d dhivagarmart -f db/migrations/V2__add_reviews_table.sql
-psql -U postgres -h 127.0.0.1 -p 5433 -d dhivagarmart -f db/migrations/V3__add_indexes.sql
+psql -U postgres -h localhost -p 5432 -d dhivagarmart -f db/migrations/V1__init_schema.sql
+psql -U postgres -h localhost -p 5432 -d dhivagarmart -f db/migrations/V2__add_reviews_table.sql
+psql -U postgres -h localhost -p 5432 -d dhivagarmart -f db/migrations/V3__add_indexes.sql
+psql -U postgres -h localhost -p 5432 -d dhivagarmart -f db/migrations/V4__update_electronics_catalog.sql
+psql -U postgres -h localhost -p 5432 -d dhivagarmart -f db/migrations/V5__add_order_details_and_wishlist.sql
+psql -U postgres -h localhost -p 5432 -d dhivagarmart -f db/migrations/V6__realistic_electronics_pricing.sql
 ```
 
 ---
 
 ## 11. Seed Setup
-To populate the database with default administrative accounts and grocery products:
+To populate the database with default administrative accounts and verified electronics products:
 ```bash
-psql -U postgres -h 127.0.0.1 -p 5433 -d dhivagarmart -f db/seed.sql
+psql -U postgres -h localhost -p 5432 -d dhivagarmart -f db/seed.sql
 ```
 
 ---
@@ -266,6 +273,12 @@ The responsive UI supports desktop and mobile viewports with no external framewo
 - `GET  /api/v1/orders` - Buyer's order history
 - `GET  /api/v1/orders/{id}` - Specific order details
 
+### Wishlist
+- `GET    /api/v1/wishlist` - View customer wishlist
+- `POST   /api/v1/wishlist` - Save product to wishlist
+- `DELETE /api/v1/wishlist/{productId}` - Remove product from wishlist
+- `POST   /api/v1/wishlist/{productId}/move-to-cart` - Transfer saved item directly into cart
+
 ### Reviews & Ratings
 - `GET  /api/v1/products/{id}/reviews` - List product reviews
 - `POST /api/v1/products/{id}/reviews` - Post 1–5 star rating (verified buyers only)
@@ -303,10 +316,10 @@ Or execute the test binary directly:
 
 ---
 
-## 17. Demo Credentials
+## 17. Seeded Platform Accounts (Evaluation & Viva Defense)
 | Role | Email | Password | Permissions |
 | :--- | :--- | :--- | :--- |
-| **Admin** | `admin@dhivagarmart.com` | `Admin@123` | Full control, moderation, user management, metrics |
+| **Admin** | `admin@dhivagarmart.com` | `Admin@123` | Full governance, moderation, user management, telemetry |
 | **Seller** | `seller@dhivagarmart.com` | `Seller@123` | Manage own products, fulfill customer orders |
 | **Buyer** | `buyer@dhivagarmart.com` | `Buyer@123` | Browse catalog, add to cart, checkout, write reviews |
 
