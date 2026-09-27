@@ -35,7 +35,7 @@ find_package(libpqxx CONFIG QUIET)
 if(NOT TARGET libpqxx::pqxx)
     find_library(LIBPQXX_LIB NAMES pqxx libpqxx REQUIRED)
     find_library(LIBPQ_LIB NAMES pq libpq REQUIRED)
-    find_path(LIBPQXX_INCLUDE_DIR NAMES pqxx/pqxx REQUIRED)
+    find_path(LIBPQXX_INCLUDE_DIR NAMES pqxx/pqxx pqxx/connection.hxx REQUIRED)
     add_library(libpqxx::pqxx UNKNOWN IMPORTED)
     set_target_properties(libpqxx::pqxx PROPERTIES
         IMPORTED_LOCATION "${LIBPQXX_LIB}"
