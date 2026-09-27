@@ -38,7 +38,8 @@ public:
 
 private:
     std::vector<model::OrderItem> FetchOrderItems(pqxx::nontransaction& ntx, int64_t order_id);
-    model::Order RowToOrder(const pqxx::row_ref& row, pqxx::nontransaction& ntx);
+    template <typename TRow>
+    model::Order RowToOrder(const TRow& row, pqxx::nontransaction& ntx);
 };
 
 } // namespace dhivagar::dhivagarmart::repository

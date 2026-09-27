@@ -5,14 +5,14 @@
 
 namespace dhivagar::dhivagarmart::repository {
 
-static model::User RowToUser(const pqxx::row_ref& row) {
+static model::User RowToUser(const auto& row) {
     model::User u;
-    u.id = row["id"].as<int64_t>();
-    u.name = row["name"].as<std::string>();
-    u.email = row["email"].as<std::string>();
-    u.password_hash = row["password_hash"].as<std::string>();
-    u.role = model::StringToUserRole(row["role"].as<std::string>());
-    u.created_at = row["created_at"].as<std::string>();
+    u.id = row["id"].template as<int64_t>();
+    u.name = row["name"].c_str();
+    u.email = row["email"].c_str();
+    u.password_hash = row["password_hash"].c_str();
+    u.role = model::StringToUserRole(row["role"].c_str());
+    u.created_at = row["created_at"].c_str();
     return u;
 }
 

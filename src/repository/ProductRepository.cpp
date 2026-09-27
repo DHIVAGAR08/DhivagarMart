@@ -5,17 +5,17 @@
 
 namespace dhivagar::dhivagarmart::repository {
 
-static model::Product RowToProduct(const pqxx::row_ref& row) {
+static model::Product RowToProduct(const auto& row) {
     model::Product p;
-    p.id = row["id"].as<int64_t>();
-    p.seller_id = row["seller_id"].as<int64_t>();
-    p.name = row["name"].as<std::string>();
-    p.description = row["description"].as<std::string>();
-    p.price = model::Money::FromCents(row["price_cents"].as<int64_t>());
-    p.stock_qty = row["stock_qty"].as<int32_t>();
-    p.category = row["category"].as<std::string>();
-    p.image_url = row["image_url"].as<std::string>();
-    p.created_at = row["created_at"].as<std::string>();
+    p.id = row["id"].template as<int64_t>();
+    p.seller_id = row["seller_id"].template as<int64_t>();
+    p.name = row["name"].c_str();
+    p.description = row["description"].c_str();
+    p.price = model::Money::FromCents(row["price_cents"].template as<int64_t>());
+    p.stock_qty = row["stock_qty"].template as<int32_t>();
+    p.category = row["category"].c_str();
+    p.image_url = row["image_url"].c_str();
+    p.created_at = row["created_at"].c_str();
     return p;
 }
 
