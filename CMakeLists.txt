@@ -23,28 +23,55 @@ if(ENABLE_SANITIZERS AND NOT MSVC)
     add_link_options(-fsanitize=address,undefined)
 endif()
 
-# Required Packages via vcpkg
+# ============================================================
+# Required Dependencies (vcpkg on Windows / System packages on Linux)
+# ============================================================
+
+# 1. Drogon Web Framework
 find_package(Drogon CONFIG REQUIRED)
-find_package(libpqxx CONFIG REQUIRED)
-find_package(unofficial-sodium CONFIG REQUIRED)
+
+# 2. PostgreSQL C++ Client (libpqxx)
+find_package(libpqxx CONFIG QUIET)
+if(NOT TARGET libpqxx::pqxx)
+    find_library(LIBPQXX_LIB NAMES pqxx libpqxx REQUIRED)
+    find_library(LIBPQ_LIB NAMES pq libpq REQUIRED)
+    find_path(LIBPQXX_INCLUDE_DIR NAMES pqxx/pqxx REQUIRED)
+    add_library(libpqxx::pqxx UNKNOWN IMPORTED)
+    set_target_properties(libpqxx::pqxx PROPERTIES
+        IMPORTED_LOCATION "${LIBPQXX_LIB}"
+        INTERFACE_INCLUDE_DIRECTORIES "${LIBPQXX_INCLUDE_DIR}"
+        INTERFACE_LINK_LIBRARIES "${LIBPQ_LIB}"
+    )
+endif()
+
+# 3. Libsodium (Argon2id hashing)
+find_package(unofficial-sodium CONFIG QUIET)
+if(NOT TARGET unofficial-sodium::sodium)
+    find_library(SODIUM_LIB NAMES sodium libsodium REQUIRED)
+    find_path(SODIUM_INCLUDE_DIR NAMES sodium.h REQUIRED)
+    add_library(unofficial-sodium::sodium UNKNOWN IMPORTED)
+    set_target_properties(unofficial-sodium::sodium PROPERTIES
+        IMPORTED_LOCATION "${SODIUM_LIB}"
+        INTERFACE_INCLUDE_DIRECTORIES "${SODIUM_INCLUDE_DIR}"
+    )
+endif()
+
+# 4. JSON & Logging
 find_package(nlohmann_json CONFIG REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
+
+# 5. C++ HTTP/HTTPS Client (cpp-httplib)
 find_package(httplib CONFIG QUIET)
 if(NOT TARGET httplib::httplib)
-    find_path(HTTPLIB_INCLUDE_DIR httplib.h)
-    if(HTTPLIB_INCLUDE_DIR)
-        find_package(OpenSSL REQUIRED)
-        find_package(Threads REQUIRED)
-        add_library(httplib::httplib INTERFACE IMPORTED)
-        set_target_properties(httplib::httplib PROPERTIES
-            INTERFACE_INCLUDE_DIRECTORIES "${HTTPLIB_INCLUDE_DIR}"
-            INTERFACE_COMPILE_DEFINITIONS "CPPHTTPLIB_OPENSSL_SUPPORT"
-            INTERFACE_LINK_LIBRARIES "OpenSSL::SSL;OpenSSL::Crypto;Threads::Threads"
-        )
-        set(httplib_FOUND TRUE)
-    else()
-        find_package(httplib CONFIG REQUIRED)
-    endif()
+    find_path(HTTPLIB_INCLUDE_DIR NAMES httplib.h REQUIRED)
+    find_package(OpenSSL REQUIRED)
+    find_package(Threads REQUIRED)
+    add_library(httplib::httplib INTERFACE IMPORTED)
+    set_target_properties(httplib::httplib PROPERTIES
+        INTERFACE_INCLUDE_DIRECTORIES "${HTTPLIB_INCLUDE_DIR}"
+        INTERFACE_COMPILE_DEFINITIONS "CPPHTTPLIB_OPENSSL_SUPPORT"
+        INTERFACE_LINK_LIBRARIES "OpenSSL::SSL;OpenSSL::Crypto;Threads::Threads"
+    )
 endif()
 
 if(WIN32)
