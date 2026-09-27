@@ -29,7 +29,23 @@ find_package(libpqxx CONFIG REQUIRED)
 find_package(unofficial-sodium CONFIG REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
-find_package(httplib CONFIG REQUIRED)
+find_package(httplib CONFIG QUIET)
+if(NOT TARGET httplib::httplib)
+    find_path(HTTPLIB_INCLUDE_DIR httplib.h)
+    if(HTTPLIB_INCLUDE_DIR)
+        find_package(OpenSSL REQUIRED)
+        find_package(Threads REQUIRED)
+        add_library(httplib::httplib INTERFACE IMPORTED)
+        set_target_properties(httplib::httplib PROPERTIES
+            INTERFACE_INCLUDE_DIRECTORIES "${HTTPLIB_INCLUDE_DIR}"
+            INTERFACE_COMPILE_DEFINITIONS "CPPHTTPLIB_OPENSSL_SUPPORT"
+            INTERFACE_LINK_LIBRARIES "OpenSSL::SSL;OpenSSL::Crypto;Threads::Threads"
+        )
+        set(httplib_FOUND TRUE)
+    else()
+        find_package(httplib CONFIG REQUIRED)
+    endif()
+endif()
 
 if(WIN32)
     if(TARGET Trantor::Trantor)
