@@ -15,6 +15,7 @@ services:
     name: dhivagarmart
     env: docker
     dockerfilePath: ./Dockerfile
+    branch: main
     region: oregon
     plan: free
     healthCheckPath: /api/v1/health
