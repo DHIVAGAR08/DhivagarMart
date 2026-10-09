@@ -44,7 +44,7 @@ RUN git clone --depth 1 --branch v1.9.4 https://github.com/drogonframework/drogo
     && cd drogon \
     && git submodule update --init \
     && mkdir build && cd build \
-    && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF .. \
+    && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF -DCMAKE_INSTALL_LIBDIR=lib .. \
     && make -j2 \
     && make install \
     && ldconfig \
@@ -70,7 +70,7 @@ ENV PORT=8080
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libuuid1 \
     libjsoncpp-dev \
-    libssl3 \
+    libssl-dev \
     zlib1g \
     libpq5 \
     libpqxx-dev \
@@ -83,8 +83,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 
 # Copy compiled Drogon/Trantor shared libraries from builder
-COPY --from=builder /usr/local/lib/libdrogon* /usr/local/lib/
-COPY --from=builder /usr/local/lib/libtrantor* /usr/local/lib/
+COPY --from=builder /usr/local/lib/ /usr/local/lib/
 RUN ldconfig
 
 # Copy compiled executable and assets
