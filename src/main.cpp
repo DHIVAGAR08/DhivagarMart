@@ -78,14 +78,10 @@ int main() {
         );
 
         // 4. Initialize Database Connection Pool and Run Migrations
-        try {
-            plugin::DatabasePlugin::InitAndStart();
-            plugin::MigrationPlugin mig_plugin;
-            Json::Value empty_cfg;
-            mig_plugin.initAndStart(empty_cfg);
-        } catch (const std::exception& db_ex) {
-            spdlog::warn("Database connection could not be established during startup: {}. Server will start and reconnect on demand.", db_ex.what());
-        }
+        plugin::DatabasePlugin::InitAndStart();
+        plugin::MigrationPlugin mig_plugin;
+        Json::Value empty_cfg;
+        mig_plugin.initAndStart(empty_cfg);
 
         // 5. Run Server Event Loop
         spdlog::info("Dhivagar Mart server listening on {}:{}", host, port);

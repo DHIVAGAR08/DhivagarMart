@@ -29,6 +29,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libpqxx-dev \
     libsodium-dev \
     libspdlog-dev \
+    libfmt-dev \
     nlohmann-json3-dev \
     libcpp-httplib-dev \
     ca-certificates \
@@ -76,6 +77,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libpqxx-dev \
     libsodium23 \
     libspdlog-dev \
+    libfmt-dev \
     ca-certificates \
     curl \
     && rm -rf /var/lib/apt/lists/*
@@ -91,7 +93,7 @@ COPY --from=builder /workspace/build/DhivagarMart /app/DhivagarMart
 COPY --from=builder /workspace/frontend /app/frontend
 COPY --from=builder /workspace/db /app/db
 COPY --from=builder /workspace/.env.example /app/.env.example
-RUN mkdir -p /app/logs
+RUN mkdir -p /app/logs && chmod +x /app/DhivagarMart
 
 EXPOSE 8080
 
