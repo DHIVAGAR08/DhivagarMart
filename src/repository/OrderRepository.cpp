@@ -20,12 +20,12 @@ std::vector<model::OrderItem> OrderRepository::FetchOrderItems(pqxx::nontransact
     items.reserve(res.size());
     for (const auto& row : res) {
         model::OrderItem item;
-        item.id = row["id"].template as<int64_t>();
-        item.order_id = row["order_id"].template as<int64_t>();
-        item.product_id = row["product_id"].template as<int64_t>();
+        item.id = row["id"].as<int64_t>();
+        item.order_id = row["order_id"].as<int64_t>();
+        item.product_id = row["product_id"].as<int64_t>();
         item.product_name = row["product_name"].is_null() ? "Discontinued Product" : row["product_name"].c_str();
-        item.quantity = row["quantity"].template as<int32_t>();
-        item.unit_price = model::Money::FromCents(row["unit_price_cents"].template as<int64_t>());
+        item.quantity = row["quantity"].as<int32_t>();
+        item.unit_price = model::Money::FromCents(row["unit_price_cents"].as<int64_t>());
         item.created_at = row["created_at"].c_str();
         items.push_back(item);
     }
