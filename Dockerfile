@@ -45,7 +45,7 @@ RUN git clone --depth 1 --branch v1.9.4 https://github.com/drogonframework/drogo
     && git submodule update --init \
     && mkdir build && cd build \
     && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF .. \
-    && make -j$(nproc) \
+    && make -j2 \
     && make install \
     && ldconfig \
     && rm -rf /tmp/drogon
@@ -56,7 +56,7 @@ COPY . .
 
 RUN rm -rf build && mkdir build && cd build \
     && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=20 -DENABLE_TESTS=OFF .. \
-    && make -j$(nproc)
+    && make -j2
 
 # ------------------------------------------------------------
 # Stage 2: Runtime Stage (Minimal base with runtime libraries)
@@ -69,13 +69,13 @@ ENV PORT=8080
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libuuid1 \
-    libjsoncpp25 \
+    libjsoncpp-dev \
     libssl3 \
     zlib1g \
     libpq5 \
     libpqxx-dev \
     libsodium23 \
-    libspdlog1.12 \
+    libspdlog-dev \
     ca-certificates \
     curl \
     && rm -rf /var/lib/apt/lists/*
@@ -92,6 +92,7 @@ COPY --from=builder /workspace/build/DhivagarMart /app/DhivagarMart
 COPY --from=builder /workspace/frontend /app/frontend
 COPY --from=builder /workspace/db /app/db
 COPY --from=builder /workspace/.env.example /app/.env.example
+RUN mkdir -p /app/logs
 
 EXPOSE 8080
 

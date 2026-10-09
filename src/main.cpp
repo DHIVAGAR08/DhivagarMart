@@ -7,6 +7,7 @@
 #include <spdlog/sinks/rotating_file_sink.h>
 #include <iostream>
 #include <vector>
+#include <filesystem>
 
 using namespace dhivagar::dhivagarmart;
 
@@ -16,10 +17,16 @@ int main() {
         auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
         console_sink->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%^%l%$] %v");
 
-        auto file_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>("logs/dhivagarmart.log", 1024 * 1024 * 10, 3);
-        file_sink->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%l] %v");
+        std::vector<spdlog::sink_ptr> sinks {console_sink};
+        try {
+            std::filesystem::create_directories("logs");
+            auto file_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>("logs/dhivagarmart.log", 1024 * 1024 * 10, 3);
+            file_sink->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%l] %v");
+            sinks.push_back(file_sink);
+        } catch (const std::exception& ex) {
+            std::cerr << "Warning: file logger not available: " << ex.what() << std::endl;
+        }
 
-        std::vector<spdlog::sink_ptr> sinks {console_sink, file_sink};
         auto logger = std::make_shared<spdlog::logger>("dhivagarmart", sinks.begin(), sinks.end());
         logger->set_level(spdlog::level::debug);
         spdlog::set_default_logger(logger);
@@ -28,7 +35,7 @@ int main() {
         // 2. Load Environment Variables
         util::Environment::LoadEnvFile(".env");
         std::string host = util::Environment::Get("APP_HOST", "0.0.0.0");
-        int port = util::Environment::GetInt("APP_PORT", 8080);
+        int port = util::Environment::GetInt("APP_PORT", util::Environment::GetInt("PORT", 8080));
         int session_timeout = util::Environment::GetInt("SESSION_IDLE_TIMEOUT_SEC", 1800);
 
         std::cout << R"(

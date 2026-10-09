@@ -21,11 +21,15 @@ DatabasePlugin::~DatabasePlugin() {
 
 std::string DatabasePlugin::BuildConnectionString() {
     util::Environment::LoadEnvFile(".env");
-    std::string host = util::Environment::Get("DATABASE_HOST", "127.0.0.1");
-    std::string port = util::Environment::Get("DATABASE_PORT", "5432");
-    std::string dbname = util::Environment::Get("DATABASE_NAME", "dhivagarmart");
-    std::string user = util::Environment::Get("DATABASE_USER", "postgres");
-    std::string password = util::Environment::Get("DATABASE_PASSWORD", "");
+    std::string db_url = util::Environment::Get("DATABASE_URL", "");
+    if (!db_url.empty()) {
+        return db_url;
+    }
+    std::string host = util::Environment::Get("DATABASE_HOST", util::Environment::Get("DB_HOST", "127.0.0.1"));
+    std::string port = util::Environment::Get("DATABASE_PORT", util::Environment::Get("DB_PORT", "5432"));
+    std::string dbname = util::Environment::Get("DATABASE_NAME", util::Environment::Get("DB_NAME", "dhivagarmart"));
+    std::string user = util::Environment::Get("DATABASE_USER", util::Environment::Get("DB_USER", "postgres"));
+    std::string password = util::Environment::Get("DATABASE_PASSWORD", util::Environment::Get("DB_PASSWORD", ""));
 
     std::string conn_str = "host=" + host + " port=" + port + " dbname=" + dbname + " user=" + user;
     if (!password.empty()) {
