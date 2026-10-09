@@ -3,6 +3,7 @@
 #include <spdlog/spdlog.h>
 #include <iostream>
 #include <chrono>
+#include <thread>
 
 namespace dhivagar::dhivagarmart::plugin {
 
@@ -35,7 +36,7 @@ std::string DatabasePlugin::BuildConnectionString() {
     if (!password.empty()) {
         conn_str += " password=" + password;
     }
-    conn_str += " connect_timeout=5";
+    conn_str += " connect_timeout=15";
     return conn_str;
 }
 
@@ -46,47 +47,57 @@ void DatabasePlugin::initAndStart(const Json::Value &config) {
 
     connection_string_ = BuildConnectionString();
 
-    try {
-        // Test primary connection
-        auto primary_conn = std::make_shared<pqxx::connection>(connection_string_);
-        if (!primary_conn->is_open()) {
-            throw std::runtime_error("Database connection opened in invalid state");
-        }
+    const int max_retries = 5;
+    const int retry_delay_sec = 3;
 
-        {
-            pqxx::work tx(*primary_conn);
-            pqxx::result r = tx.exec("SELECT 1;");
-            tx.commit();
-        }
-
-        // Required exact specification log output
-        std::cout << "PostgreSQL connected successfully" << std::endl;
-        spdlog::info("PostgreSQL connected successfully");
-
-        {
-            std::lock_guard<std::mutex> lock(mutex_);
-            pool_.push(primary_conn);
-
-            // Pre-warm the pool to min_connections_
-            for (size_t i = 1; i < min_connections_; ++i) {
-                try {
-                    auto c = std::make_shared<pqxx::connection>(connection_string_);
-                    if (c->is_open()) {
-                        pool_.push(c);
-                    }
-                } catch (...) {
-                    break;
-                }
+    for (int attempt = 1; attempt <= max_retries; ++attempt) {
+        try {
+            spdlog::info("Connecting to PostgreSQL (attempt {}/{})...", attempt, max_retries);
+            auto primary_conn = std::make_shared<pqxx::connection>(connection_string_);
+            if (!primary_conn->is_open()) {
+                throw std::runtime_error("Database connection opened in invalid state");
             }
-            is_running_ = true;
+
+            {
+                pqxx::work tx(*primary_conn);
+                pqxx::result r = tx.exec("SELECT 1;");
+                tx.commit();
+            }
+
+            // Required exact specification log output
+            std::cout << "PostgreSQL connected successfully" << std::endl;
+            spdlog::info("PostgreSQL connected successfully");
+
+            {
+                std::lock_guard<std::mutex> lock(mutex_);
+                pool_.push(primary_conn);
+
+                // Pre-warm the pool to min_connections_
+                for (size_t i = 1; i < min_connections_; ++i) {
+                    try {
+                        auto c = std::make_shared<pqxx::connection>(connection_string_);
+                        if (c->is_open()) {
+                            pool_.push(c);
+                        }
+                    } catch (...) {
+                        break;
+                    }
+                }
+                is_running_ = true;
+            }
+            return;
+        } catch (const std::exception& e) {
+            spdlog::warn("Database connection attempt {}/{} failed: {}", attempt, max_retries, e.what());
+            if (attempt == max_retries) {
+                // Safe user-readable error without exposing database passwords
+                std::string safe_msg = "Database connection failed: unable to connect to host/port specified.";
+                std::cerr << safe_msg << " Details: " << e.what() << std::endl;
+                spdlog::error("{}. Error: {}", safe_msg, e.what());
+                is_running_ = false;
+                throw std::runtime_error(safe_msg);
+            }
+            std::this_thread::sleep_for(std::chrono::seconds(retry_delay_sec));
         }
-    } catch (const std::exception& e) {
-        // Safe user-readable error without exposing database passwords
-        std::string safe_msg = "Database connection failed: unable to connect to host/port specified.";
-        std::cerr << safe_msg << " Details: " << e.what() << std::endl;
-        spdlog::error("{}. Error: {}", safe_msg, e.what());
-        is_running_ = false;
-        throw std::runtime_error(safe_msg);
     }
 }
 
