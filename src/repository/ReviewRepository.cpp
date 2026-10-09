@@ -29,8 +29,8 @@ model::Review ReviewRepository::Create(const model::Review& review, const std::s
     created.product_id = row["product_id"].as<int64_t>();
     created.user_id = row["user_id"].as<int64_t>();
     created.rating = row["rating"].as<int32_t>();
-    created.comment = row["comment"].as<std::string>();
-    created.created_at = row["created_at"].as<std::string>();
+    created.comment = row["comment"].c_str();
+    created.created_at = row["created_at"].c_str();
     created.user_name = review.user_name;
     return created;
 }
@@ -58,9 +58,9 @@ std::vector<model::Review> ReviewRepository::FindByProductId(int64_t product_id,
         rev.product_id = row["product_id"].as<int64_t>();
         rev.user_id = row["user_id"].as<int64_t>();
         rev.rating = row["rating"].as<int32_t>();
-        rev.comment = row["comment"].as<std::string>();
-        rev.created_at = row["created_at"].as<std::string>();
-        rev.user_name = row["user_name"].as<std::string>();
+        rev.comment = row["comment"].c_str();
+        rev.created_at = row["created_at"].c_str();
+        rev.user_name = row["user_name"].c_str();
         reviews.push_back(rev);
     }
     return reviews;
