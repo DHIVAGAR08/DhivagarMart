@@ -58,9 +58,9 @@ std::vector<model::Review> ReviewRepository::FindByProductId(int64_t product_id,
         rev.product_id = row["product_id"].as<int64_t>();
         rev.user_id = row["user_id"].as<int64_t>();
         rev.rating = row["rating"].as<int32_t>();
-        rev.comment = row["comment"].c_str();
-        rev.created_at = row["created_at"].c_str();
-        rev.user_name = row["user_name"].c_str();
+        rev.comment = row["comment"].is_null() ? "" : row["comment"].c_str();
+        rev.created_at = row["created_at"].is_null() ? "" : row["created_at"].c_str();
+        rev.user_name = row["user_name"].is_null() ? "Customer" : row["user_name"].c_str();
         reviews.push_back(rev);
     }
     return reviews;

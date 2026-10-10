@@ -29,13 +29,13 @@ std::vector<model::WishlistItem> WishlistRepository::GetWishlistItems(int64_t us
         item.id = row["id"].as<int64_t>();
         item.user_id = row["user_id"].as<int64_t>();
         item.product_id = row["product_id"].as<int64_t>();
-        item.created_at = row["created_at"].c_str();
-        item.product_name = row["product_name"].c_str();
-        item.product_description = row["product_description"].c_str();
-        item.product_category = row["product_category"].c_str();
-        item.product_image_url = row["product_image_url"].c_str();
-        item.product_price = model::Money::FromCents(row["price_cents"].as<int64_t>());
-        item.available_stock = row["stock_qty"].as<int32_t>();
+        item.created_at = row["created_at"].is_null() ? "" : row["created_at"].c_str();
+        item.product_name = row["product_name"].is_null() ? "" : row["product_name"].c_str();
+        item.product_description = row["product_description"].is_null() ? "" : row["product_description"].c_str();
+        item.product_category = row["product_category"].is_null() ? "General" : row["product_category"].c_str();
+        item.product_image_url = row["product_image_url"].is_null() ? "" : row["product_image_url"].c_str();
+        item.product_price = model::Money::FromCents(row["price_cents"].is_null() ? 0 : row["price_cents"].as<int64_t>());
+        item.available_stock = row["stock_qty"].is_null() ? 0 : row["stock_qty"].as<int32_t>();
         items.push_back(item);
     }
     return items;

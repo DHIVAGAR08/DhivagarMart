@@ -14,14 +14,14 @@ ALTER TABLE orders DROP CONSTRAINT IF EXISTS orders_status_check;
 ALTER TABLE orders ADD CONSTRAINT orders_status_check 
     CHECK (status::text = ANY (ARRAY['PENDING', 'CONFIRMED', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED']));
 
--- 3. Backfill existing orders with default addresses
+-- 3. Backfill missing metadata columns on existing orders safely without fake addresses
 UPDATE orders 
-SET payment_method = 'CASH_ON_DELIVERY',
-    payment_status = CASE WHEN status = 'DELIVERED' THEN 'PAID' ELSE 'PENDING' END,
-    delivery_address = '42 Anna Salai, Guindy, Chennai, Tamil Nadu - 600032',
-    phone = '+91 98765 43210',
-    full_name = 'John Buyer'
-WHERE delivery_address IS NULL;
+SET payment_method = COALESCE(payment_method, 'CASH_ON_DELIVERY'),
+    payment_status = CASE WHEN status = 'DELIVERED' THEN 'PAID' ELSE COALESCE(payment_status, 'PENDING') END,
+    delivery_address = COALESCE(delivery_address, ''),
+    phone = COALESCE(phone, ''),
+    full_name = COALESCE(full_name, (SELECT u.name FROM users u WHERE u.id = orders.buyer_id), '')
+WHERE payment_method IS NULL OR payment_status IS NULL OR delivery_address IS NULL;
 
 -- 4. Create wishlist_items table
 CREATE TABLE IF NOT EXISTS wishlist_items (

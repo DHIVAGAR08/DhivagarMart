@@ -24,9 +24,9 @@ std::vector<model::OrderItem> OrderRepository::FetchOrderItems(pqxx::nontransact
         item.order_id = row["order_id"].as<int64_t>();
         item.product_id = row["product_id"].as<int64_t>();
         item.product_name = row["product_name"].is_null() ? "Discontinued Product" : row["product_name"].c_str();
-        item.quantity = row["quantity"].as<int32_t>();
-        item.unit_price = model::Money::FromCents(row["unit_price_cents"].as<int64_t>());
-        item.created_at = row["created_at"].c_str();
+        item.quantity = row["quantity"].is_null() ? 1 : row["quantity"].as<int32_t>();
+        item.unit_price = model::Money::FromCents(row["unit_price_cents"].is_null() ? 0 : row["unit_price_cents"].as<int64_t>());
+        item.created_at = row["created_at"].is_null() ? "" : row["created_at"].c_str();
         items.push_back(item);
     }
     return items;
@@ -36,17 +36,17 @@ template <typename TRow>
 model::Order OrderRepository::RowToOrder(const TRow& row, pqxx::nontransaction& ntx) {
     model::Order order;
     order.id = row["id"].template as<int64_t>();
-    order.buyer_id = row["buyer_id"].template as<int64_t>();
-    order.buyer_name = row["buyer_name"].c_str();
-    order.buyer_email = row["buyer_email"].c_str();
-    order.status = model::StringToOrderStatus(row["status"].c_str());
-    order.total_amount = model::Money::FromCents(row["total_amount_cents"].template as<int64_t>());
+    order.buyer_id = row["buyer_id"].is_null() ? 0 : row["buyer_id"].template as<int64_t>();
+    order.buyer_name = row["buyer_name"].is_null() ? "" : row["buyer_name"].c_str();
+    order.buyer_email = row["buyer_email"].is_null() ? "" : row["buyer_email"].c_str();
+    order.status = row["status"].is_null() ? model::OrderStatus::kPending : model::StringToOrderStatus(row["status"].c_str());
+    order.total_amount = model::Money::FromCents(row["total_amount_cents"].is_null() ? 0 : row["total_amount_cents"].template as<int64_t>());
     order.payment_method = row["payment_method"].is_null() ? "CASH_ON_DELIVERY" : row["payment_method"].c_str();
     order.payment_status = row["payment_status"].is_null() ? "PENDING" : row["payment_status"].c_str();
     order.delivery_address = row["delivery_address"].is_null() ? "" : row["delivery_address"].c_str();
     order.phone = row["phone"].is_null() ? "" : row["phone"].c_str();
     order.full_name = row["full_name"].is_null() ? "" : row["full_name"].c_str();
-    order.created_at = row["created_at"].c_str();
+    order.created_at = row["created_at"].is_null() ? "" : row["created_at"].c_str();
     order.items = FetchOrderItems(ntx, order.id);
     return order;
 }

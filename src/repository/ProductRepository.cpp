@@ -8,14 +8,14 @@ namespace dhivagar::dhivagarmart::repository {
 static model::Product RowToProduct(const auto& row) {
     model::Product p;
     p.id = row["id"].template as<int64_t>();
-    p.seller_id = row["seller_id"].template as<int64_t>();
-    p.name = row["name"].c_str();
-    p.description = row["description"].c_str();
-    p.price = model::Money::FromCents(row["price_cents"].template as<int64_t>());
-    p.stock_qty = row["stock_qty"].template as<int32_t>();
-    p.category = row["category"].c_str();
-    p.image_url = row["image_url"].c_str();
-    p.created_at = row["created_at"].c_str();
+    p.seller_id = row["seller_id"].is_null() ? 0 : row["seller_id"].template as<int64_t>();
+    p.name = row["name"].is_null() ? "" : row["name"].c_str();
+    p.description = row["description"].is_null() ? "" : row["description"].c_str();
+    p.price = model::Money::FromCents(row["price_cents"].is_null() ? 0 : row["price_cents"].template as<int64_t>());
+    p.stock_qty = row["stock_qty"].is_null() ? 0 : row["stock_qty"].template as<int32_t>();
+    p.category = row["category"].is_null() ? "General" : row["category"].c_str();
+    p.image_url = row["image_url"].is_null() ? "" : row["image_url"].c_str();
+    p.created_at = row["created_at"].is_null() ? "" : row["created_at"].c_str();
     return p;
 }
 

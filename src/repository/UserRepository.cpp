@@ -8,11 +8,11 @@ namespace dhivagar::dhivagarmart::repository {
 static model::User RowToUser(const auto& row) {
     model::User u;
     u.id = row["id"].template as<int64_t>();
-    u.name = row["name"].c_str();
-    u.email = row["email"].c_str();
-    u.password_hash = row["password_hash"].c_str();
-    u.role = model::StringToUserRole(row["role"].c_str());
-    u.created_at = row["created_at"].c_str();
+    u.name = row["name"].is_null() ? "" : row["name"].c_str();
+    u.email = row["email"].is_null() ? "" : row["email"].c_str();
+    u.password_hash = row["password_hash"].is_null() ? "" : row["password_hash"].c_str();
+    u.role = row["role"].is_null() ? model::UserRole::kBuyer : model::StringToUserRole(row["role"].c_str());
+    u.created_at = row["created_at"].is_null() ? "" : row["created_at"].c_str();
     return u;
 }
 
