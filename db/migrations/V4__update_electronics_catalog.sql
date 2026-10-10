@@ -2,6 +2,35 @@
 -- Transition marketplace catalog from grocery domain to high-performance Electronics & Technology domain.
 -- Preserves all relational constraints, users, and audit records.
 
+-- 1. Ensure baseline platform accounts exist if not already present
+INSERT INTO users (id, name, email, password_hash, role, created_at) VALUES
+(1, 'System Administrator', 'admin@dhivagarmart.com', '$argon2id$v=19$m=65536,t=2,p=1$/gMIaFVSkxkVrUEcRmk4Fw$dXrXmSmKg/CLNNwhD5urIu+zrSJTQQ9KXqkCwwjplgI', 'ADMIN', CURRENT_TIMESTAMP),
+(2, 'Fresh Farms Seller', 'seller@dhivagarmart.com', '$argon2id$v=19$m=65536,t=2,p=1$60XS1/dAcJXeCGW9QH49HQ$Qc+9gXEL0gw5j9/pWApfCOo09ypVuWEE/VE5Ix/h9BA', 'SELLER', CURRENT_TIMESTAMP),
+(3, 'John Buyer', 'buyer@dhivagarmart.com', '$argon2id$v=19$m=65536,t=2,p=1$Ch4z8sIA7Rv4pqAbb5ncnA$sVJSho07stk6d6fWPtpA9VfBM8tvj4Td41CLva3usgA', 'BUYER', CURRENT_TIMESTAMP)
+ON CONFLICT (id) DO NOTHING;
+
+SELECT setval('users_id_seq', (SELECT GREATEST(MAX(id), 3) FROM users));
+
+-- 2. Ensure original product rows (1-16) exist with canonical values before update
+INSERT INTO products (id, seller_id, name, description, price_cents, stock_qty, category, image_url, created_at) VALUES
+(1, 2, 'Samsung Galaxy S24 Ultra 5G (512GB, Titanium Gray)', 'Flagship smartphone featuring Galaxy AI, 200MP quad camera, Snapdragon 8 Gen 3, and integrated S-Pen.', 12999900, 45, 'Mobiles', 'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=600&auto=format&fit=crop&q=80', CURRENT_TIMESTAMP),
+(2, 2, 'Apple iPhone 15 Pro Max (256GB, Natural Titanium)', 'Aerospace-grade titanium design, A17 Pro chip, 48MP main camera with 5x optical telephoto, and Action button.', 13490000, 30, 'Mobiles', 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=600&auto=format&fit=crop&q=80', CURRENT_TIMESTAMP),
+(3, 2, 'OnePlus 12 5G (16GB RAM, 512GB Storage, Silky Black)', '4th Gen Hasselblad Camera System, 5400mAh battery with 100W SUPERVOOC charging, and 2K 120Hz ProXDR display.', 6499900, 50, 'Mobiles', 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=600&auto=format&fit=crop&q=80', CURRENT_TIMESTAMP),
+(4, 2, 'Redmi Note 13 Pro+ 5G (Fusion Purple, 256GB)', '200MP ultra-clear camera with OIS, 120Hz 3D curved AMOLED display, and 120W HyperCharge.', 2999900, 75, 'Mobiles', 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&auto=format&fit=crop&q=80', CURRENT_TIMESTAMP),
+(5, 2, 'Realme 12 Pro+ 5G (Submarine Blue, 256GB)', 'Periscope portrait camera, luxury watch design by Ollivier Saveo, and 120Hz curved vision display.', 2499900, 60, 'Mobiles', 'https://images.unsplash.com/photo-1565849904461-04a58ad377e0?w=600&auto=format&fit=crop&q=80', CURRENT_TIMESTAMP),
+(6, 2, 'Dell Inspiron 15 Laptop (Intel Core i7 13th Gen, 16GB, 512GB SSD)', 'High-productivity everyday laptop with 15.6-inch FHD 120Hz display, backlit keyboard, and Windows 11.', 6899000, 35, 'Laptops', 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=600&auto=format&fit=crop&q=80', CURRENT_TIMESTAMP),
+(7, 2, 'HP Pavilion 15 Laptop (AMD Ryzen 7, 16GB RAM, 1TB SSD)', 'Sleek aluminum body laptop featuring Audio by B&O, micro-edge IPS anti-glare display, and fast charging.', 5499900, 40, 'Laptops', 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=600&auto=format&fit=crop&q=80', CURRENT_TIMESTAMP),
+(8, 2, 'Lenovo IdeaPad Slim 3 (Intel Core i5 12th Gen, 16GB, FHD IPS)', 'Thin and light laptop with military-grade durability, privacy shutter webcam, and rapid charge boost.', 4999900, 50, 'Laptops', 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&auto=format&fit=crop&q=80', CURRENT_TIMESTAMP),
+(9, 2, 'ASUS Vivobook 16X (Intel Core i5, RTX 3050 4GB, 16GB RAM)', 'Creator and gaming laptop with 16-inch 120Hz display, ErgoSense keyboard, and IceCool thermal technology.', 6499900, 30, 'Laptops', 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600&auto=format&fit=crop&q=80', CURRENT_TIMESTAMP),
+(10, 2, 'Acer Aspire 5 Laptop (13th Gen Intel Core i5, 16GB RAM, 512GB SSD)', 'Versatile multi-tasking laptop with elevated hinge design for cooling, Wi-Fi 6E, and dual stereo speakers.', 5199000, 45, 'Laptops', 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&auto=format&fit=crop&q=80', CURRENT_TIMESTAMP),
+(11, 2, '55-inch 4K Ultra HD Smart LED TV (Dolby Vision & Atmos)', 'Bezel-less cinema display with Google TV OS, MEMC motion smoothing, and 30W high-fidelity speakers.', 4299900, 25, 'Electrical', 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=600&auto=format&fit=crop&q=80', CURRENT_TIMESTAMP),
+(12, 2, 'Stainless Steel 1.8L Fast-Boil Electric Kettle', '1500W rapid boiling element with auto shut-off, boil-dry protection, and 360-degree swivel base.', 149900, 120, 'Electrical', 'https://images.unsplash.com/photo-1570222094114-d054a817e56b?w=600&auto=format&fit=crop&q=80', CURRENT_TIMESTAMP),
+(13, 2, 'Heavy-Duty 750W 4-Jar Kitchen Mixer Grinder', '100% copper motor with overload protection, stainless steel blades, and dedicated juicer extractor jar.', 349900, 80, 'Electrical', 'https://images.unsplash.com/photo-1584269600464-37b1b58a9fe7?w=600&auto=format&fit=crop&q=80', CURRENT_TIMESTAMP),
+(14, 2, 'High-Speed Silent Aerodynamic 1200mm Ceiling Fan', 'Energy-efficient BLDC motor with RF remote control, sleep timer, and anti-dust coating.', 249900, 90, 'Electrical', 'https://images.unsplash.com/photo-1585338107529-13afc5f02586?w=600&auto=format&fit=crop&q=80', CURRENT_TIMESTAMP),
+(15, 2, '1.5 Ton 5-Star Inverter Split Air Conditioner with Wi-Fi', 'Dual inverter compressor, 4-in-1 convertible cooling, PM 2.5 air purification filter, and voice control.', 3899000, 20, 'Electrical', 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=600&auto=format&fit=crop&q=80', CURRENT_TIMESTAMP),
+(16, 2, 'Active Noise Cancelling True Wireless Earbuds (ANC 45dB)', 'High-res spatial audio, dual transparency mode, 40 hours total battery life with wireless charging case.', 449900, 110, 'Audio', 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=600&auto=format&fit=crop&q=80', CURRENT_TIMESTAMP)
+ON CONFLICT (id) DO NOTHING;
+
 -- Update existing product rows (1-16) to Electronics products
 UPDATE products SET 
     name = 'Samsung Galaxy S24 Ultra 5G (512GB, Titanium Gray)',

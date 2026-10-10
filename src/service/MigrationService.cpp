@@ -51,15 +51,21 @@ int MigrationService::RunPendingMigrations(const std::string& migrations_dir) {
     }
 
     // 3. Scan directory for Vx__*.sql files
-    if (!fs::exists(migrations_dir)) {
-        spdlog::warn("Migrations directory {} does not exist, skipping.", migrations_dir);
-        return 0;
+    std::string active_dir = migrations_dir;
+    if (!fs::exists(active_dir)) {
+        if (fs::exists("/app/" + migrations_dir)) {
+            active_dir = "/app/" + migrations_dir;
+        } else {
+            spdlog::warn("Migrations directory {} does not exist, skipping.", migrations_dir);
+            return 0;
+        }
     }
+    spdlog::info("Reading migrations from directory: {}", active_dir);
 
     std::vector<MigrationItem> available_migrations;
     static const std::regex kMigrationFileRegex(R"(^V(\d+)__(.+)\.sql$)");
 
-    for (const auto& entry : fs::directory_iterator(migrations_dir)) {
+    for (const auto& entry : fs::directory_iterator(active_dir)) {
         if (!entry.is_regular_file()) continue;
         std::string filename = entry.path().filename().string();
         std::smatch match;
