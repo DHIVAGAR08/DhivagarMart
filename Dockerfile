@@ -78,6 +78,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libsodium23 \
     libspdlog-dev \
     libfmt-dev \
+    libcpp-httplib-dev \
     ca-certificates \
     curl \
     && rm -rf /var/lib/apt/lists/*

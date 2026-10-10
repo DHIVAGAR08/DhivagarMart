@@ -4,6 +4,9 @@
 #include "exception/AppException.h"
 #include <spdlog/spdlog.h>
 #include <algorithm>
+#ifndef CPPHTTPLIB_OPENSSL_SUPPORT
+#define CPPHTTPLIB_OPENSSL_SUPPORT
+#endif
 #ifdef CPPHTTPLIB_USE_NON_BLOCKING_GETADDRINFO
 #undef CPPHTTPLIB_USE_NON_BLOCKING_GETADDRINFO
 #endif

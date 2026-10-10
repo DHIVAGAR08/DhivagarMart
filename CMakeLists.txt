@@ -60,17 +60,34 @@ endif()
 find_package(nlohmann_json CONFIG REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
 
-# 5. C++ HTTP/HTTPS Client (cpp-httplib)
+# 5. C++ HTTP/HTTPS Client (cpp-httplib) & OpenSSL
+find_package(OpenSSL REQUIRED)
+find_package(Threads REQUIRED)
+
 find_package(httplib CONFIG QUIET)
 if(NOT TARGET httplib::httplib)
-    find_path(HTTPLIB_INCLUDE_DIR NAMES httplib.h REQUIRED)
-    find_package(OpenSSL REQUIRED)
-    find_package(Threads REQUIRED)
+    find_package(PkgConfig QUIET)
+    if(PKG_CONFIG_FOUND)
+        pkg_check_modules(PC_HTTPLIB QUIET cpp-httplib)
+    endif()
+
+    find_path(HTTPLIB_INCLUDE_DIR NAMES httplib.h
+        HINTS ${PC_HTTPLIB_INCLUDE_DIRS}
+    )
+    find_library(HTTPLIB_LIBRARY NAMES cpp-httplib httplib
+        HINTS ${PC_HTTPLIB_LIBRARY_DIRS}
+    )
+
     add_library(httplib::httplib INTERFACE IMPORTED)
+    set(_httplib_link_libs OpenSSL::SSL OpenSSL::Crypto Threads::Threads)
+    if(HTTPLIB_LIBRARY)
+        list(PREPEND _httplib_link_libs "${HTTPLIB_LIBRARY}")
+    endif()
+
     set_target_properties(httplib::httplib PROPERTIES
         INTERFACE_INCLUDE_DIRECTORIES "${HTTPLIB_INCLUDE_DIR}"
         INTERFACE_COMPILE_DEFINITIONS "CPPHTTPLIB_OPENSSL_SUPPORT"
-        INTERFACE_LINK_LIBRARIES "OpenSSL::SSL;OpenSSL::Crypto;Threads::Threads"
+        INTERFACE_LINK_LIBRARIES "${_httplib_link_libs}"
     )
 endif()
 
@@ -141,6 +158,10 @@ target_include_directories(DhivagarMart PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
+target_compile_definitions(DhivagarMart PRIVATE
+    CPPHTTPLIB_OPENSSL_SUPPORT
+)
+
 target_link_libraries(DhivagarMart PRIVATE
     Drogon::Drogon
     libpqxx::pqxx
@@ -148,6 +169,9 @@ target_link_libraries(DhivagarMart PRIVATE
     nlohmann_json::nlohmann_json
     spdlog::spdlog
     httplib::httplib
+    OpenSSL::SSL
+    OpenSSL::Crypto
+    Threads::Threads
 )
 
 if(WIN32)
@@ -175,6 +199,10 @@ if(ENABLE_TESTS)
         ${CMAKE_CURRENT_SOURCE_DIR}/src
     )
 
+    target_compile_definitions(DhivagarMartTests PRIVATE
+        CPPHTTPLIB_OPENSSL_SUPPORT
+    )
+
     target_link_libraries(DhivagarMartTests PRIVATE
         GTest::gtest
         GTest::gmock
@@ -185,6 +213,9 @@ if(ENABLE_TESTS)
         nlohmann_json::nlohmann_json
         spdlog::spdlog
         httplib::httplib
+        OpenSSL::SSL
+        OpenSSL::Crypto
+        Threads::Threads
     )
 
     if(WIN32)
