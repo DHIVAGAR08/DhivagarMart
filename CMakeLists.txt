@@ -174,6 +174,10 @@ target_link_libraries(DhivagarMart PRIVATE
     Threads::Threads
 )
 
+if(HTTPLIB_LIBRARY)
+    target_link_libraries(DhivagarMart PRIVATE ${HTTPLIB_LIBRARY})
+endif()
+
 if(WIN32)
     target_link_libraries(DhivagarMart PRIVATE ws2_32 wsock32 crypt32)
 endif()
@@ -217,6 +221,10 @@ if(ENABLE_TESTS)
         OpenSSL::Crypto
         Threads::Threads
     )
+
+    if(HTTPLIB_LIBRARY)
+        target_link_libraries(DhivagarMartTests PRIVATE ${HTTPLIB_LIBRARY})
+    endif()
 
     if(WIN32)
         target_link_libraries(DhivagarMartTests PRIVATE ws2_32 wsock32 crypt32)
