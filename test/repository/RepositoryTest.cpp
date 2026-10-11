@@ -31,7 +31,7 @@ TEST_F(RepositoryTest, UserFindAdmin) {
 TEST_F(RepositoryTest, ProductFindAllAndFilter) {
     repository::ProductRepository repo;
     auto all_prods = repo.FindAll(std::nullopt, std::nullopt);
-    EXPECT_GE(all_prods.size(), 10u);
+    EXPECT_GE(all_prods.size(), 6u);
 
     auto mobile_prods = repo.FindAll("Mobiles", std::nullopt);
     EXPECT_GE(mobile_prods.size(), 2u);

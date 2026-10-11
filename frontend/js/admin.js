@@ -99,7 +99,6 @@ async function loadAdminOrders() {
           <select onchange="handleAdminUpdateStatus(${ord.id}, this.value)" class="form-control" style="width: auto; padding: 0.3rem 0.6rem;">
             <option value="PENDING" ${ord.status === 'PENDING' ? 'selected' : ''}>PENDING</option>
             <option value="CONFIRMED" ${ord.status === 'CONFIRMED' ? 'selected' : ''}>CONFIRMED</option>
-            <option value="PROCESSING" ${ord.status === 'PROCESSING' ? 'selected' : ''}>PROCESSING</option>
             <option value="SHIPPED" ${ord.status === 'SHIPPED' ? 'selected' : ''}>SHIPPED</option>
             <option value="DELIVERED" ${ord.status === 'DELIVERED' ? 'selected' : ''}>DELIVERED</option>
             <option value="CANCELLED" ${ord.status === 'CANCELLED' ? 'selected' : ''}>CANCELLED</option>

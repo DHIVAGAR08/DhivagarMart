@@ -64,6 +64,11 @@ dto::OrderResponseDto AdminService::UpdateOrderStatus(int64_t order_id, const st
         throw exception::ValidationException("Invalid order ID");
     }
 
+    if (status_str != "PENDING" && status_str != "CONFIRMED" && status_str != "PROCESSING" &&
+        status_str != "SHIPPED" && status_str != "DELIVERED" && status_str != "CANCELLED") {
+        throw exception::ValidationException("Invalid order status: " + status_str);
+    }
+
     model::OrderStatus target = model::StringToOrderStatus(status_str);
     if (!order_repo_->UpdateStatus(order_id, target, request_id)) {
         throw exception::NotFoundException("Order not found");

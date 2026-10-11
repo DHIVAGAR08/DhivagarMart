@@ -158,8 +158,14 @@ dto::OrderResponseDto SellerService::UpdateOrderStatus(
             break;
         }
     }
+
     if (!has_seller_items) {
         throw exception::AuthorizationException("This order does not contain products from your store");
+    }
+
+    if (new_status != "PENDING" && new_status != "CONFIRMED" && new_status != "PROCESSING" &&
+        new_status != "SHIPPED" && new_status != "DELIVERED" && new_status != "CANCELLED") {
+        throw exception::ValidationException("Invalid order status: " + new_status);
     }
 
     model::OrderStatus target_status = model::StringToOrderStatus(new_status);

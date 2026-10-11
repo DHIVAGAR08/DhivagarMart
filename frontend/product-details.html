@@ -124,8 +124,7 @@
     let currentProduct = null;
 
     async function loadDetails() {
-      const user = await requireAuth();
-      if (!user) return;
+      await checkAuthState();
 
       const params = new URLSearchParams(window.location.search);
       currentProdId = params.get('id');
@@ -251,6 +250,11 @@
         updateWishlistCount();
         alert('❤️ Item added to your Wishlist!');
       } catch (err) {
+        if (err.status === 401) {
+          alert('Please login to save items to your wishlist.');
+          window.location.href = 'login.html';
+          return;
+        }
         alert('Wishlist: ' + err.message);
       }
     }
@@ -287,6 +291,11 @@
         updateCartCount();
         alert('Product added to your cart!');
       } catch (err) {
+        if (err.status === 401) {
+          alert('Please login to add items to your cart.');
+          window.location.href = 'login.html';
+          return;
+        }
         alert('Failed to add item: ' + err.message);
       }
     }
@@ -299,6 +308,11 @@
         updateCartCount();
         window.location.href = 'checkout.html';
       } catch (err) {
+        if (err.status === 401) {
+          alert('Please login to purchase items.');
+          window.location.href = 'login.html';
+          return;
+        }
         alert('Error: ' + err.message);
       }
     }
@@ -314,6 +328,11 @@
         document.getElementById('review-form').reset();
         loadReviews();
       } catch (err) {
+        if (err.status === 401) {
+          alert('Please login to submit a verified review.');
+          window.location.href = 'login.html';
+          return;
+        }
         if (err.status === 403) {
           alert('Review Authorization: You can only submit reviews for tech hardware you have purchased in a completed order.');
         } else {

@@ -14,7 +14,6 @@ function renderTimeline(status) {
   const stages = [
     { label: 'Placed', key: 'PENDING' },
     { label: 'Confirmed', key: 'CONFIRMED' },
-    { label: 'Processing', key: 'PROCESSING' },
     { label: 'Shipped', key: 'SHIPPED' },
     { label: 'Delivered', key: 'DELIVERED' }
   ];
@@ -22,9 +21,9 @@ function renderTimeline(status) {
   const statusOrder = {
     'PENDING': 0,
     'CONFIRMED': 1,
-    'PROCESSING': 2,
-    'SHIPPED': 3,
-    'DELIVERED': 4
+    'PROCESSING': 1,
+    'SHIPPED': 2,
+    'DELIVERED': 3
   };
 
   const currentIndex = statusOrder[status] !== undefined ? statusOrder[status] : 0;
