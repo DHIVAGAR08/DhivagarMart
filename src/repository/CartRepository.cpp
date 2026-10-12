@@ -11,7 +11,7 @@ std::vector<model::CartItem> CartRepository::GetCartItems(int64_t user_id, const
     pqxx::nontransaction ntx(*conn);
 
     auto res = ntx.exec_params(
-        "SELECT c.id, c.user_id, c.product_id, c.quantity, c.created_at, "
+        "SELECT c.id, c.user_id, c.product_id, c.quantity, "
         "       p.name AS product_name, p.description AS product_description, "
         "       p.category AS product_category, p.image_url AS product_image_url, "
         "       p.price_cents, p.stock_qty "
@@ -29,8 +29,8 @@ std::vector<model::CartItem> CartRepository::GetCartItems(int64_t user_id, const
         item.id = row["id"].as<int64_t>();
         item.user_id = row["user_id"].as<int64_t>();
         item.product_id = row["product_id"].as<int64_t>();
-        item.quantity = row["quantity"].as<int32_t>();
-        item.created_at = row["created_at"].is_null() ? "" : row["created_at"].c_str();
+        item.quantity = row["quantity"].is_null() ? 1 : row["quantity"].as<int32_t>();
+        item.created_at = "";
         item.product_name = row["product_name"].is_null() ? "" : row["product_name"].c_str();
         item.product_description = row["product_description"].is_null() ? "" : row["product_description"].c_str();
         item.product_category = row["product_category"].is_null() ? "General" : row["product_category"].c_str();
