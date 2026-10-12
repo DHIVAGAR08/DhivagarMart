@@ -67,8 +67,13 @@ const api = {
 
   // Cart
   getCart: () => apiRequest('/cart', 'GET'),
-  addToCart: (productId, quantity = 1) => apiRequest('/cart', 'POST', { product_id: productId, quantity }),
-  updateCartQty: (productId, quantity) => apiRequest(`/cart/${productId}`, 'PUT', { quantity }),
+  addToCart: (productId, quantity = 1) => apiRequest('/cart', 'POST', { 
+    product_id: parseInt(productId, 10), 
+    quantity: parseInt(quantity, 10) || 1 
+  }),
+  updateCartQty: (productId, quantity) => apiRequest(`/cart/${productId}`, 'PUT', { 
+    quantity: parseInt(quantity, 10) || 1 
+  }),
   removeFromCart: (productId) => apiRequest(`/cart/${productId}`, 'DELETE'),
 
   // Orders
@@ -79,7 +84,9 @@ const api = {
 
   // Wishlist
   getWishlist: () => apiRequest('/wishlist', 'GET'),
-  addToWishlist: (productId) => apiRequest('/wishlist', 'POST', { product_id: productId }),
+  addToWishlist: (productId) => apiRequest('/wishlist', 'POST', { 
+    product_id: parseInt(productId, 10) 
+  }),
   removeFromWishlist: (productId) => apiRequest(`/wishlist/${productId}`, 'DELETE'),
   moveWishlistToCart: (productId) => apiRequest(`/wishlist/${productId}/move-to-cart`, 'POST'),
 

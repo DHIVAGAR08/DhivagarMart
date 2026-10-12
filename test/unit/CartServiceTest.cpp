@@ -5,6 +5,9 @@
 #include "repository/ICartRepository.h"
 #include "repository/IProductRepository.h"
 #include "exception/AppException.h"
+#include "dto/CartDtos.h"
+#include "dto/WishlistDtos.h"
+#include <nlohmann/json.hpp>
 
 using namespace dhivagar::dhivagarmart;
 using ::testing::_;
@@ -93,3 +96,48 @@ TEST(CartServiceTest, RunningTotalCalculation) {
     EXPECT_EQ(cart.total_cents, 1247); // 798 + 449 = 1247 (₹12.47)
     EXPECT_EQ(cart.total_formatted, "₹12.47");
 }
+
+TEST(CartDtoTest, AddCartItemRequestDtoParsesNumericAndStringFields) {
+    // 1. Numeric inputs
+    nlohmann::json numeric_json = {{"product_id", 42}, {"quantity", 3}};
+    auto dto1 = numeric_json.get<dto::AddCartItemRequestDto>();
+    EXPECT_EQ(dto1.product_id, 42);
+    EXPECT_EQ(dto1.quantity, 3);
+
+    // 2. String inputs (from URL params or form inputs)
+    nlohmann::json string_json = {{"product_id", "42"}, {"quantity", "3"}};
+    auto dto2 = string_json.get<dto::AddCartItemRequestDto>();
+    EXPECT_EQ(dto2.product_id, 42);
+    EXPECT_EQ(dto2.quantity, 3);
+
+    // 3. Fallbacks and defaults
+    nlohmann::json missing_qty_json = {{"product_id", "7"}};
+    auto dto3 = missing_qty_json.get<dto::AddCartItemRequestDto>();
+    EXPECT_EQ(dto3.product_id, 7);
+    EXPECT_EQ(dto3.quantity, 1);
+}
+
+TEST(CartDtoTest, UpdateCartItemRequestDtoParsesNumericAndStringFields) {
+    nlohmann::json num_json = {{"quantity", 5}};
+    auto dto1 = num_json.get<dto::UpdateCartItemRequestDto>();
+    EXPECT_EQ(dto1.quantity, 5);
+
+    nlohmann::json str_json = {{"quantity", "5"}};
+    auto dto2 = str_json.get<dto::UpdateCartItemRequestDto>();
+    EXPECT_EQ(dto2.quantity, 5);
+
+    nlohmann::json zero_json = {{"quantity", "0"}};
+    auto dto3 = zero_json.get<dto::UpdateCartItemRequestDto>();
+    EXPECT_EQ(dto3.quantity, 0);
+}
+
+TEST(WishlistDtoTest, AddWishlistRequestDtoParsesNumericAndStringFields) {
+    nlohmann::json num_json = {{"product_id", 10}};
+    auto dto1 = num_json.get<dto::AddWishlistRequestDto>();
+    EXPECT_EQ(dto1.product_id, 10);
+
+    nlohmann::json str_json = {{"product_id", "10"}};
+    auto dto2 = str_json.get<dto::AddWishlistRequestDto>();
+    EXPECT_EQ(dto2.product_id, 10);
+}
+

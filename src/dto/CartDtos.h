@@ -14,8 +14,32 @@ struct AddCartItemRequestDto {
 };
 
 inline void from_json(const nlohmann::json& j, AddCartItemRequestDto& dto) {
-    dto.product_id = j.value("product_id", 0LL);
-    dto.quantity = j.value("quantity", 1);
+    dto.product_id = 0;
+    dto.quantity = 1;
+
+    if (j.contains("product_id")) {
+        if (j["product_id"].is_number()) {
+            dto.product_id = j["product_id"].get<int64_t>();
+        } else if (j["product_id"].is_string()) {
+            try {
+                dto.product_id = std::stoll(j["product_id"].get<std::string>());
+            } catch (...) {
+                dto.product_id = 0;
+            }
+        }
+    }
+
+    if (j.contains("quantity")) {
+        if (j["quantity"].is_number()) {
+            dto.quantity = j["quantity"].get<int32_t>();
+        } else if (j["quantity"].is_string()) {
+            try {
+                dto.quantity = std::stoi(j["quantity"].get<std::string>());
+            } catch (...) {
+                dto.quantity = 1;
+            }
+        }
+    }
 }
 
 struct UpdateCartItemRequestDto {
@@ -23,7 +47,18 @@ struct UpdateCartItemRequestDto {
 };
 
 inline void from_json(const nlohmann::json& j, UpdateCartItemRequestDto& dto) {
-    dto.quantity = j.value("quantity", 1);
+    dto.quantity = 1;
+    if (j.contains("quantity")) {
+        if (j["quantity"].is_number()) {
+            dto.quantity = j["quantity"].get<int32_t>();
+        } else if (j["quantity"].is_string()) {
+            try {
+                dto.quantity = std::stoi(j["quantity"].get<std::string>());
+            } catch (...) {
+                dto.quantity = 1;
+            }
+        }
+    }
 }
 
 struct CartItemResponseDto {

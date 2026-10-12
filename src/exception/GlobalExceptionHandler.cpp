@@ -1,6 +1,7 @@
 #include "exception/GlobalExceptionHandler.h"
 #include "exception/AppException.h"
 #include "util/JsonUtil.h"
+#include <nlohmann/json.hpp>
 #include <spdlog/spdlog.h>
 
 namespace dhivagar::dhivagarmart::exception {
@@ -10,6 +11,11 @@ drogon::HttpResponsePtr GlobalExceptionHandler::HandleException(const std::excep
         spdlog::warn("[{}] AppException caught: status={} code={} msg={}", 
                      request_id, app_ex->GetHttpStatus(), app_ex->GetErrorCode(), app_ex->GetUserMessage());
         return util::JsonUtil::CreateErrorResponse(app_ex->GetHttpStatus(), app_ex->GetErrorCode(), app_ex->GetUserMessage());
+    }
+
+    if (const auto* json_ex = dynamic_cast<const nlohmann::json::exception*>(&e)) {
+        spdlog::warn("[{}] JSON error caught: {}", request_id, json_ex->what());
+        return util::JsonUtil::CreateErrorResponse(400, "BAD_REQUEST", "Invalid request payload format.");
     }
 
     spdlog::error("[{}] Unhandled std::exception: {}", request_id, e.what());

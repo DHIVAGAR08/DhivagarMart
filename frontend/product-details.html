@@ -127,8 +127,8 @@
       await checkAuthState();
 
       const params = new URLSearchParams(window.location.search);
-      currentProdId = params.get('id');
-      if (!currentProdId) {
+      currentProdId = parseInt(params.get('id'), 10);
+      if (!currentProdId || isNaN(currentProdId)) {
         window.location.href = 'products.html';
         return;
       }
