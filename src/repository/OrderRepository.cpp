@@ -7,7 +7,7 @@ namespace dhivagar::dhivagarmart::repository {
 
 std::vector<model::OrderItem> OrderRepository::FetchOrderItems(pqxx::nontransaction& ntx, int64_t order_id) {
     auto res = ntx.exec_params(
-        "SELECT oi.id, oi.order_id, oi.product_id, oi.quantity, oi.unit_price_cents, oi.created_at, "
+        "SELECT oi.id, oi.order_id, oi.product_id, oi.quantity, oi.unit_price_cents, "
         "       p.name AS product_name "
         "FROM order_items oi "
         "LEFT JOIN products p ON oi.product_id = p.id "
@@ -26,7 +26,7 @@ std::vector<model::OrderItem> OrderRepository::FetchOrderItems(pqxx::nontransact
         item.product_name = row["product_name"].is_null() ? "Discontinued Product" : row["product_name"].c_str();
         item.quantity = row["quantity"].is_null() ? 1 : row["quantity"].as<int32_t>();
         item.unit_price = model::Money::FromCents(row["unit_price_cents"].is_null() ? 0 : row["unit_price_cents"].as<int64_t>());
-        item.created_at = row["created_at"].is_null() ? "" : row["created_at"].c_str();
+        item.created_at = "";
         items.push_back(item);
     }
     return items;
@@ -46,7 +46,7 @@ model::Order OrderRepository::RowToOrder(const TRow& row, pqxx::nontransaction& 
     order.delivery_address = row["delivery_address"].is_null() ? "" : row["delivery_address"].c_str();
     order.phone = row["phone"].is_null() ? "" : row["phone"].c_str();
     order.full_name = row["full_name"].is_null() ? "" : row["full_name"].c_str();
-    order.created_at = row["created_at"].is_null() ? "" : row["created_at"].c_str();
+    order.created_at = "";
     order.items = FetchOrderItems(ntx, order.id);
     return order;
 }
@@ -97,7 +97,7 @@ std::optional<model::Order> OrderRepository::FindById(int64_t id, const std::str
 
     auto res = ntx.exec_params(
         "SELECT o.id, o.buyer_id, o.status, o.total_amount_cents, "
-        "       o.payment_method, o.payment_status, o.delivery_address, o.phone, o.full_name, o.created_at, "
+        "       o.payment_method, o.payment_status, o.delivery_address, o.phone, o.full_name, "
         "       u.name AS buyer_name, u.email AS buyer_email "
         "FROM orders o "
         "JOIN users u ON o.buyer_id = u.id "
@@ -119,7 +119,7 @@ std::vector<model::Order> OrderRepository::FindByBuyerId(int64_t buyer_id, const
 
     auto res = ntx.exec_params(
         "SELECT o.id, o.buyer_id, o.status, o.total_amount_cents, "
-        "       o.payment_method, o.payment_status, o.delivery_address, o.phone, o.full_name, o.created_at, "
+        "       o.payment_method, o.payment_status, o.delivery_address, o.phone, o.full_name, "
         "       u.name AS buyer_name, u.email AS buyer_email "
         "FROM orders o "
         "JOIN users u ON o.buyer_id = u.id "
@@ -144,7 +144,7 @@ std::vector<model::Order> OrderRepository::FindBySellerId(int64_t seller_id, con
     // Fetch distinct orders that contain at least one item from this seller
     auto res = ntx.exec_params(
         "SELECT DISTINCT o.id, o.buyer_id, o.status, o.total_amount_cents, "
-        "       o.payment_method, o.payment_status, o.delivery_address, o.phone, o.full_name, o.created_at, "
+        "       o.payment_method, o.payment_status, o.delivery_address, o.phone, o.full_name, "
         "       u.name AS buyer_name, u.email AS buyer_email "
         "FROM orders o "
         "JOIN users u ON o.buyer_id = u.id "
@@ -170,7 +170,7 @@ std::vector<model::Order> OrderRepository::FindAll(const std::string& request_id
 
     auto res = ntx.exec_params(
         "SELECT o.id, o.buyer_id, o.status, o.total_amount_cents, "
-        "       o.payment_method, o.payment_status, o.delivery_address, o.phone, o.full_name, o.created_at, "
+        "       o.payment_method, o.payment_status, o.delivery_address, o.phone, o.full_name, "
         "       u.name AS buyer_name, u.email AS buyer_email "
         "FROM orders o "
         "JOIN users u ON o.buyer_id = u.id "

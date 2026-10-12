@@ -104,7 +104,7 @@ async function loadAdminOrders() {
             <option value="CANCELLED" ${ord.status === 'CANCELLED' ? 'selected' : ''}>CANCELLED</option>
           </select>
         </td>
-        <td><span style="font-size:0.85rem; color:#6b7280;">${ord.created_at}</span></td>
+        <td><span style="font-size:0.85rem; color:#6b7280;">${ord.created_at || 'Recently'}</span></td>
       </tr>
     `).join('');
   } catch (err) {

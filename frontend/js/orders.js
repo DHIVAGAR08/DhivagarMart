@@ -98,7 +98,7 @@ async function loadOrders() {
             <div>
               <span style="font-weight: 800; font-size: 1.2rem; color:var(--secondary);">Order #DHV-${ord.id}</span>
               <span style="color: var(--text-muted); font-size: 0.85rem; margin-left: 0.8rem;">
-                Placed on: ${ord.created_at}
+                Placed on: ${ord.created_at || 'Recently'}
               </span>
             </div>
             <div style="display:flex; align-items:center; gap:0.6rem;">
