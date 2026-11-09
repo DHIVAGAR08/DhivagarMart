@@ -42,6 +42,11 @@
         </p>
       </div>
 
+      <!-- DB Status Warning Banner -->
+      <div id="db-status-banner" style="display: none; background: #fef3c7; color: #92400e; padding: 0.75rem 1rem; border-radius: var(--radius-md); margin-bottom: 1.25rem; font-size: 0.85rem; border: 1px solid #fde68a; font-weight: 500;">
+        ⚠️ <strong>Database Notice:</strong> The PostgreSQL database is currently reconnecting or suspended. If you manage this deployment, check the Render database dashboard.
+      </div>
+
       <!-- Error Banner -->
       <div id="login-error" style="display: none; background: var(--danger-light); color: var(--danger); padding: 0.75rem 1rem; border-radius: var(--radius-md); margin-bottom: 1.25rem; font-size: 0.9rem; border: 1px solid #fecaca; font-weight: 500;"></div>
 
@@ -162,6 +167,22 @@
         submitBtn.textContent = 'Sign In';
       }
     }
+
+    async function checkDbLiveness() {
+      try {
+        const res = await fetch('/api/v1/health');
+        if (res.ok) {
+          const json = await res.json();
+          const banner = document.getElementById('db-status-banner');
+          if (banner && json.data && json.data.db === 'DOWN') {
+            banner.style.display = 'block';
+          } else if (banner) {
+            banner.style.display = 'none';
+          }
+        }
+      } catch (e) {}
+    }
+    document.addEventListener('DOMContentLoaded', checkDbLiveness);
   </script>
 </body>
 </html>

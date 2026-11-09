@@ -24,6 +24,13 @@ std::string DatabasePlugin::BuildConnectionString() {
     util::Environment::LoadEnvFile(".env");
     std::string db_url = util::Environment::Get("DATABASE_URL", "");
     if (!db_url.empty()) {
+        if (db_url.find("connect_timeout") == std::string::npos) {
+            if (db_url.find('?') == std::string::npos) {
+                db_url += "?connect_timeout=5";
+            } else {
+                db_url += "&connect_timeout=5";
+            }
+        }
         return db_url;
     }
     std::string host = util::Environment::Get("DATABASE_HOST", util::Environment::Get("DB_HOST", "127.0.0.1"));
@@ -36,7 +43,7 @@ std::string DatabasePlugin::BuildConnectionString() {
     if (!password.empty()) {
         conn_str += " password=" + password;
     }
-    conn_str += " connect_timeout=15";
+    conn_str += " connect_timeout=5";
     return conn_str;
 }
 
@@ -47,8 +54,8 @@ void DatabasePlugin::initAndStart(const Json::Value &config) {
 
     connection_string_ = BuildConnectionString();
 
-    const int max_retries = 5;
-    const int retry_delay_sec = 3;
+    const int max_retries = 2;
+    const int retry_delay_sec = 2;
 
     for (int attempt = 1; attempt <= max_retries; ++attempt) {
         try {
@@ -137,13 +144,19 @@ std::shared_ptr<pqxx::connection> DatabasePlugin::AcquireInternal() {
     if (!is_running_) {
         // Attempt on-demand initialization if not yet started
         lock.unlock();
-        InitAndStart();
+        try {
+            InitAndStart();
+        } catch (...) {}
         lock.lock();
+    }
+
+    if (!is_running_) {
+        throw std::runtime_error("Database connection is currently unavailable. Please verify database status.");
     }
 
     if (cv_.wait_for(lock, std::chrono::seconds(5), [this]() { return !pool_.empty() || !is_running_; })) {
         if (!is_running_) {
-            throw std::runtime_error("Database connection pool is shutting down");
+            throw std::runtime_error("Database connection pool is offline. Please check database status.");
         }
         auto conn = pool_.front();
         pool_.pop();
@@ -156,7 +169,10 @@ std::shared_ptr<pqxx::connection> DatabasePlugin::AcquireInternal() {
     }
 
     // Try creating an ad-hoc connection if pool is starved
-    return std::make_shared<pqxx::connection>(connection_string_);
+    if (is_running_) {
+        return std::make_shared<pqxx::connection>(connection_string_);
+    }
+    throw std::runtime_error("Database connection pool is offline. Please check database status.");
 }
 
 void DatabasePlugin::ReleaseInternal(std::shared_ptr<pqxx::connection> conn) {
@@ -186,6 +202,9 @@ ConnectionHandle DatabasePlugin::GetConnection() {
 
 bool DatabasePlugin::CheckHealth() {
     try {
+        if (!instance_ || !instance_->is_running_) {
+            return false;
+        }
         auto handle = GetConnection();
         pqxx::nontransaction ntx(*handle);
         pqxx::result r = ntx.exec("SELECT 1;");

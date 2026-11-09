@@ -15,14 +15,14 @@ void HealthController::CheckHealth(const drogon::HttpRequestPtr &/*req*/,
     };
 
     nlohmann::json response_body = {
-        {"success", db_ok},
+        {"success", true},
         {"data", data},
         {"status", "UP"},
         {"db", db_ok ? "UP" : "DOWN"}
     };
 
     auto resp = drogon::HttpResponse::newHttpResponse();
-    resp->setStatusCode(db_ok ? drogon::k200OK : drogon::k503ServiceUnavailable);
+    resp->setStatusCode(drogon::k200OK);
     resp->setContentTypeCode(drogon::CT_APPLICATION_JSON);
     resp->setBody(response_body.dump());
     callback(resp);
