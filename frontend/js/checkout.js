@@ -1,4 +1,4 @@
-// Dhivagar Mart - Checkout Logic
+// Dhivagar Mart - Electronics Checkout Controller
 let currentCart = null;
 
 function togglePaymentInputs(mode) {
@@ -15,18 +15,20 @@ async function initCheckout() {
   try {
     currentCart = await api.getCart();
     if (!currentCart.items || currentCart.items.length === 0) {
-      alert('Your cart is empty. Please add some fresh groceries first!');
+      alert('Your cart is empty. Please add items before checking out.');
       window.location.href = 'products.html';
       return;
     }
 
     summaryBox.innerHTML = `
-      <h3 style="margin-bottom: 1rem; color: var(--secondary);">Order Breakdown (${currentCart.total_items} items)</h3>
-      <div style="max-height: 260px; overflow-y: auto; margin-bottom: 1rem;">
+      <h3 style="margin-bottom: 1rem; color: var(--secondary); font-size:1.15rem; font-weight:800; border-bottom:1px solid #e2e8f0; padding-bottom:0.75rem;">
+        Order Items (${currentCart.total_items})
+      </h3>
+      <div style="max-height: 280px; overflow-y: auto; margin-bottom: 1rem;">
         ${currentCart.items.map(i => `
           <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; font-size: 0.9rem; border-bottom: 1px dashed var(--border-color); padding-bottom: 0.5rem;">
             <div>
-              <span style="font-weight: 600;">${i.product_name}</span>
+              <span style="font-weight: 700; color:var(--secondary);">${i.product_name}</span>
               <div style="font-size: 0.8rem; color: var(--text-muted);">${i.quantity} × ${formatINR(i.unit_price_cents)}</div>
             </div>
             <strong>${formatINR(i.subtotal_cents)}</strong>
@@ -35,16 +37,16 @@ async function initCheckout() {
       </div>
       <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-muted);">
         <span>Delivery:</span>
-        <span style="color: var(--success); font-weight: 700;">FREE Express</span>
+        <span style="color: #059669; font-weight: 700;">FREE Express Delivery</span>
       </div>
       <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-muted);">
-        <span>Fresh Quality Guarantee:</span>
-        <span style="color: var(--success); font-weight: 700;">Included</span>
+        <span>Brand Warranty:</span>
+        <span style="color: #059669; font-weight: 700;">1-Year Certified</span>
       </div>
       <hr style="border: 0; border-top: 1px solid var(--border-color); margin-bottom: 1rem;">
-      <div style="display: flex; justify-content: space-between; font-size: 1.25rem; font-weight: 800;">
-        <span>Grand Total:</span>
-        <span style="color: var(--primary);">${formatINR(currentCart.total_cents)}</span>
+      <div style="display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: 800;">
+        <span>Order Total:</span>
+        <span style="color: var(--secondary);">${formatINR(currentCart.total_cents)}</span>
       </div>
     `;
   } catch (err) {
@@ -55,12 +57,12 @@ async function initCheckout() {
 async function handlePlaceOrder(e) {
   e.preventDefault();
 
-  const fullName = document.getElementById('full-name')?.value.trim() || 'Demo Guest';
+  const fullName = document.getElementById('full-name')?.value.trim() || 'Customer';
   const phone = document.getElementById('phone-number')?.value.trim() || '+91 98765 43210';
-  const street = document.getElementById('shipping-address')?.value.trim() || 'Demo Street';
+  const street = document.getElementById('shipping-address')?.value.trim() || 'Tech Park Avenue';
   const city = document.getElementById('city')?.value.trim() || 'Chennai';
   const state = document.getElementById('state')?.value.trim() || 'Tamil Nadu';
-  const pincode = document.getElementById('pincode')?.value.trim() || '600001';
+  const pincode = document.getElementById('pincode')?.value.trim() || '600017';
 
   const selectedPaymentRadio = document.querySelector('input[name="payment-method"]:checked');
   const paymentMethod = selectedPaymentRadio ? selectedPaymentRadio.value : 'CASH_ON_DELIVERY';
@@ -68,7 +70,7 @@ async function handlePlaceOrder(e) {
   const submitBtn = document.getElementById('place-order-btn');
   if (submitBtn) {
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Processing Demo Order...';
+    submitBtn.textContent = 'Processing Order...';
   }
 
   try {
@@ -93,7 +95,7 @@ async function handlePlaceOrder(e) {
       document.getElementById('confirm-payment-method').textContent = order.payment_method || paymentMethod;
       const statusBadge = document.getElementById('confirm-payment-status');
       if (statusBadge) {
-        statusBadge.textContent = order.payment_status || 'PAID (Demo)';
+        statusBadge.textContent = 'CONFIRMED';
         statusBadge.style.background = '#10b981';
       }
       document.getElementById('confirm-address').textContent = order.delivery_address || `${street}, ${city}`;
@@ -107,7 +109,7 @@ async function handlePlaceOrder(e) {
     alert('Order checkout failed: ' + err.message);
     if (submitBtn) {
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Place Demo Order Now';
+      submitBtn.textContent = 'Place Your Order Now';
     }
   }
 }

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fresh Grocery Catalog - Dhivagar Mart</title>
+  <title>Electronics & Flagship Catalog - Dhivagar Mart</title>
   <link rel="stylesheet" href="css/style.css">
   <script>
     window.skipAutoAuthCheck = true;
@@ -16,23 +16,30 @@
     <div class="nav-container">
       <a href="index.html" class="brand">
         <span class="logo-icon">🛒</span>
-        <span>Dhivagar <span class="brand-tech">Mart</span></span>
+        <span>DHIVAGAR <span class="brand-tech">MART</span></span>
       </a>
 
-      <!-- Header Search Bar -->
+      <!-- Search Bar -->
       <form class="nav-search-bar" onsubmit="handleSearch(event)">
-        <input type="text" id="nav-search-input" placeholder="Search fresh apples, milk, rice, vegetables, bananas, eggs...">
-        <button type="submit">Search</button>
+        <select id="search-category-select" class="nav-search-category">
+          <option value="All">All Categories</option>
+          <option value="Smartphones">Smartphones</option>
+          <option value="Apple iPhones">Apple iPhones</option>
+          <option value="Smart Watches">Smart Watches</option>
+          <option value="Apple Watches">Apple Watches</option>
+          <option value="Android Watches">Android Watches</option>
+          <option value="Wireless Earbuds">Wireless Earbuds</option>
+          <option value="Headphones">Headphones</option>
+          <option value="Accessories">Accessories</option>
+        </select>
+        <input type="text" id="nav-search-input" placeholder="Search smartphones, smartwatches, audio, accessories...">
+        <button type="submit">🔍</button>
       </form>
 
       <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="products.html" class="active">Products</a></li>
-        <li><a href="index.html#categories-section">Categories</a></li>
-        <li><a href="products.html?offers=true">Offers</a></li>
         <li>
           <a href="wishlist.html">
-            ❤️ Wishlist <span id="wishlist-badge" class="badge" style="background:var(--primary);">0</span>
+            ❤️ Wishlist <span id="wishlist-badge" class="badge">0</span>
           </a>
         </li>
         <li>
@@ -43,41 +50,60 @@
       </ul>
 
       <ul class="nav-links" id="nav-auth-container">
-        <li><a href="login.html" class="btn btn-secondary btn-sm">Login</a></li>
+        <li><a href="login.html" class="btn btn-secondary btn-sm" style="background:rgba(255,255,255,0.1); color:#ffffff; border-color:rgba(255,255,255,0.25);">Sign In</a></li>
       </ul>
     </div>
   </header>
+
+  <!-- Secondary Category Sub-Nav Strip -->
+  <div class="sub-nav">
+    <div class="sub-nav-container">
+      <a href="javascript:void(0)" onclick="filterCategory('All', this)">All Electronics</a>
+      <a href="javascript:void(0)" onclick="filterCategory('Smartphones', this)">📱 Smartphones</a>
+      <a href="javascript:void(0)" onclick="filterCategory('Apple iPhones', this)">🍎 Apple iPhones</a>
+      <a href="javascript:void(0)" onclick="filterCategory('Smart Watches', this)">⌚ Smart Watches</a>
+      <a href="javascript:void(0)" onclick="filterCategory('Apple Watches', this)">🍏 Apple Watches</a>
+      <a href="javascript:void(0)" onclick="filterCategory('Android Watches', this)">🤖 Android Watches</a>
+      <a href="javascript:void(0)" onclick="filterCategory('Wireless Earbuds', this)">🎵 Wireless Earbuds</a>
+      <a href="javascript:void(0)" onclick="filterCategory('Headphones', this)">🎧 Headphones</a>
+      <a href="javascript:void(0)" onclick="filterCategory('Accessories', this)">🔌 Accessories</a>
+    </div>
+  </div>
 
   <main class="container">
     <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem;">
       <div>
         <h1 style="font-size:2rem; font-weight:800; color:var(--secondary); letter-spacing:-0.5px;">
-          Fresh Grocery Catalog
+          Electronics & Technology Catalog
         </h1>
         <p style="color:var(--text-muted); font-size:0.95rem;">
-          Explore farm-fresh fruits, pure milk, premium grains, vegetables, and kitchen essentials
+          Explore smartphones, smartwatches, true wireless earbuds, studio headphones, and charging accessories
         </p>
       </div>
     </div>
 
     <!-- Category Filter Chips -->
     <div class="categories-bar">
-      <button class="category-chip active" onclick="filterCategory('All', this)">All Products</button>
-      <button class="category-chip" onclick="filterCategory('Fruits', this)">🍎 Fruits</button>
-      <button class="category-chip" onclick="filterCategory('Dairy', this)">🥛 Dairy</button>
-      <button class="category-chip" onclick="filterCategory('Grains', this)">🌾 Grains</button>
-      <button class="category-chip" onclick="filterCategory('Vegetables', this)">🥕 Vegetables</button>
-      <button class="category-chip" onclick="filterCategory('Dairy & Eggs', this)">🥚 Dairy & Eggs</button>
+      <button class="category-chip active" onclick="filterCategory('All', this)">All Electronics</button>
+      <button class="category-chip" onclick="filterCategory('Smartphones', this)">📱 Smartphones</button>
+      <button class="category-chip" onclick="filterCategory('Apple iPhones', this)">🍎 Apple iPhones</button>
+      <button class="category-chip" onclick="filterCategory('Smart Watches', this)">⌚ Smart Watches</button>
+      <button class="category-chip" onclick="filterCategory('Apple Watches', this)">🍏 Apple Watches</button>
+      <button class="category-chip" onclick="filterCategory('Android Watches', this)">🤖 Android Watches</button>
+      <button class="category-chip" onclick="filterCategory('Wireless Earbuds', this)">🎵 Wireless Earbuds</button>
+      <button class="category-chip" onclick="filterCategory('Headphones', this)">🎧 Headphones</button>
+      <button class="category-chip" onclick="filterCategory('Accessories', this)">🔌 Accessories</button>
     </div>
 
     <!-- Sort & In-Stock Toolbar -->
-    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem; background:white; padding:0.75rem 1.25rem; border-radius:var(--radius-lg); border:1px solid var(--border-color); box-shadow:var(--shadow-sm);">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem; background:white; padding:0.75rem 1.25rem; border-radius:var(--radius-md); border:1px solid var(--border-color); box-shadow:var(--shadow-sm);">
       <div style="display:flex; align-items:center; gap:0.5rem; font-size:0.9rem;">
         <label for="sort-select" style="font-weight:600; color:var(--secondary);">Sort By:</label>
         <select id="sort-select" onchange="handleSortChange(this.value)" class="form-control" style="width:auto; padding:0.35rem 0.8rem; font-size:0.88rem;">
-          <option value="featured">Featured / Default</option>
+          <option value="featured">Featured / Best Match</option>
           <option value="price-asc">Price: Low → High</option>
           <option value="price-desc">Price: High → Low</option>
+          <option value="rating">Customer Rating</option>
           <option value="newest">Newest Arrivals</option>
         </select>
       </div>
@@ -94,23 +120,52 @@
   </main>
 
   <!-- Floating AI Assistant -->
-  <button class="chat-launcher" onclick="toggleChat()" title="Ask Dhivagar Mart Grocery Assistant">🤖</button>
+  <button class="chat-launcher" onclick="toggleChat()" title="Ask Dhivagar Mart Tech Assistant">🤖</button>
   <div id="chat-panel" class="chat-panel">
     <div class="chat-header">
-      <h3>⚡ Dhivagar Mart Assistant</h3>
+      <h3 style="font-size:1.05rem; font-weight:700;">⚡ Tech Shopping Assistant</h3>
       <button onclick="toggleChat()" style="background:transparent; border:none; color:white; font-size:1.2rem; cursor:pointer;">✕</button>
     </div>
     <div id="chat-messages" class="chat-messages">
-      <div class="chat-bubble bot">Need recommendations or help choosing fresh items? Just ask!</div>
+      <div class="chat-bubble bot">Need technical recommendations or help comparing products? Just ask!</div>
     </div>
     <div class="chat-input-bar">
-      <input type="text" id="chat-input" placeholder="Ask about items or prices..." onkeypress="handleChatKeyPress(event)">
+      <input type="text" id="chat-input" placeholder="Ask about tech specs..." onkeypress="handleChatKeyPress(event)">
       <button onclick="sendChatMessage()" class="btn btn-primary btn-sm">Send</button>
     </div>
   </div>
 
   <footer>
-    <p>© 2026 Dhivagar Mart. All rights reserved. Fast & Fresh Groceries • Standalone Demo Mode</p>
+    <div class="footer-container">
+      <div class="footer-col">
+        <h4>About Dhivagar Mart</h4>
+        <ul>
+          <li><a href="about.html">About Our Marketplace</a></li>
+          <li><a href="products.html">Flagship Launches</a></li>
+          <li><a href="products.html">Certified Hardware</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Top Categories</h4>
+        <ul>
+          <li><a href="products.html?category=Smartphones">Smartphones</a></li>
+          <li><a href="products.html?category=Apple%20iPhones">Apple iPhones</a></li>
+          <li><a href="products.html?category=Smart%20Watches">Smart Watches</a></li>
+          <li><a href="products.html?category=Wireless%20Earbuds">Wireless Earbuds</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Help & Support</h4>
+        <ul>
+          <li><a href="orders.html">Track Orders</a></li>
+          <li><a href="wishlist.html">Wishlist</a></li>
+          <li><a href="cart.html">Cart</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Dhivagar Mart India. All rights reserved. Premium Electronics & Gadgets.</p>
+    </div>
   </footer>
 
   <script src="js/api.js"></script>
@@ -118,6 +173,12 @@
   <script src="js/products.js"></script>
   <script src="js/chat.js"></script>
   <script>
+    function toggleChat() {
+      const panel = document.getElementById('chat-panel');
+      if (!panel) return;
+      panel.style.display = (panel.style.display === 'flex') ? 'none' : 'flex';
+    }
+
     document.addEventListener('DOMContentLoaded', async () => {
       await checkAuthState();
 
@@ -128,9 +189,12 @@
       const searchInput = document.getElementById('nav-search-input');
       if (searchInput && search) searchInput.value = search;
 
+      const catSelect = document.getElementById('search-category-select');
+      if (catSelect && cat !== 'All') catSelect.value = cat;
+
       document.querySelectorAll('.category-chip').forEach(el => {
         const text = el.textContent.replace(/[^a-zA-Z &]/g, '').trim().toLowerCase();
-        if (text === cat.toLowerCase() || (cat === 'All' && (text.includes('all') || text === 'all products'))) {
+        if (text === cat.toLowerCase() || (cat === 'All' && text.includes('all'))) {
           el.classList.add('active');
         } else if (cat !== 'All') {
           el.classList.remove('active');

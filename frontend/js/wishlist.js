@@ -11,8 +11,8 @@ async function loadWishlistPage() {
         <div style="text-align: center; padding: 4rem 1rem;">
           <div style="font-size: 3rem; margin-bottom: 1rem;">❤️</div>
           <h2>Your wishlist is empty</h2>
-          <p style="color: var(--text-muted); margin: 1rem 0 2rem;">Save your favorite groceries and daily essentials for later!</p>
-          <a href="products.html" class="btn btn-primary">Explore Products</a>
+          <p style="color: var(--text-muted); margin: 1rem 0 2rem;">Save your favorite smartphones, wearables, and audio gadgets for later!</p>
+          <a href="products.html" class="btn btn-primary">Explore Electronics</a>
         </div>
       `;
       return;

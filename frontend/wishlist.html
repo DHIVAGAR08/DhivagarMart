@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Wishlist - Dhivagar Mart</title>
+  <title>Your Wishlist - Dhivagar Mart Electronics</title>
   <link rel="stylesheet" href="css/style.css">
   <script>
     window.skipAutoAuthCheck = true;
@@ -16,16 +16,26 @@
     <div class="nav-container">
       <a href="index.html" class="brand">
         <span class="logo-icon">🛒</span>
-        <span>Dhivagar <span class="brand-tech">Mart</span></span>
+        <span>DHIVAGAR <span class="brand-tech">MART</span></span>
       </a>
+
+      <!-- Search Bar -->
+      <form class="nav-search-bar" onsubmit="handleSearch(event)">
+        <select id="search-category-select" class="nav-search-category">
+          <option value="All">All Categories</option>
+          <option value="Smartphones">Smartphones</option>
+          <option value="Apple iPhones">Apple iPhones</option>
+          <option value="Smart Watches">Smart Watches</option>
+          <option value="Wireless Earbuds">Wireless Earbuds</option>
+        </select>
+        <input type="text" id="nav-search-input" placeholder="Search electronics...">
+        <button type="submit">🔍</button>
+      </form>
+
       <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="products.html">Products</a></li>
-        <li><a href="index.html#categories-section">Categories</a></li>
-        <li><a href="products.html?offers=true">Offers</a></li>
         <li>
           <a href="wishlist.html" class="active">
-            ❤️ Wishlist <span id="wishlist-badge" class="badge" style="background:var(--primary);">0</span>
+            ❤️ Wishlist <span id="wishlist-badge" class="badge">0</span>
           </a>
         </li>
         <li>
@@ -34,6 +44,7 @@
           </a>
         </li>
       </ul>
+
       <ul class="nav-links" id="nav-auth-container"></ul>
     </div>
   </header>
@@ -41,45 +52,36 @@
   <main class="container">
     <div style="margin-bottom: 2rem;">
       <h1 style="font-size:2rem; font-weight:800; color:var(--secondary); letter-spacing:-0.5px;">
-        ❤️ My Wishlist & Saved Groceries
+        ❤️ Your Wishlist
       </h1>
       <p style="color:var(--text-muted); font-size:0.95rem;">
-        Keep track of items you love and move them directly into your shopping cart
+        Saved smartphones, wearables, and audio hardware ready to be added to your cart
       </p>
     </div>
 
     <div id="wishlist-container">
       <div style="text-align:center; padding:3rem; color:var(--text-muted);">
-        <span style="font-size:2rem;">⏳</span><br>Loading your saved wishlist...
+        <span style="font-size:2rem;">⏳</span><br>Loading your saved items...
       </div>
     </div>
   </main>
 
-  <!-- Floating AI Assistant -->
-  <button class="chat-launcher" onclick="toggleChat()" title="Ask Dhivagar Mart Grocery Assistant">🤖</button>
-  <div id="chat-panel" class="chat-panel">
-    <div class="chat-header">
-      <h3>⚡ Grocery Assistant</h3>
-      <button onclick="toggleChat()" style="background:transparent; border:none; color:white; font-size:1.2rem; cursor:pointer;">✕</button>
-    </div>
-    <div id="chat-messages" class="chat-messages">
-      <div class="chat-bubble bot">Need advice on items in your wishlist? Ask me!</div>
-    </div>
-    <div class="chat-input-bar">
-      <input type="text" id="chat-input" placeholder="Ask a question..." onkeypress="handleChatKeyPress(event)">
-      <button onclick="sendChatMessage()" class="btn btn-primary btn-sm">Send</button>
-    </div>
-  </div>
-
   <footer>
-    <p>© 2026 Dhivagar Mart. All rights reserved. Fast & Fresh Groceries • Standalone Demo Mode</p>
+    <div class="footer-bottom" style="border:none; padding:0;">
+      <p>© 2026 Dhivagar Mart India. All rights reserved. Premium Electronics & Gadgets.</p>
+    </div>
   </footer>
 
   <script src="js/api.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/wishlist.js"></script>
-  <script src="js/chat.js"></script>
   <script>
+    function handleSearch(e) {
+      if (e) e.preventDefault();
+      const term = document.getElementById('nav-search-input')?.value.trim() || '';
+      window.location.href = `products.html?search=${encodeURIComponent(term)}`;
+    }
+
     document.addEventListener('DOMContentLoaded', async () => {
       await checkAuthState();
       loadWishlistPage();

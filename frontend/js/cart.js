@@ -1,4 +1,4 @@
-// Dhivagar Mart - Cart Page Logic
+// Dhivagar Mart - Electronics Cart Page Controller
 async function loadCartPage() {
   const container = document.getElementById('cart-container');
   if (!container) return;
@@ -8,11 +8,11 @@ async function loadCartPage() {
 
     if (!cart.items || cart.items.length === 0) {
       container.innerHTML = `
-        <div style="text-align: center; padding: 4rem 1rem;">
-          <div style="font-size: 3rem; margin-bottom: 1rem;">🛒</div>
-          <h2>Your cart is empty.</h2>
-          <p style="color: var(--text-muted); margin: 1rem 0 2rem;">Explore our fresh fruits, dairy, grains, vegetables, and kitchen essentials!</p>
-          <a href="products.html" class="btn btn-primary">Start Shopping</a>
+        <div style="text-align: center; padding: 4rem 1rem; background:white; border-radius:var(--radius-md); border:1px solid var(--border-color);">
+          <div style="font-size: 3.5rem; margin-bottom: 1rem;">🛒</div>
+          <h2 style="color:var(--secondary); font-size:1.6rem; font-weight:800; margin-bottom:0.5rem;">Your Shopping Cart is empty</h2>
+          <p style="color: var(--text-muted); margin: 0.5rem 0 2rem;">Explore the latest flagship smartphones, smartwatches, and audio hardware!</p>
+          <a href="products.html" class="btn btn-primary btn-lg">Explore Electronics Catalog</a>
         </div>
       `;
       return;
@@ -28,33 +28,38 @@ async function loadCartPage() {
                 <th>Price</th>
                 <th>Quantity</th>
                 <th>Subtotal</th>
-                <th></th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
               ${cart.items.map(item => `
                 <tr>
                   <td>
-                    <div style="display: flex; align-items: center; gap: 0.8rem;">
-                      <img src="${item.product_image_url || 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=100'}" 
-                           style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px;">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                      <img src="${item.product_image_url || 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=100'}" 
+                           style="width: 60px; height: 60px; object-fit: contain; border-radius: 6px; background:#f8fafc; padding:4px; border:1px solid #e2e8f0;">
                       <div>
-                        <strong>${item.product_name}</strong>
-                        <div style="font-size: 0.8rem; color: #6b7280;">${item.product_category}</div>
+                        <a href="product-details.html?id=${item.product_id}" style="font-weight: 700; color:var(--secondary); text-decoration:none;">
+                          ${item.product_name}
+                        </a>
+                        <div style="font-size: 0.78rem; color: #2563eb; font-weight:600; margin-top:2px;">${item.product_category}</div>
+                        <div style="font-size: 0.75rem; color: #059669; font-weight:600;">✓ In Stock</div>
                       </div>
                     </div>
                   </td>
-                  <td>${formatINR(item.unit_price_cents)}</td>
+                  <td style="font-weight:600;">${formatINR(item.unit_price_cents)}</td>
                   <td>
                     <div style="display: flex; align-items: center; gap: 0.4rem;">
-                      <button onclick="changeQuantity(${item.product_id}, ${item.quantity - 1})" class="btn btn-secondary btn-sm" style="font-weight:700;">-</button>
+                      <button onclick="changeQuantity(${item.product_id}, ${item.quantity - 1})" class="btn btn-secondary btn-sm" style="font-weight:800; width:30px; height:30px; padding:0;">−</button>
                       <span style="font-weight: 700; min-width: 24px; text-align: center;">${item.quantity}</span>
-                      <button onclick="changeQuantity(${item.product_id}, ${item.quantity + 1})" class="btn btn-secondary btn-sm" style="font-weight:700;">+</button>
+                      <button onclick="changeQuantity(${item.product_id}, ${item.quantity + 1})" class="btn btn-secondary btn-sm" style="font-weight:800; width:30px; height:30px; padding:0;" ${item.quantity >= item.available_stock ? 'disabled' : ''}>+</button>
                     </div>
                   </td>
-                  <td style="font-weight: 700; color: var(--primary);">${formatINR(item.subtotal_cents)}</td>
+                  <td style="font-weight: 800; color: var(--secondary);">${formatINR(item.subtotal_cents)}</td>
                   <td>
-                    <button onclick="removeItem(${item.product_id})" class="btn btn-danger btn-sm" title="Remove item">✕</button>
+                    <button onclick="removeItem(${item.product_id})" class="btn btn-secondary btn-sm" title="Remove from cart" style="color:#ef4444; border-color:#fecaca;">
+                      ✕ Remove
+                    </button>
                   </td>
                 </tr>
               `).join('')}
@@ -63,31 +68,33 @@ async function loadCartPage() {
         </div>
 
         <div>
-          <div class="form-card" style="margin: 0; max-width: none;">
-            <h3 style="margin-bottom: 1.2rem; color:var(--secondary);">Order Summary</h3>
-            <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem;">
-              <span>Total Items:</span>
-              <strong>${cart.total_items}</strong>
-            </div>
-            <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem;">
-              <span>Subtotal:</span>
+          <div class="form-card" style="margin: 0; max-width: none; position:sticky; top:80px;">
+            <h3 style="margin-bottom: 1.2rem; color:var(--secondary); font-size:1.2rem; font-weight:800; border-bottom:1px solid #e2e8f0; padding-bottom:0.8rem;">
+              Order Summary
+            </h3>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; font-size:0.95rem;">
+              <span>Subtotal (${cart.total_items} items):</span>
               <strong>${formatINR(cart.total_cents)}</strong>
             </div>
-            <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; color: var(--success);">
-              <span>Delivery:</span>
-              <strong>FREE Fast Delivery</strong>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.8rem; font-size:0.95rem; color: #059669;">
+              <span>Delivery Charges:</span>
+              <strong style="text-transform:uppercase;">FREE Express</strong>
             </div>
-            <div style="display: flex; justify-content: space-between; margin-bottom: 1.2rem; color: var(--success);">
-              <span>Freshness Guarantee:</span>
-              <strong>100% Guaranteed</strong>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 1.2rem; font-size:0.85rem; color: #64748b;">
+              <span>Taxes & GST:</span>
+              <span>Included in price</span>
             </div>
             <hr style="border: 0; border-top: 1px solid var(--border-color); margin-bottom: 1.2rem;">
             <div style="display: flex; justify-content: space-between; margin-bottom: 1.5rem; font-size: 1.25rem;">
-              <span style="font-weight:700;">Grand Total:</span>
-              <strong style="color: var(--primary); font-size:1.4rem;">${formatINR(cart.total_cents)}</strong>
+              <span style="font-weight:800;">Order Total:</span>
+              <strong style="color: var(--secondary); font-size:1.45rem;">${formatINR(cart.total_cents)}</strong>
             </div>
-            <a href="checkout.html" class="btn btn-primary" style="width: 100%; text-align:center; display:block; margin-bottom:0.75rem; font-weight:700;">Proceed to Checkout →</a>
-            <a href="products.html" class="btn btn-secondary" style="width: 100%; text-align:center; display:block; font-weight:600;">← Continue Shopping</a>
+            <a href="checkout.html" class="btn btn-buy-now btn-lg" style="width: 100%; text-align:center; display:block; margin-bottom:0.75rem; font-weight:800; font-size:1.05rem;">
+              Proceed to Checkout →
+            </a>
+            <a href="products.html" class="btn btn-secondary" style="width: 100%; text-align:center; display:block; font-weight:600;">
+              ← Continue Shopping
+            </a>
           </div>
         </div>
       </div>
@@ -108,7 +115,7 @@ async function changeQuantity(productId, newQty) {
 }
 
 async function removeItem(productId) {
-  if (!confirm('Remove this item from your cart?')) return;
+  if (!confirm('Remove this product from your shopping cart?')) return;
   try {
     await api.removeFromCart(productId);
     loadCartPage();

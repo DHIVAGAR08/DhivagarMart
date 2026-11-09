@@ -16,7 +16,7 @@ async function checkAuthState() {
 }
 
 /**
- * Enforces authentication or demo guest access on pages.
+ * Enforces authentication on user pages.
  */
 async function requireAuth(allowedRoles = []) {
   try {
@@ -42,22 +42,16 @@ async function requireAuth(allowedRoles = []) {
 }
 
 /**
- * Used on login.html to redirect if already logged in as non-guest
+ * Used on login.html to redirect if already logged in
  */
 async function redirectIfAuthenticated() {
   try {
     const user = await api.getCurrentUser();
-    if (user && !user.is_demo) {
-      if (user.role === 'SELLER') {
-        window.location.replace('seller.html');
-      } else if (user.role === 'ADMIN') {
-        window.location.replace('admin.html');
-      } else {
-        window.location.replace('index.html');
-      }
+    if (user && user.email !== 'customer@dhivagarmart.com') {
+      window.location.replace('index.html');
     }
   } catch {
-    // Unauthenticated, stay on login page
+    // Stay on login page
   }
 }
 
@@ -65,29 +59,17 @@ function updateNavbar(user) {
   const authNav = document.getElementById('nav-auth-container');
   if (!authNav) return;
 
-  if (user) {
-    let roleBadge = user.is_demo 
-      ? '<span class="badge" style="background:var(--primary); font-size:0.75rem;">DEMO</span>'
-      : (user.role === 'SELLER' 
-          ? '<span class="badge" style="background:#0284c7">SELLER</span>' 
-          : (user.role === 'ADMIN' ? '<span class="badge" style="background:#dc2626">ADMIN</span>' : ''));
-
-    let roleLinks = '<li><a href="orders.html">📦 Orders</a></li>';
-    if (user.role === 'SELLER') roleLinks = '<li><a href="seller.html">🏪 Seller</a></li>';
-    if (user.role === 'ADMIN') roleLinks = '<li><a href="admin.html">🛡️ Admin</a></li>';
-
+  if (user && user.name) {
     authNav.innerHTML = `
-      ${roleLinks}
+      <li><a href="orders.html">📦 Orders</a></li>
       <li style="display:flex; align-items:center; gap:0.4rem; font-weight:600; font-size:0.9rem;">
-        <span>👤 ${user.name}</span>
-        ${roleBadge}
+        <span style="color:#ffffff;">👤 ${user.name}</span>
       </li>
-      <li><button onclick="handleLogout()" class="btn btn-secondary btn-sm">Reset</button></li>
+      <li><button onclick="handleLogout()" class="btn btn-secondary btn-sm" style="background:rgba(255,255,255,0.1); color:#ffffff; border-color:rgba(255,255,255,0.25);">Sign Out</button></li>
     `;
   } else {
     authNav.innerHTML = `
-      <li><a href="login.html" class="btn btn-secondary btn-sm">Login</a></li>
-      <li><a href="register.html" class="btn btn-primary btn-sm">Register</a></li>
+      <li><a href="login.html" class="btn btn-secondary btn-sm" style="background:rgba(255,255,255,0.1); color:#ffffff; border-color:rgba(255,255,255,0.25);">Sign In</a></li>
     `;
   }
 }
@@ -119,7 +101,7 @@ async function handleLogout() {
     await api.logout();
     window.location.href = 'index.html';
   } catch (err) {
-    alert('Reset failed: ' + err.message);
+    alert('Sign out: ' + err.message);
   }
 }
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dhivagar Mart - Fresh Groceries & Daily Essentials</title>
+  <title>Dhivagar Mart - Premium Electronics & Gadgets</title>
   <link rel="stylesheet" href="css/style.css">
   <script>
     window.skipAutoAuthCheck = true;
@@ -11,105 +11,177 @@
 </head>
 <body>
 
-  <!-- Top Navigation -->
+  <!-- Amazon / Flipkart Inspired Top Navigation -->
   <header>
     <div class="nav-container">
       <a href="index.html" class="brand">
         <span class="logo-icon">🛒</span>
-        <span>Dhivagar <span class="brand-tech">Mart</span></span>
+        <span>DHIVAGAR <span class="brand-tech">MART</span></span>
       </a>
 
-      <!-- Header Search Bar -->
+      <!-- Professional Search Bar with Category Dropdown -->
       <form class="nav-search-bar" onsubmit="handleSearch(event)">
-        <input type="text" id="nav-search-input" placeholder="Search fresh apples, milk, rice, vegetables, bananas, eggs...">
-        <button type="submit">Search</button>
+        <select id="search-category-select" class="nav-search-category">
+          <option value="All">All Categories</option>
+          <option value="Smartphones">Smartphones</option>
+          <option value="Apple iPhones">Apple iPhones</option>
+          <option value="Smart Watches">Smart Watches</option>
+          <option value="Apple Watches">Apple Watches</option>
+          <option value="Android Watches">Android Watches</option>
+          <option value="Wireless Earbuds">Wireless Earbuds</option>
+          <option value="Headphones">Headphones</option>
+          <option value="Accessories">Accessories</option>
+        </select>
+        <input type="text" id="nav-search-input" placeholder="Search iPhone 17 Pro, Galaxy S25 Ultra, Apple Watch, boAt, AirPods...">
+        <button type="submit" title="Search Electronics">🔍</button>
       </form>
 
       <ul class="nav-links">
-        <li><a href="index.html" class="active">Home</a></li>
-        <li><a href="products.html">Products</a></li>
-        <li><a href="#categories-section">Categories</a></li>
-        <li><a href="products.html?offers=true">Offers</a></li>
         <li>
           <a href="wishlist.html">
-            ❤️ Wishlist <span id="wishlist-badge" class="badge" style="background:var(--primary);">0</span>
+            ❤️ Wishlist <span id="wishlist-badge" class="badge">0</span>
           </a>
         </li>
         <li>
-          <a href="cart.html" style="position:relative;">
+          <a href="cart.html">
             🛒 Cart <span id="cart-badge" class="badge">0</span>
           </a>
         </li>
       </ul>
 
       <ul class="nav-links" id="nav-auth-container">
-        <li><a href="login.html" class="btn btn-secondary btn-sm">Login</a></li>
+        <li><a href="login.html" class="btn btn-secondary btn-sm" style="background:rgba(255,255,255,0.1); color:#ffffff; border-color:rgba(255,255,255,0.25);">Sign In</a></li>
       </ul>
     </div>
   </header>
 
+  <!-- Secondary Category Sub-Navigation Strip (Flipkart / Amazon Style) -->
+  <div class="sub-nav">
+    <div class="sub-nav-container">
+      <a href="javascript:void(0)" onclick="filterCategory('All', this)" class="active">All Electronics</a>
+      <a href="javascript:void(0)" onclick="filterCategory('Smartphones', this)">📱 Smartphones</a>
+      <a href="javascript:void(0)" onclick="filterCategory('Apple iPhones', this)">🍎 Apple iPhones</a>
+      <a href="javascript:void(0)" onclick="filterCategory('Smart Watches', this)">⌚ Smart Watches</a>
+      <a href="javascript:void(0)" onclick="filterCategory('Apple Watches', this)">🍏 Apple Watches</a>
+      <a href="javascript:void(0)" onclick="filterCategory('Android Watches', this)">🤖 Android Watches</a>
+      <a href="javascript:void(0)" onclick="filterCategory('Wireless Earbuds', this)">🎵 Wireless Earbuds</a>
+      <a href="javascript:void(0)" onclick="filterCategory('Headphones', this)">🎧 Headphones</a>
+      <a href="javascript:void(0)" onclick="filterCategory('Accessories', this)">🔌 Accessories</a>
+    </div>
+  </div>
+
   <!-- Main Marketplace Content -->
   <main class="container">
-    <!-- Hero Banner -->
-    <section class="hero-tech">
+    <!-- Hero Banner (Next-Gen Flagship Festival) -->
+    <section class="hero-electronics">
       <div class="hero-content">
         <div class="hero-tag">
-          <span>🌿</span> 100% FARM-FRESH GROCERIES & ESSENTIALS
+          <span>⚡</span> THE NEXT-GEN FLAGSHIP FESTIVAL
         </div>
-        <h1>Fresh Groceries. Best Prices.</h1>
-        <p>Shop fresh fruits, farm milk, premium rice, organic vegetables, and daily staples delivered right to your doorstep.</p>
+        <h1>Premium Electronics. Unmatched Performance.</h1>
+        <p>Discover flagship smartphones, smartwatches, active noise-cancelling audio & premium accessories with verified brand warranties and fast express delivery.</p>
         <div class="hero-actions">
-          <a href="#products-section" class="btn btn-primary btn-lg">
-            SHOP GROCERIES NOW
+          <a href="#products-section" class="btn btn-primary btn-lg" onclick="filterCategory('Smartphones', null)">
+            EXPLORE FLAGSHIPS →
           </a>
-          <a href="products.html" class="btn btn-secondary btn-lg" style="background: rgba(255,255,255,0.18); color:white; border-color:rgba(255,255,255,0.3);">
-            EXPLORE CATALOG →
+          <a href="#products-section" class="btn btn-secondary btn-lg" onclick="filterCategory('Wireless Earbuds', null)" style="background: rgba(255,255,255,0.1); color:white; border-color:rgba(255,255,255,0.3);">
+            EXPLORE AUDIO GEAR
           </a>
         </div>
       </div>
     </section>
 
-    <!-- Grocery Categories Section -->
+    <!-- Value Proposition Strip -->
+    <div class="features-strip">
+      <div class="feature-pill">
+        <div class="feature-icon">🚚</div>
+        <div class="feature-text">
+          <strong>Express Free Delivery</strong>
+          <span>Doorstep dispatch within 24-48 hrs</span>
+        </div>
+      </div>
+      <div class="feature-pill">
+        <div class="feature-icon">🛡️</div>
+        <div class="feature-text">
+          <strong>Official Brand Warranty</strong>
+          <span>100% Genuine certified hardware</span>
+        </div>
+      </div>
+      <div class="feature-pill">
+        <div class="feature-icon">🔄</div>
+        <div class="feature-text">
+          <strong>7-Day Easy Replacement</strong>
+          <span>Hassle-free technical replacement</span>
+        </div>
+      </div>
+      <div class="feature-pill">
+        <div class="feature-icon">💳</div>
+        <div class="feature-text">
+          <strong>No-Cost EMI Options</strong>
+          <span>Available on major credit/debit cards</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8 Categories Grid -->
     <section id="categories-section" style="margin-bottom: 2.5rem;">
       <div class="section-header">
         <div>
-          <h2>Explore Categories</h2>
-          <p>Hand-picked daily essentials direct from local farms and trusted suppliers</p>
+          <h2>Explore Electronics Categories</h2>
+          <p>Browse our curated selection of flagship smartphones, smart wearables & audio</p>
         </div>
         <a href="products.html" style="color:var(--primary); font-weight:700; text-decoration:none; font-size:0.95rem;">
-          View All Groceries →
+          View Full Catalog →
         </a>
       </div>
 
       <div class="categories-grid">
-        <div class="category-card" onclick="filterCategory('Fruits', this)">
+        <div class="category-card" onclick="filterCategory('Smartphones', this)">
+          <div class="category-icon-box">📱</div>
+          <div class="category-title">Smartphones</div>
+          <div class="category-subtitle">Flagship & 5G</div>
+        </div>
+
+        <div class="category-card" onclick="filterCategory('Apple iPhones', this)">
           <div class="category-icon-box">🍎</div>
-          <div class="category-title">Fruits</div>
-          <div class="category-subtitle">Apples & Bananas</div>
+          <div class="category-title">Apple iPhones</div>
+          <div class="category-subtitle">iPhone 17 Series</div>
         </div>
 
-        <div class="category-card" onclick="filterCategory('Dairy', this)">
-          <div class="category-icon-box">🥛</div>
-          <div class="category-title">Dairy</div>
-          <div class="category-subtitle">Pure Farm Fresh Milk</div>
+        <div class="category-card" onclick="filterCategory('Smart Watches', this)">
+          <div class="category-icon-box">⌚</div>
+          <div class="category-title">Smart Watches</div>
+          <div class="category-subtitle">AMOLED & GPS</div>
         </div>
 
-        <div class="category-card" onclick="filterCategory('Grains', this)">
-          <div class="category-icon-box">🌾</div>
-          <div class="category-title">Grains</div>
-          <div class="category-subtitle">Premium Basmati Rice</div>
+        <div class="category-card" onclick="filterCategory('Apple Watches', this)">
+          <div class="category-icon-box">🍏</div>
+          <div class="category-title">Apple Watches</div>
+          <div class="category-subtitle">Series 11 & Ultra 3</div>
         </div>
 
-        <div class="category-card" onclick="filterCategory('Vegetables', this)">
-          <div class="category-icon-box">🥕</div>
-          <div class="category-title">Vegetables</div>
-          <div class="category-subtitle">Assorted Farm Fresh</div>
+        <div class="category-card" onclick="filterCategory('Android Watches', this)">
+          <div class="category-icon-box">🤖</div>
+          <div class="category-title">Android Watches</div>
+          <div class="category-subtitle">Galaxy & Wear OS</div>
         </div>
 
-        <div class="category-card" onclick="filterCategory('Dairy & Eggs', this)">
-          <div class="category-icon-box">🥚</div>
-          <div class="category-title">Dairy & Eggs</div>
-          <div class="category-subtitle">Farm Fresh Brown Eggs</div>
+        <div class="category-card" onclick="filterCategory('Wireless Earbuds', this)">
+          <div class="category-icon-box">🎵</div>
+          <div class="category-title">Wireless Earbuds</div>
+          <div class="category-subtitle">boAt & AirPods Pro</div>
+        </div>
+
+        <div class="category-card" onclick="filterCategory('Headphones', this)">
+          <div class="category-icon-box">🎧</div>
+          <div class="category-title">Headphones</div>
+          <div class="category-subtitle">Over-Ear Studio ANC</div>
+        </div>
+
+        <div class="category-card" onclick="filterCategory('Accessories', this)">
+          <div class="category-icon-box">🔌</div>
+          <div class="category-title">Accessories</div>
+          <div class="category-subtitle">GaN Chargers & MagSafe</div>
         </div>
       </div>
     </section>
@@ -118,16 +190,19 @@
     <section id="products-section">
       <div class="section-header">
         <div>
-          <h2>Featured Products</h2>
-          <p id="catalog-subtitle">Showing fresh farm groceries with instant home delivery</p>
+          <h2>Featured Electronics</h2>
+          <p id="catalog-subtitle">Showing flagship smartphones, smartwatches, audio & accessories with brand warranty</p>
         </div>
         <div class="categories-bar" style="margin-bottom:0; padding-bottom:0;">
-          <button class="category-chip active" onclick="filterCategory('All', this)">All Products</button>
-          <button class="category-chip" onclick="filterCategory('Fruits', this)">🍎 Fruits</button>
-          <button class="category-chip" onclick="filterCategory('Dairy', this)">🥛 Dairy</button>
-          <button class="category-chip" onclick="filterCategory('Grains', this)">🌾 Grains</button>
-          <button class="category-chip" onclick="filterCategory('Vegetables', this)">🥕 Vegetables</button>
-          <button class="category-chip" onclick="filterCategory('Dairy & Eggs', this)">🥚 Dairy & Eggs</button>
+          <button class="category-chip active" onclick="filterCategory('All', this)">All Electronics</button>
+          <button class="category-chip" onclick="filterCategory('Smartphones', this)">📱 Smartphones</button>
+          <button class="category-chip" onclick="filterCategory('Apple iPhones', this)">🍎 Apple iPhones</button>
+          <button class="category-chip" onclick="filterCategory('Smart Watches', this)">⌚ Smart Watches</button>
+          <button class="category-chip" onclick="filterCategory('Apple Watches', this)">🍏 Apple Watches</button>
+          <button class="category-chip" onclick="filterCategory('Android Watches', this)">🤖 Android Watches</button>
+          <button class="category-chip" onclick="filterCategory('Wireless Earbuds', this)">🎵 Wireless Earbuds</button>
+          <button class="category-chip" onclick="filterCategory('Headphones', this)">🎧 Headphones</button>
+          <button class="category-chip" onclick="filterCategory('Accessories', this)">🔌 Accessories</button>
         </div>
       </div>
 
@@ -136,36 +211,80 @@
     </section>
   </main>
 
-  <!-- Floating AI Assistant -->
-  <button class="chat-launcher" onclick="toggleChat()" title="Ask Dhivagar Mart Grocery Assistant">🤖</button>
+  <!-- Floating AI Tech Assistant -->
+  <button class="chat-launcher" onclick="toggleChat()" title="Ask Dhivagar Mart Tech Assistant">🤖</button>
 
   <div id="chat-panel" class="chat-panel">
     <div class="chat-header">
       <div>
-        <h3>⚡ Dhivagar Mart Assistant</h3>
-        <span style="font-size:0.75rem; opacity:0.85;">Instant Grocery & Pricing Help</span>
+        <h3 style="font-size:1.05rem; font-weight:700;">⚡ Tech Shopping Assistant</h3>
+        <span style="font-size:0.75rem; opacity:0.85;">Dhivagar Mart AI Intelligence</span>
       </div>
       <button onclick="toggleChat()" style="background:transparent; border:none; color:white; font-size:1.2rem; cursor:pointer;">✕</button>
     </div>
     <div id="chat-messages" class="chat-messages">
       <div class="chat-bubble bot">
-        Hello! Welcome to Dhivagar Mart. Ask me about our fresh fruits, milk, rice, vegetables, bananas, and eggs!
+        Hello! I'm your Dhivagar Mart technology assistant. Ask me about the iPhone 17 Pro, Galaxy S25 Ultra, Apple Watches, or audio gear!
       </div>
     </div>
     <div class="chat-chips">
-      <button class="chip-btn" onclick="sendChatMessage('What fruits are available?')">🍎 Fruits</button>
-      <button class="chip-btn" onclick="sendChatMessage('Tell me about farm fresh milk')">🥛 Dairy</button>
-      <button class="chip-btn" onclick="sendChatMessage('What is the price of Basmati rice?')">🌾 Rice</button>
-      <button class="chip-btn" onclick="sendChatMessage('How to place an order?')">📦 Order Info</button>
+      <button class="chip-btn" onclick="sendChatMessage('Tell me about iPhone 17 Pro specs')">📱 iPhone 17 Pro</button>
+      <button class="chip-btn" onclick="sendChatMessage('Galaxy S25 Ultra features')">📱 Galaxy S25 Ultra</button>
+      <button class="chip-btn" onclick="sendChatMessage('Compare Apple Watch Series 11 and Ultra 3')">⌚ Apple Watches</button>
+      <button class="chip-btn" onclick="sendChatMessage('What earbuds do you recommend?')">🎧 Audio Gear</button>
+      <button class="chip-btn" onclick="sendChatMessage('How does warranty and delivery work?')">📦 Delivery & Warranty</button>
     </div>
     <div class="chat-input-bar">
-      <input type="text" id="chat-input" placeholder="Ask about grocery prices or items..." onkeypress="handleChatKeyPress(event)">
+      <input type="text" id="chat-input" placeholder="Ask about tech specs or recommendations..." onkeypress="handleChatKeyPress(event)">
       <button onclick="sendChatMessage()" class="btn btn-primary btn-sm">Send</button>
     </div>
   </div>
 
+  <!-- Professional Amazon/Flipkart Style Footer -->
   <footer>
-    <p>© 2026 Dhivagar Mart. All rights reserved. Fast & Fresh Groceries • Standalone Demo Mode</p>
+    <div class="footer-container">
+      <div class="footer-col">
+        <h4>About Dhivagar Mart</h4>
+        <ul>
+          <li><a href="about.html">About Our Marketplace</a></li>
+          <li><a href="products.html">Flagship Launches</a></li>
+          <li><a href="products.html">Certified Refurbished</a></li>
+          <li><a href="index.html">Genuine Brand Warranty</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Top Categories</h4>
+        <ul>
+          <li><a href="javascript:void(0)" onclick="filterCategory('Smartphones', null)">5G Smartphones</a></li>
+          <li><a href="javascript:void(0)" onclick="filterCategory('Apple iPhones', null)">Apple iPhones</a></li>
+          <li><a href="javascript:void(0)" onclick="filterCategory('Smart Watches', null)">Smart Watches</a></li>
+          <li><a href="javascript:void(0)" onclick="filterCategory('Wireless Earbuds', null)">Noise Cancelling Earbuds</a></li>
+          <li><a href="javascript:void(0)" onclick="filterCategory('Accessories', null)">GaN Fast Chargers</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Customer Care</h4>
+        <ul>
+          <li><a href="orders.html">Track Your Orders</a></li>
+          <li><a href="checkout.html">Shipping Rates & Policies</a></li>
+          <li><a href="wishlist.html">Your Wishlist</a></li>
+          <li><a href="login.html">Account Settings</a></li>
+          <li><a href="javascript:void(0)" onclick="toggleChat()">24/7 AI Assistant</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Payment & Trust</h4>
+        <p style="font-size:0.85rem; line-height:1.6; margin-bottom:0.75rem;">
+          100% Secure Checkout with 256-bit SSL encryption. Accepts UPI, Credit/Debit cards, Net Banking & Cash on Delivery.
+        </p>
+        <div style="font-size:1.4rem; display:flex; gap:0.5rem;">
+          <span>💳</span><span>⚡</span><span>🔒</span><span>🛡️</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Dhivagar Mart India. All rights reserved. Premium Electronics & Gadgets Marketplace.</p>
+    </div>
   </footer>
 
   <script src="js/api.js"></script>
@@ -173,6 +292,12 @@
   <script src="js/products.js"></script>
   <script src="js/chat.js"></script>
   <script>
+    function toggleChat() {
+      const panel = document.getElementById('chat-panel');
+      if (!panel) return;
+      panel.style.display = (panel.style.display === 'flex') ? 'none' : 'flex';
+    }
+
     document.addEventListener('DOMContentLoaded', async () => {
       await checkAuthState();
       loadProducts('All', '');

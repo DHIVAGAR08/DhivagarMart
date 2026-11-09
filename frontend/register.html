@@ -3,24 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Create Account - Dhivagar Mart | Fresh Groceries</title>
+  <title>Create Account - Dhivagar Mart Electronics</title>
   <link rel="stylesheet" href="css/style.css">
   <script>
     window.skipAutoAuthCheck = true;
   </script>
 </head>
-<body style="background: radial-gradient(circle at top right, #fce7f3 0%, #fff5f8 100%); min-height: 100vh;">
+<body style="background: radial-gradient(circle at top right, #1e293b 0%, #0f172a 100%); min-height: 100vh;">
 
   <!-- Header -->
-  <header style="background: #ffffff; border-bottom: 1px solid var(--border-color);">
+  <header style="background: #131921; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
     <div class="nav-container">
       <a href="index.html" class="brand">
         <span class="logo-icon">🛒</span>
-        <span>Dhivagar <span class="brand-tech">Mart</span></span>
+        <span>DHIVAGAR <span class="brand-tech">MART</span></span>
       </a>
       <ul class="nav-links">
         <li>
-          <a href="login.html" class="btn btn-secondary btn-sm" style="border-radius:9999px;">
+          <a href="login.html" class="btn btn-secondary btn-sm" style="background:rgba(255,255,255,0.1); color:#ffffff; border-color:rgba(255,255,255,0.25);">
             Sign In
           </a>
         </li>
@@ -29,37 +29,37 @@
   </header>
 
   <!-- Register Form Container -->
-  <main class="auth-wrapper">
-    <div class="form-card" style="box-shadow: 0 20px 25px -5px rgba(236, 72, 153, 0.15); border: 1px solid var(--border-color); max-width: 500px;">
+  <main class="auth-wrapper" style="display:flex; justify-content:center; align-items:center; padding:3rem 1.5rem; flex:1;">
+    <div class="form-card" style="box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border: 1px solid rgba(226, 232, 240, 0.2); max-width: 480px; width:100%; border-radius:var(--radius-md);">
       <div style="text-align: center; margin-bottom: 2rem;">
-        <div style="width: 52px; height: 52px; background: var(--bg-subtle); color: var(--primary); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 0.8rem; border: 1px solid var(--border-color);">
-          🌱
+        <div style="width: 52px; height: 52px; background: #eff6ff; color: #2563eb; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 0.8rem;">
+          🚀
         </div>
-        <h1 style="font-size: 1.85rem; font-weight: 800; color: var(--secondary); letter-spacing: -0.5px;">Create Your Account</h1>
-        <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.25rem;">
-          Join Dhivagar Mart for fresh grocery delivery
+        <h1 style="font-size: 1.75rem; font-weight: 800; color: var(--secondary); letter-spacing: -0.5px;">Create Your Account</h1>
+        <p style="color: var(--text-muted); font-size: 0.92rem; margin-top: 0.25rem;">
+          Join Dhivagar Mart for exclusive member deals & warranty tracking
         </p>
       </div>
 
       <!-- Alerts -->
-      <div id="register-error" style="display: none; background: var(--danger-light); color: var(--danger); padding: 0.75rem 1rem; border-radius: var(--radius-md); margin-bottom: 1.25rem; font-size: 0.9rem; border: 1px solid #fecaca; font-weight: 500;"></div>
-      <div id="register-success" style="display: none; background: var(--success-light); color: #065f46; padding: 0.85rem 1rem; border-radius: var(--radius-md); margin-bottom: 1.25rem; font-size: 0.92rem; border: 1px solid #a7f3d0; font-weight: 600;"></div>
+      <div id="register-error" style="display: none; background: var(--danger-light); color: var(--danger); padding: 0.75rem 1rem; border-radius: var(--radius-sm); margin-bottom: 1.25rem; font-size: 0.9rem; border: 1px solid #fecaca; font-weight: 500;"></div>
+      <div id="register-success" style="display: none; background: var(--success-light); color: #065f46; padding: 0.85rem 1rem; border-radius: var(--radius-sm); margin-bottom: 1.25rem; font-size: 0.92rem; border: 1px solid #a7f3d0; font-weight: 600;"></div>
 
       <form id="register-form" onsubmit="handleRegisterSubmit(event)">
         <div class="form-group">
-          <label for="name">Full Name</label>
-          <input type="text" id="name" class="form-control" placeholder="e.g. Dhivagar" required autocomplete="name">
+          <label for="name">Your Name</label>
+          <input type="text" id="name" class="form-control" placeholder="First and last name" required autocomplete="name">
         </div>
 
         <div class="form-group">
           <label for="email">Email Address</label>
-          <input type="email" id="email" class="form-control" placeholder="e.g. user@example.com" required autocomplete="email">
+          <input type="email" id="email" class="form-control" placeholder="e.g. name@example.com" required autocomplete="email">
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
           <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" id="password" class="form-control" placeholder="Min. 6 chars" required minlength="6" autocomplete="new-password">
+            <input type="password" id="password" class="form-control" placeholder="At least 6 chars" required minlength="6" autocomplete="new-password">
           </div>
           <div class="form-group">
             <label for="confirm-password">Confirm Password</label>
@@ -67,16 +67,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="role">Account Type</label>
-          <select id="role" class="form-control" required style="font-weight: 600;">
-            <option value="BUYER">🛒 Grocery Shopper (Order fresh groceries & staples)</option>
-            <option value="SELLER">🏪 Farm Seller (List farm produce & groceries)</option>
-          </select>
-        </div>
-
         <button type="submit" id="reg-btn" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 0.5rem; font-weight: 700;">
-          Create Account
+          Create Dhivagar Mart Account
         </button>
       </form>
 
@@ -91,7 +83,9 @@
   </main>
 
   <footer>
-    <p>© 2026 Dhivagar Mart. All rights reserved. Fast & Fresh Groceries • Standalone Demo Mode</p>
+    <div class="footer-bottom" style="border:none; padding:0;">
+      <p>© 2026 Dhivagar Mart India. All rights reserved. Premium Electronics & Gadgets.</p>
+    </div>
   </footer>
 
   <script src="js/api.js"></script>
@@ -103,7 +97,6 @@
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
       const confirmPassword = document.getElementById('confirm-password').value;
-      const role = document.getElementById('role').value;
 
       const errorDiv = document.getElementById('register-error');
       const successDiv = document.getElementById('register-success');
@@ -113,7 +106,7 @@
       successDiv.style.display = 'none';
 
       if (password !== confirmPassword) {
-        errorDiv.textContent = 'Passwords do not match. Please ensure both passwords match.';
+        errorDiv.textContent = 'Passwords do not match. Please verify your password entry.';
         errorDiv.style.display = 'block';
         return;
       }
@@ -122,8 +115,8 @@
       btn.textContent = 'Creating account...';
 
       try {
-        await api.register({ name, email, password, role });
-        successDiv.textContent = 'Demo account created successfully! Redirecting...';
+        await api.register({ name, email, password, role: 'BUYER' });
+        successDiv.textContent = 'Account created successfully! Redirecting...';
         successDiv.style.display = 'block';
         setTimeout(() => {
           window.location.href = 'index.html';
@@ -132,7 +125,7 @@
         errorDiv.textContent = err.message || 'Registration failed.';
         errorDiv.style.display = 'block';
         btn.disabled = false;
-        btn.textContent = 'Create Account';
+        btn.textContent = 'Create Dhivagar Mart Account';
       }
     }
   </script>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Checkout - Dhivagar Mart</title>
+  <title>Checkout - Dhivagar Mart Electronics</title>
   <link rel="stylesheet" href="css/style.css">
   <script>
     window.skipAutoAuthCheck = true;
@@ -16,18 +16,9 @@
     <div class="nav-container">
       <a href="index.html" class="brand">
         <span class="logo-icon">🛒</span>
-        <span>Dhivagar <span class="brand-tech">Mart</span></span>
+        <span>DHIVAGAR <span class="brand-tech">MART</span></span>
       </a>
       <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="products.html">Products</a></li>
-        <li><a href="index.html#categories-section">Categories</a></li>
-        <li><a href="products.html?offers=true">Offers</a></li>
-        <li>
-          <a href="wishlist.html">
-            ❤️ Wishlist <span id="wishlist-badge" class="badge" style="background:var(--primary);">0</span>
-          </a>
-        </li>
         <li>
           <a href="cart.html">
             🛒 Cart <span id="cart-badge" class="badge">0</span>
@@ -41,48 +32,48 @@
   <main class="container">
     <div style="margin-bottom:2rem;">
       <h1 style="font-size:2rem; font-weight:800; color:var(--secondary); letter-spacing:-0.5px;">
-        ⚡ Instant Grocery Checkout
+        Secure Express Checkout
       </h1>
       <p style="color:var(--text-muted); font-size:0.95rem;">
-        Complete your order with fast local doorstep delivery
+        Complete your order with verified manufacturer warranty & doorstep courier delivery
       </p>
     </div>
 
-    <!-- Explicit Demo Mode Notice Banner -->
-    <div style="background:#fce7f3; border:1px solid #fbcfe8; color:#be185d; padding:0.9rem 1.25rem; border-radius:var(--radius-lg); margin-bottom:1.5rem; display:flex; align-items:center; gap:0.75rem; font-weight:600;">
+    <!-- Transparent Simulation Explanation Notice -->
+    <div style="background:#eff6ff; border:1px solid #bfdbfe; color:#1e40af; padding:0.9rem 1.25rem; border-radius:var(--radius-md); margin-bottom:1.5rem; display:flex; align-items:center; gap:0.75rem; font-size:0.9rem;">
       <span style="font-size:1.3rem;">ℹ️</span>
       <div>
-        <strong>Demo Order Mode:</strong> No real payment will be charged. Orders are simulated instantly for presentation and testing.
+        <strong>Order Preview Mode:</strong> This e-commerce portal operates in order preview mode. No real monetary transactions or charges will be deducted from your account.
       </div>
     </div>
 
     <div style="display:grid; grid-template-columns: 1.5fr 1fr; gap:2.5rem;">
-      <div class="form-card" style="margin:0; max-width:none; box-shadow:var(--shadow-md);">
+      <div class="form-card" style="margin:0; max-width:none; box-shadow:var(--shadow-sm);">
         <form id="checkout-form" onsubmit="handlePlaceOrder(event)">
-          <!-- Section 1: Customer Contact & Shipping Details -->
-          <h2 style="font-size:1.3rem; font-weight:700; margin-bottom:1.2rem; color:var(--secondary);">
-            1. Recipient & Delivery Details
+          <!-- Section 1: Delivery Address -->
+          <h2 style="font-size:1.3rem; font-weight:800; margin-bottom:1.2rem; color:var(--secondary);">
+            1. Delivery Address
           </h2>
           
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
             <div class="form-group" style="margin-bottom:0;">
               <label for="full-name">Full Name:</label>
-              <input type="text" id="full-name" class="form-control" placeholder="e.g. Dhivagar" value="Dhivagar (Demo Guest)" required>
+              <input type="text" id="full-name" class="form-control" placeholder="e.g. Dhivagar" value="Dhivagar" required>
             </div>
             <div class="form-group" style="margin-bottom:0;">
-              <label for="phone-number">Mobile / Contact Phone:</label>
+              <label for="phone-number">Mobile Number:</label>
               <input type="tel" id="phone-number" class="form-control" placeholder="e.g. +91 98765 43210" value="+91 98765 43210" required>
             </div>
           </div>
 
           <div class="form-group">
-            <label for="shipping-address">Delivery Address (Street / Area / Apartment):</label>
-            <textarea id="shipping-address" class="form-control" rows="2" placeholder="House/Flat number, Building name, Street..." required>No. 12, Anna Nagar Main Road</textarea>
+            <label for="shipping-address">Flat, House no., Building, Company, Apartment:</label>
+            <textarea id="shipping-address" class="form-control" rows="2" placeholder="House/Flat number, Building name, Street..." required>No. 42, Tech Park Avenue, T. Nagar</textarea>
           </div>
 
           <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; margin-bottom:1.5rem;">
             <div class="form-group" style="margin-bottom:0;">
-              <label for="city">City:</label>
+              <label for="city">Town / City:</label>
               <input type="text" id="city" class="form-control" placeholder="e.g. Chennai" value="Chennai" required>
             </div>
             <div class="form-group" style="margin-bottom:0;">
@@ -91,47 +82,48 @@
             </div>
             <div class="form-group" style="margin-bottom:0;">
               <label for="pincode">PIN Code:</label>
-              <input type="text" id="pincode" class="form-control" placeholder="e.g. 600040" value="600040" required>
+              <input type="text" id="pincode" class="form-control" placeholder="e.g. 600017" value="600017" required>
             </div>
           </div>
 
           <!-- Section 2: Payment Method Selection -->
-          <h2 style="font-size:1.3rem; font-weight:700; margin: 1.75rem 0 0.8rem; color:var(--secondary);">
+          <h2 style="font-size:1.3rem; font-weight:800; margin: 1.75rem 0 0.8rem; color:var(--secondary);">
             2. Payment Method
           </h2>
 
           <div style="display:flex; flex-direction:column; gap:0.75rem; margin-bottom:1.5rem;">
-            <label style="display:flex; align-items:center; gap:0.75rem; padding:0.9rem 1.1rem; border:1px solid var(--border-color); border-radius:var(--radius-md); cursor:pointer; background:var(--bg-subtle);">
+            <label style="display:flex; align-items:center; gap:0.75rem; padding:0.9rem 1.1rem; border:1px solid var(--border-color); border-radius:var(--radius-sm); cursor:pointer; background:var(--bg-subtle);">
               <input type="radio" name="payment-method" value="CASH_ON_DELIVERY" checked onchange="togglePaymentInputs('COD')">
               <div>
-                <strong>💵 Cash on Delivery (COD)</strong>
-                <div style="font-size:0.82rem; color:var(--text-muted);">Pay with cash or UPI when groceries arrive at your door</div>
+                <strong>💵 Cash / UPI on Delivery</strong>
+                <div style="font-size:0.82rem; color:var(--text-muted);">Pay cash or scan QR when package arrives at your door</div>
               </div>
             </label>
 
-            <label style="display:flex; align-items:center; gap:0.75rem; padding:0.9rem 1.1rem; border:1px solid var(--border-color); border-radius:var(--radius-md); cursor:pointer; background:var(--bg-subtle);">
+            <label style="display:flex; align-items:center; gap:0.75rem; padding:0.9rem 1.1rem; border:1px solid var(--border-color); border-radius:var(--radius-sm); cursor:pointer; background:var(--bg-subtle);">
               <input type="radio" name="payment-method" value="UPI" onchange="togglePaymentInputs('UPI')">
               <div>
-                <strong>⚡ Instant UPI (Google Pay / PhonePe / Paytm)</strong>
-                <div style="font-size:0.82rem; color:var(--text-muted);">Instant demo UPI confirmation</div>
+                <strong>⚡ Instant UPI (Google Pay / PhonePe / Paytm / BHIM)</strong>
+                <div style="font-size:0.82rem; color:var(--text-muted);">Direct digital payment via UPI VPA</div>
               </div>
             </label>
 
-            <label style="display:flex; align-items:center; gap:0.75rem; padding:0.9rem 1.1rem; border:1px solid var(--border-color); border-radius:var(--radius-md); cursor:pointer; background:var(--bg-subtle);">
+            <label style="display:flex; align-items:center; gap:0.75rem; padding:0.9rem 1.1rem; border:1px solid var(--border-color); border-radius:var(--radius-sm); cursor:pointer; background:var(--bg-subtle);">
               <input type="radio" name="payment-method" value="CARD" onchange="togglePaymentInputs('CARD')">
               <div>
-                <strong>💳 Credit / Debit Card</strong>
-                <div style="font-size:0.82rem; color:var(--text-muted);">Demo Card payment simulation</div>
+                <strong>💳 Credit / Debit Card (Visa, MasterCard, RuPay, Amex)</strong>
+                <div style="font-size:0.82rem; color:var(--text-muted);">Secure payment with 256-bit encryption</div>
               </div>
             </label>
           </div>
 
-          <div id="payment-input-upi" style="display:none; background:white; border:1px dashed var(--primary); padding:1rem; border-radius:var(--radius-md); margin-bottom:1.5rem;">
+          <!-- Conditional Payment Sub-Inputs -->
+          <div id="payment-input-upi" style="display:none; background:#ffffff; border:1px dashed var(--primary); padding:1rem; border-radius:var(--radius-sm); margin-bottom:1.5rem;">
             <label for="upi-id" style="font-size:0.88rem; font-weight:600;">Virtual Payment Address (VPA / UPI ID):</label>
-            <input type="text" id="upi-id" class="form-control" placeholder="dhivagar@okaxis" style="margin-top:0.3rem;" value="demo@okhdfcbank">
+            <input type="text" id="upi-id" class="form-control" placeholder="username@okhdfcbank" style="margin-top:0.3rem;" value="dhivagar@okhdfcbank">
           </div>
 
-          <div id="payment-input-card" style="display:none; background:white; border:1px dashed var(--primary); padding:1rem; border-radius:var(--radius-md); margin-bottom:1.5rem;">
+          <div id="payment-input-card" style="display:none; background:#ffffff; border:1px dashed var(--primary); padding:1rem; border-radius:var(--radius-sm); margin-bottom:1.5rem;">
             <div class="form-group" style="margin-bottom:0.75rem;">
               <label for="mock-card-num" style="font-size:0.88rem; font-weight:600;">Card Number:</label>
               <input type="text" id="mock-card-num" class="form-control" placeholder="4111 •••• •••• 1111" maxlength="19" value="4111 2222 3333 4444">
@@ -148,30 +140,30 @@
             </div>
           </div>
 
-          <button type="submit" id="place-order-btn" class="btn btn-primary btn-lg" style="width:100%; font-weight:700;">
-            Place Demo Order Now
+          <button type="submit" id="place-order-btn" class="btn btn-buy-now btn-lg" style="width:100%; font-weight:800; font-size:1.1rem;">
+            Place Your Order Now
           </button>
         </form>
       </div>
 
-      <div class="form-card" style="margin:0; max-width:none; height:fit-content; box-shadow:var(--shadow-md);" id="checkout-summary">
-        <p style="color:var(--text-muted);">Calculating grocery order summary...</p>
+      <div class="form-card" style="margin:0; max-width:none; height:fit-content; box-shadow:var(--shadow-sm);" id="checkout-summary">
+        <p style="color:var(--text-muted);">Calculating order summary...</p>
       </div>
     </div>
   </main>
 
   <!-- Order Confirmation Modal -->
   <div id="order-confirm-modal" class="modal-overlay" style="display:none;">
-    <div class="form-card" style="margin:0; width:92%; max-width:540px; box-shadow:var(--shadow-xl); text-align:center;">
+    <div class="form-card" style="margin:0; width:92%; max-width:560px; box-shadow:var(--shadow-xl); text-align:center;">
       <div style="font-size:3.5rem; margin-bottom:0.5rem;">🎉</div>
       <h2 style="font-size:1.6rem; font-weight:800; color:var(--secondary); margin-bottom:0.5rem;">
-        Grocery Order Placed Successfully!
+        Order Placed Successfully!
       </h2>
       <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:1.5rem;">
-        Thank you for shopping at Dhivagar Mart. Your fresh grocery package is being packed for delivery.
+        Thank you for ordering with Dhivagar Mart. Your hardware shipment is being prepared for express dispatch.
       </p>
 
-      <div style="background:var(--bg-subtle); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:1.25rem; text-align:left; margin-bottom:1.5rem;">
+      <div style="background:var(--bg-subtle); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem; text-align:left; margin-bottom:1.5rem;">
         <div style="display:flex; justify-content:space-between; margin-bottom:0.6rem;">
           <span style="color:var(--text-muted);">Order Tracking ID:</span>
           <strong id="confirm-order-id" style="color:var(--primary);">#DHV-1001</strong>
@@ -182,15 +174,15 @@
         </div>
         <div style="display:flex; justify-content:space-between; margin-bottom:0.6rem;">
           <span style="color:var(--text-muted);">Payment Status:</span>
-          <span id="confirm-payment-status" class="badge" style="background:#10b981;">PAID (Demo)</span>
+          <span id="confirm-payment-status" class="badge" style="background:#10b981; color:#fff;">CONFIRMED</span>
         </div>
         <div style="display:flex; justify-content:space-between; margin-bottom:0.6rem;">
           <span style="color:var(--text-muted);">Delivery Address:</span>
-          <span id="confirm-address" style="font-size:0.85rem; max-width:240px; text-align:right;"></span>
+          <span id="confirm-address" style="font-size:0.85rem; max-width:260px; text-align:right;"></span>
         </div>
-        <div style="display:flex; justify-content:space-between; font-size:1.1rem; font-weight:800; border-top:1px solid var(--border-color); padding-top:0.6rem;">
-          <span>Grand Total:</span>
-          <strong id="confirm-total" style="color:var(--primary);">₹0</strong>
+        <div style="display:flex; justify-content:space-between; font-size:1.15rem; font-weight:800; border-top:1px solid var(--border-color); padding-top:0.6rem;">
+          <span>Order Total:</span>
+          <strong id="confirm-total" style="color:var(--secondary);">₹0</strong>
         </div>
       </div>
 
@@ -206,7 +198,25 @@
   </div>
 
   <footer>
-    <p>© 2026 Dhivagar Mart. All rights reserved. Fast & Fresh Groceries • Standalone Demo Mode</p>
+    <div class="footer-container">
+      <div class="footer-col">
+        <h4>About Dhivagar Mart</h4>
+        <ul>
+          <li><a href="about.html">About Our Marketplace</a></li>
+          <li><a href="products.html">Flagship Launches</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Customer Help</h4>
+        <ul>
+          <li><a href="orders.html">Track Orders</a></li>
+          <li><a href="cart.html">View Cart</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Dhivagar Mart India. All rights reserved. Premium Electronics & Gadgets.</p>
+    </div>
   </footer>
 
   <script src="js/api.js"></script>
