@@ -142,10 +142,7 @@
       submitBtn.textContent = 'Verifying credentials...';
 
       try {
-        if (!window.api || typeof window.api.login !== 'function') {
-          throw new Error('API initialization pending. Please refresh the page.');
-        }
-        await window.api.login({ email, password });
+        await api.login({ email, password });
         window.location.href = 'index.html';
       } catch (err) {
         errorDiv.innerHTML = `

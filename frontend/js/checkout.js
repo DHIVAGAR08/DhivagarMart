@@ -95,8 +95,8 @@ async function handlePlaceOrder(e) {
       document.getElementById('confirm-payment-method').textContent = order.payment_method || paymentMethod;
       const statusBadge = document.getElementById('confirm-payment-status');
       if (statusBadge) {
-        statusBadge.textContent = 'CONFIRMED';
-        statusBadge.style.background = '#10b981';
+        statusBadge.textContent = 'DEMO RECORD (NO REAL PAYMENT)';
+        statusBadge.style.background = '#f59e0b';
       }
       document.getElementById('confirm-address').textContent = order.delivery_address || `${street}, ${city}`;
       document.getElementById('confirm-total').textContent = formatINR(order.total_amount_cents);

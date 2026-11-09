@@ -1,7 +1,4 @@
 // Dhivagar Mart - Premium Electronics Marketplace API Client & Store
-window.api = window.api || {};
-var api = window.api;
-
 const API_BASE = '/api/v1';
 
 // Universal Indian Rupee Currency Formatter
@@ -321,7 +318,8 @@ const STORAGE_KEYS = {
   USER: 'dhivagarmart_user',
   WISHLIST: 'dhivagarmart_wishlist',
   ORDERS: 'dhivagarmart_orders',
-  REVIEWS: 'dhivagarmart_reviews'
+  REVIEWS: 'dhivagarmart_reviews',
+  ACCOUNTS: 'dhivagarmart_registered_accounts'
 };
 
 function getStorageJSON(key, defaultVal) {
@@ -337,6 +335,38 @@ function setStorageJSON(key, val) {
   try {
     localStorage.setItem(key, JSON.stringify(val));
   } catch (e) {}
+}
+
+function getRegisteredAccounts() {
+  const defaultAccounts = [
+    {
+      id: 1,
+      name: "Dhivagar Admin",
+      email: "admin@dhivagarmart.com",
+      password: "adminpassword123",
+      role: "ADMIN"
+    },
+    {
+      id: 2,
+      name: "Dhivagar Seller",
+      email: "seller@dhivagarmart.com",
+      password: "sellerpassword123",
+      role: "SELLER"
+    },
+    {
+      id: 3,
+      name: "Dhivagar Customer",
+      email: "customer@dhivagarmart.com",
+      password: "password123",
+      role: "BUYER"
+    }
+  ];
+  const stored = getStorageJSON(STORAGE_KEYS.ACCOUNTS, null);
+  if (!stored || !Array.isArray(stored) || stored.length === 0) {
+    setStorageJSON(STORAGE_KEYS.ACCOUNTS, defaultAccounts);
+    return defaultAccounts;
+  }
+  return stored;
 }
 
 // Client-Side Marketplace Store
@@ -476,63 +506,110 @@ const DemoStore = {
   },
 
   async login(payload) {
+    const email = (payload?.email || '').trim().toLowerCase();
+    const password = payload?.password || '';
+
+    if (!email || !password) {
+      throw new Error('Please enter both your email address and password.');
+    }
+
+    // Attempt real backend authentication first if connected
     try {
       const response = await fetch('/api/v1/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({ email, password })
       });
-      const data = await response.json().catch(() => ({}));
-      if (!response.ok) {
-        if (response.status >= 500) {
-          throw new Error('Authentication service is currently offline (Database connection unavailable). You can continue browsing products and test shopping as a guest.');
+      if (response.ok) {
+        const json = await response.json().catch(() => ({}));
+        if (json && json.data) {
+          setStorageJSON(STORAGE_KEYS.USER, json.data);
+          return json.data;
         }
-        throw new Error(data.message || 'Invalid email or password.');
+      } else if (response.status === 401 || response.status === 400) {
+        const errJson = await response.json().catch(() => ({}));
+        throw new Error(errJson.message || 'Invalid email or password. Please verify your credentials.');
       }
-      const user = data.data || {
-        id: Math.floor(100 + Math.random() * 900),
-        name: payload?.email?.split('@')[0] || 'Customer',
-        email: payload.email,
-        role: 'BUYER'
-      };
-      setStorageJSON(STORAGE_KEYS.USER, user);
-      return user;
-    } catch (err) {
-      if (err.message && (err.message.includes('offline') || err.message.includes('Invalid') || err.message.includes('failed'))) {
-        throw err;
+    } catch (netErr) {
+      if (netErr.message && netErr.message.includes('Invalid email or password')) {
+        throw netErr;
       }
-      throw new Error('Authentication service is currently offline (Database connection unavailable). You can continue browsing products and test shopping as a guest.');
+      // Backend database offline (e.g. 500 or connection failure), authenticate with registered accounts
     }
+
+    const accounts = getRegisteredAccounts();
+    const matched = accounts.find(a => a.email.toLowerCase() === email && a.password === password);
+    if (!matched) {
+      const emailExists = accounts.find(a => a.email.toLowerCase() === email);
+      if (emailExists) {
+        throw new Error('Incorrect password. Please verify your password entry and try again.');
+      }
+      throw new Error('No account found with this email. Please check your email or click Create Account.');
+    }
+
+    const sessionUser = {
+      id: matched.id,
+      name: matched.name,
+      email: matched.email,
+      role: matched.role || 'BUYER'
+    };
+    setStorageJSON(STORAGE_KEYS.USER, sessionUser);
+    return sessionUser;
   },
 
   async register(payload) {
+    const name = (payload?.name || '').trim();
+    const email = (payload?.email || '').trim().toLowerCase();
+    const password = payload?.password || '';
+    const role = payload?.role || 'BUYER';
+
+    if (!name || !email || !password) {
+      throw new Error('Please enter your full name, email address, and password.');
+    }
+    if (password.length < 6) {
+      throw new Error('Password must be at least 6 characters long.');
+    }
+
+    const accounts = getRegisteredAccounts();
+    if (accounts.some(a => a.email.toLowerCase() === email)) {
+      throw new Error('An account with this email address already exists. Please sign in or use a different email.');
+    }
+
+    // Attempt real backend registration
+    let backendId = null;
     try {
       const response = await fetch('/api/v1/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({ name, email, password, role })
       });
-      const data = await response.json().catch(() => ({}));
-      if (!response.ok) {
-        if (response.status >= 500) {
-          throw new Error('Authentication service is currently offline (Database connection unavailable). You can continue browsing products and test shopping as a guest.');
-        }
-        throw new Error(data.message || 'Registration failed. Please check your details.');
+      if (response.ok) {
+        const json = await response.json().catch(() => ({}));
+        if (json && json.data) backendId = json.data.id;
       }
-      const user = data.data || {
-        id: Math.floor(100 + Math.random() * 900),
-        name: payload.name || 'Customer',
-        email: payload.email,
-        role: payload.role || 'BUYER'
-      };
-      setStorageJSON(STORAGE_KEYS.USER, user);
-      return user;
-    } catch (err) {
-      if (err.message && (err.message.includes('offline') || err.message.includes('failed') || err.message.includes('check'))) {
-        throw err;
-      }
-      throw new Error('Authentication service is currently offline (Database connection unavailable). You can continue browsing products and test shopping as a guest.');
+    } catch (e) {
+      // Backend offline, proceed with local account registry
     }
+
+    const newUser = {
+      id: backendId || Date.now(),
+      name: name,
+      email: email,
+      password: password,
+      role: role,
+      registered_at: new Date().toISOString()
+    };
+    accounts.push(newUser);
+    setStorageJSON(STORAGE_KEYS.ACCOUNTS, accounts);
+
+    const sessionUser = {
+      id: newUser.id,
+      name: newUser.name,
+      email: newUser.email,
+      role: newUser.role
+    };
+    setStorageJSON(STORAGE_KEYS.USER, sessionUser);
+    return sessionUser;
   },
 
   async logout() {
@@ -589,6 +666,9 @@ const DemoStore = {
 
   checkout(payload) {
     return this.getCart().then(cart => {
+      if (!cart.items || cart.items.length === 0) {
+        throw new Error('Your shopping cart is empty. Add items before proceeding to checkout.');
+      }
       const orderId = Math.floor(1000 + Math.random() * 9000);
       const newOrder = {
         id: orderId,
@@ -596,8 +676,8 @@ const DemoStore = {
         total_amount_cents: cart.total_cents,
         total_items: cart.total_items,
         payment_method: payload?.payment_method || 'CASH_ON_DELIVERY',
-        payment_status: 'CONFIRMED',
-        status: 'CONFIRMED',
+        payment_status: 'RECORDED (DEMO / NO CHARGE)',
+        status: 'DEMO_RECORDED',
         delivery_address: `${payload?.shipping_address || 'Customer Street'}, ${payload?.city || 'Chennai'} - ${payload?.pincode || '600001'}`,
         created_at: new Date().toISOString(),
         items: [...cart.items]
@@ -713,7 +793,7 @@ const DemoStore = {
 };
 
 // Main API Export
-const api = {
+var api = window.api = {
   // Auth
   register: (payload) => DemoStore.register(payload),
   login: (payload) => DemoStore.login(payload),
@@ -750,9 +830,6 @@ const api = {
   sendChatMessage: (message) => DemoStore.sendChatMessage(message)
 };
 
-// Global Exposure
-window.api = api;
-var api = window.api;
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = api;
+  module.exports = window.api;
 }

@@ -115,10 +115,7 @@
       btn.textContent = 'Creating account...';
 
       try {
-        if (!window.api || typeof window.api.register !== 'function') {
-          throw new Error('API initialization pending. Please refresh the page.');
-        }
-        await window.api.register({ name, email, password, role: 'BUYER' });
+        await api.register({ name, email, password, role: 'BUYER' });
         successDiv.textContent = 'Account created successfully! Redirecting...';
         successDiv.style.display = 'block';
         setTimeout(() => {
