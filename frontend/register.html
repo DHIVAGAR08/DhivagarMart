@@ -3,20 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Create Account - Dhivagar Mart | Electronics & Technology</title>
+  <title>Create Account - Dhivagar Mart | Fresh Groceries</title>
   <link rel="stylesheet" href="css/style.css">
   <script>
     window.skipAutoAuthCheck = true;
   </script>
 </head>
-<body style="background: radial-gradient(circle at top right, #1e293b 0%, #0f172a 100%); min-height: 100vh;">
+<body style="background: radial-gradient(circle at top right, #fce7f3 0%, #fff5f8 100%); min-height: 100vh;">
 
   <!-- Header -->
-  <header style="background: rgba(15, 23, 42, 0.85); border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+  <header style="background: #ffffff; border-bottom: 1px solid var(--border-color);">
     <div class="nav-container">
-      <a href="login.html" class="brand" style="color: white;">
+      <a href="index.html" class="brand">
         <span class="logo-icon">🛒</span>
-        <span>Dhivagar <span class="brand-tech" style="color: #38bdf8;">Mart</span></span>
+        <span>Dhivagar <span class="brand-tech">Mart</span></span>
       </a>
       <ul class="nav-links">
         <li>
@@ -30,14 +30,14 @@
 
   <!-- Register Form Container -->
   <main class="auth-wrapper">
-    <div class="form-card" style="box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border: 1px solid rgba(226, 232, 240, 0.8); max-width: 500px;">
+    <div class="form-card" style="box-shadow: 0 20px 25px -5px rgba(236, 72, 153, 0.15); border: 1px solid var(--border-color); max-width: 500px;">
       <div style="text-align: center; margin-bottom: 2rem;">
-        <div style="width: 52px; height: 52px; background: var(--accent-light); color: var(--accent-hover); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 0.8rem;">
-          🚀
+        <div style="width: 52px; height: 52px; background: var(--bg-subtle); color: var(--primary); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 0.8rem; border: 1px solid var(--border-color);">
+          🌱
         </div>
         <h1 style="font-size: 1.85rem; font-weight: 800; color: var(--secondary); letter-spacing: -0.5px;">Create Your Account</h1>
         <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.25rem;">
-          Join the Dhivagar Mart technology community
+          Join Dhivagar Mart for fresh grocery delivery
         </p>
       </div>
 
@@ -48,12 +48,12 @@
       <form id="register-form" onsubmit="handleRegisterSubmit(event)">
         <div class="form-group">
           <label for="name">Full Name</label>
-          <input type="text" id="name" class="form-control" placeholder="e.g. Alex Rivera" required autocomplete="name">
+          <input type="text" id="name" class="form-control" placeholder="e.g. Dhivagar" required autocomplete="name">
         </div>
 
         <div class="form-group">
           <label for="email">Email Address</label>
-          <input type="email" id="email" class="form-control" placeholder="e.g. alex@example.com" required autocomplete="email">
+          <input type="email" id="email" class="form-control" placeholder="e.g. user@example.com" required autocomplete="email">
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
@@ -67,19 +67,15 @@
           </div>
         </div>
 
-        <!-- Role Selection strictly BUYER and SELLER only -->
         <div class="form-group">
           <label for="role">Account Type</label>
           <select id="role" class="form-control" required style="font-weight: 600;">
-            <option value="BUYER">🛒 Tech Buyer (Shop devices, components & gadgets)</option>
-            <option value="SELLER">🏪 Electronics Seller (List & sell tech products)</option>
+            <option value="BUYER">🛒 Grocery Shopper (Order fresh groceries & staples)</option>
+            <option value="SELLER">🏪 Farm Seller (List farm produce & groceries)</option>
           </select>
-          <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.35rem;">
-            * Administrative roles are strictly provisioned by internal system administrators.
-          </p>
         </div>
 
-        <button type="submit" id="reg-btn" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 0.5rem;">
+        <button type="submit" id="reg-btn" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 0.5rem; font-weight: 700;">
           Create Account
         </button>
       </form>
@@ -95,7 +91,7 @@
   </main>
 
   <footer>
-    <p>© 2026 Dhivagar Mart. All rights reserved. Native C++20 • Drogon • PostgreSQL</p>
+    <p>© 2026 Dhivagar Mart. All rights reserved. Fast & Fresh Groceries • Standalone Demo Mode</p>
   </footer>
 
   <script src="js/api.js"></script>
@@ -116,7 +112,6 @@
       errorDiv.style.display = 'none';
       successDiv.style.display = 'none';
 
-      // Validate password confirmation
       if (password !== confirmPassword) {
         errorDiv.textContent = 'Passwords do not match. Please ensure both passwords match.';
         errorDiv.style.display = 'block';
@@ -128,13 +123,13 @@
 
       try {
         await api.register({ name, email, password, role });
-        successDiv.textContent = 'Registration successful! Redirecting to login...';
+        successDiv.textContent = 'Demo account created successfully! Redirecting...';
         successDiv.style.display = 'block';
         setTimeout(() => {
-          window.location.href = 'login.html';
-        }, 1200);
+          window.location.href = 'index.html';
+        }, 1000);
       } catch (err) {
-        errorDiv.textContent = err.message || 'Registration failed. Please check your information.';
+        errorDiv.textContent = err.message || 'Registration failed.';
         errorDiv.style.display = 'block';
         btn.disabled = false;
         btn.textContent = 'Create Account';

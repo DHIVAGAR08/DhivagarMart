@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Electronics Catalog - Dhivagar Mart</title>
+  <title>Fresh Grocery Catalog - Dhivagar Mart</title>
   <link rel="stylesheet" href="css/style.css">
   <script>
     window.skipAutoAuthCheck = true;
@@ -21,7 +21,7 @@
 
       <!-- Header Search Bar -->
       <form class="nav-search-bar" onsubmit="handleSearch(event)">
-        <input type="text" id="nav-search-input" placeholder="Search smartphones, laptops, audio, accessories...">
+        <input type="text" id="nav-search-input" placeholder="Search fresh apples, milk, rice, vegetables, bananas, eggs...">
         <button type="submit">Search</button>
       </form>
 
@@ -32,7 +32,7 @@
         <li><a href="products.html?offers=true">Offers</a></li>
         <li>
           <a href="wishlist.html">
-            ❤️ Wishlist <span id="wishlist-badge" class="badge" style="background:#e11d48;">0</span>
+            ❤️ Wishlist <span id="wishlist-badge" class="badge" style="background:var(--primary);">0</span>
           </a>
         </li>
         <li>
@@ -52,25 +52,22 @@
     <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem;">
       <div>
         <h1 style="font-size:2rem; font-weight:800; color:var(--secondary); letter-spacing:-0.5px;">
-          Electronics & Technology Catalog
+          Fresh Grocery Catalog
         </h1>
         <p style="color:var(--text-muted); font-size:0.95rem;">
-          Explore smartphones, ultrabooks, audio devices, and smart accessories
+          Explore farm-fresh fruits, pure milk, premium grains, vegetables, and kitchen essentials
         </p>
       </div>
     </div>
 
-    <!-- Category Filter Chips (8 Categories) -->
+    <!-- Category Filter Chips -->
     <div class="categories-bar">
-      <button class="category-chip active" onclick="filterCategory('All', this)">All Hardware</button>
-      <button class="category-chip" onclick="filterCategory('Mobiles', this)">📱 Mobiles</button>
-      <button class="category-chip" onclick="filterCategory('Laptops', this)">💻 Laptops</button>
-      <button class="category-chip" onclick="filterCategory('Electrical', this)">⚡ Electrical</button>
-      <button class="category-chip" onclick="filterCategory('Audio', this)">🎧 Audio</button>
-      <button class="category-chip" onclick="filterCategory('Smart Watches', this)">⌚ Smart Watches</button>
-      <button class="category-chip" onclick="filterCategory('Gaming', this)">🎮 Gaming</button>
-      <button class="category-chip" onclick="filterCategory('Cameras', this)">📷 Cameras</button>
-      <button class="category-chip" onclick="filterCategory('Accessories', this)">🔌 Accessories</button>
+      <button class="category-chip active" onclick="filterCategory('All', this)">All Products</button>
+      <button class="category-chip" onclick="filterCategory('Fruits', this)">🍎 Fruits</button>
+      <button class="category-chip" onclick="filterCategory('Dairy', this)">🥛 Dairy</button>
+      <button class="category-chip" onclick="filterCategory('Grains', this)">🌾 Grains</button>
+      <button class="category-chip" onclick="filterCategory('Vegetables', this)">🥕 Vegetables</button>
+      <button class="category-chip" onclick="filterCategory('Dairy & Eggs', this)">🥚 Dairy & Eggs</button>
     </div>
 
     <!-- Sort & In-Stock Toolbar -->
@@ -97,23 +94,23 @@
   </main>
 
   <!-- Floating AI Assistant -->
-  <button class="chat-launcher" onclick="toggleChat()" title="Ask Dhivagar Mart Tech Assistant">🤖</button>
+  <button class="chat-launcher" onclick="toggleChat()" title="Ask Dhivagar Mart Grocery Assistant">🤖</button>
   <div id="chat-panel" class="chat-panel">
     <div class="chat-header">
-      <h3>⚡ Tech Shopping Assistant</h3>
+      <h3>⚡ Dhivagar Mart Assistant</h3>
       <button onclick="toggleChat()" style="background:transparent; border:none; color:white; font-size:1.2rem; cursor:pointer;">✕</button>
     </div>
     <div id="chat-messages" class="chat-messages">
-      <div class="chat-bubble bot">Need technical recommendations or help comparing products? Just ask!</div>
+      <div class="chat-bubble bot">Need recommendations or help choosing fresh items? Just ask!</div>
     </div>
     <div class="chat-input-bar">
-      <input type="text" id="chat-input" placeholder="Ask about tech specs..." onkeypress="handleChatKeyPress(event)">
+      <input type="text" id="chat-input" placeholder="Ask about items or prices..." onkeypress="handleChatKeyPress(event)">
       <button onclick="sendChatMessage()" class="btn btn-primary btn-sm">Send</button>
     </div>
   </div>
 
   <footer>
-    <p>© 2026 Dhivagar Mart. All rights reserved. Native C++20 • Drogon • PostgreSQL</p>
+    <p>© 2026 Dhivagar Mart. All rights reserved. Fast & Fresh Groceries • Standalone Demo Mode</p>
   </footer>
 
   <script src="js/api.js"></script>
@@ -122,8 +119,7 @@
   <script src="js/chat.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
-      const user = await requireAuth();
-      if (!user) return;
+      await checkAuthState();
 
       const urlParams = new URLSearchParams(window.location.search);
       const cat = urlParams.get('category') || 'All';
@@ -134,7 +130,7 @@
 
       document.querySelectorAll('.category-chip').forEach(el => {
         const text = el.textContent.replace(/[^a-zA-Z &]/g, '').trim().toLowerCase();
-        if (text === cat.toLowerCase()) {
+        if (text === cat.toLowerCase() || (cat === 'All' && (text.includes('all') || text === 'all products'))) {
           el.classList.add('active');
         } else if (cat !== 'All') {
           el.classList.remove('active');

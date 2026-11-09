@@ -25,7 +25,7 @@
         <li><a href="products.html?offers=true">Offers</a></li>
         <li>
           <a href="wishlist.html">
-            ❤️ Wishlist <span id="wishlist-badge" class="badge" style="background:#e11d48;">0</span>
+            ❤️ Wishlist <span id="wishlist-badge" class="badge" style="background:var(--primary);">0</span>
           </a>
         </li>
         <li>
@@ -50,7 +50,7 @@
 
     <!-- Product Detail Layout -->
     <div id="product-detail-view" style="display:grid; grid-template-columns:1fr 1.1fr; gap:3rem; margin-bottom:3.5rem;">
-      <div style="text-align:center; padding:3rem; grid-column:1/-1;">Loading technical specifications...</div>
+      <div style="text-align:center; padding:3rem; grid-column:1/-1;">Loading product details...</div>
     </div>
 
     <!-- Verified Customer Reviews Section -->
@@ -58,7 +58,7 @@
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; border-bottom:1px solid var(--border-color); padding-bottom:1rem;">
         <div>
           <h2 style="font-size:1.5rem; font-weight:800; color:var(--secondary);">Customer Reviews & Ratings</h2>
-          <p style="color:var(--text-muted); font-size:0.9rem;">Real verified feedback from buyers</p>
+          <p style="color:var(--text-muted); font-size:0.9rem;">Verified feedback from local buyers</p>
         </div>
       </div>
       
@@ -68,15 +68,15 @@
         </div>
 
         <div style="background:var(--bg-light); padding:1.75rem; border-radius:var(--radius-lg); border:1px solid var(--border-color); height:fit-content;">
-          <h3 style="font-size:1.15rem; font-weight:700; margin-bottom:0.5rem; color:var(--secondary);">Write a Verified Review</h3>
+          <h3 style="font-size:1.15rem; font-weight:700; margin-bottom:0.5rem; color:var(--secondary);">Write a Customer Review</h3>
           <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1.25rem; line-height:1.4;">
-            Only verified buyers who completed an order containing this hardware can submit a review.
+            Share your experience with product freshness, taste, and packaging.
           </p>
           <form id="review-form" onsubmit="handleReviewSubmit(event)">
             <div class="form-group">
               <label for="review-rating">Rating Score:</label>
               <select id="review-rating" class="form-control" required style="font-weight:600;">
-                <option value="5">⭐⭐⭐⭐⭐ (5 - Exceptional)</option>
+                <option value="5">⭐⭐⭐⭐⭐ (5 - Superb Quality)</option>
                 <option value="4">⭐⭐⭐⭐ (4 - Very Good)</option>
                 <option value="3">⭐⭐⭐ (3 - Average)</option>
                 <option value="2">⭐⭐ (2 - Below Expectations)</option>
@@ -85,10 +85,10 @@
             </div>
             <div class="form-group">
               <label for="review-comment">Your Review Feedback:</label>
-              <textarea id="review-comment" class="form-control" rows="4" placeholder="Detail your experience with performance, build quality, and battery..." required></textarea>
+              <textarea id="review-comment" class="form-control" rows="4" placeholder="Detail your experience with freshness and quality..." required></textarea>
             </div>
             <button type="submit" class="btn btn-primary" style="width:100%; font-weight:700;">
-              Submit Verified Review
+              Submit Review
             </button>
           </form>
         </div>
@@ -97,14 +97,14 @@
   </main>
 
   <!-- Floating AI Assistant -->
-  <button class="chat-launcher" onclick="toggleChat()" title="Ask Dhivagar Mart Tech Assistant">🤖</button>
+  <button class="chat-launcher" onclick="toggleChat()" title="Ask Dhivagar Mart Grocery Assistant">🤖</button>
   <div id="chat-panel" class="chat-panel">
     <div class="chat-header">
-      <h3>⚡ Tech Shopping Assistant</h3>
+      <h3>⚡ Grocery Assistant</h3>
       <button onclick="toggleChat()" style="background:transparent; border:none; color:white; font-size:1.2rem; cursor:pointer;">✕</button>
     </div>
     <div id="chat-messages" class="chat-messages">
-      <div class="chat-bubble bot">Have questions about this hardware? Ask me anytime!</div>
+      <div class="chat-bubble bot">Have questions about this item? Ask me anytime!</div>
     </div>
     <div class="chat-input-bar">
       <input type="text" id="chat-input" placeholder="Ask about this product..." onkeypress="handleChatKeyPress(event)">
@@ -113,7 +113,7 @@
   </div>
 
   <footer>
-    <p>© 2026 Dhivagar Mart. All rights reserved. Native C++20 • Drogon • PostgreSQL</p>
+    <p>© 2026 Dhivagar Mart. All rights reserved. Fast & Fresh Groceries • Standalone Demo Mode</p>
   </footer>
 
   <script src="js/api.js"></script>
@@ -142,6 +142,7 @@
         const inStock = currentProduct.stock_qty > 0;
         const stockClass = inStock ? (currentProduct.stock_qty < 10 ? 'stock-low' : 'stock-in') : 'stock-out';
         const stockText = inStock ? (currentProduct.stock_qty < 10 ? `Low Stock (Only ${currentProduct.stock_qty} left)` : `In Stock (${currentProduct.stock_qty} units available)`) : 'Out of Stock';
+        const unitLabel = currentProduct.unit ? ` / ${currentProduct.unit}` : '';
 
         document.getElementById('product-detail-view').innerHTML = `
           <div>
@@ -167,31 +168,32 @@
 
             <div style="display:flex; align-items:baseline; gap:1rem; margin-bottom:1.25rem; flex-wrap:wrap;">
               <span style="font-size:2.2rem; font-weight:900; color:var(--primary); letter-spacing:-0.5px;">
-                ${formatINR(currentProduct.price_cents)}
+                ${formatINR(currentProduct.price_cents)}${unitLabel}
               </span>
               <span style="font-size:1.1rem; color:var(--text-muted); text-decoration:line-through;">
                 ${formatINR(Math.round(currentProduct.price_cents * 1.15))}
               </span>
-              <span class="badge" style="background:#dcfce7; color:#15803d; font-size:0.85rem; font-weight:700; padding:0.35rem 0.75rem;">
+              <span class="badge" style="background:#fce7f3; color:#be185d; font-size:0.85rem; font-weight:700; padding:0.35rem 0.75rem;">
                 15% OFF
               </span>
               <span style="font-size:0.9rem; color:#10b981; font-weight:700; background:#ecfdf5; padding:0.3rem 0.6rem; border-radius:9999px;">
-                ✓ 100% Genuine Tech Warranty
+                ✓ 100% Farm Fresh Guarantee
               </span>
             </div>
 
-            <!-- Technical Overview Box -->
+            <!-- Overview Box -->
             <div style="background:white; border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:1.5rem; margin-bottom:1.75rem; box-shadow:var(--shadow-sm);">
               <h3 style="font-size:1rem; font-weight:700; color:var(--secondary); margin-bottom:0.6rem; text-transform:uppercase; letter-spacing:0.5px;">
-                Technical Overview & Features
+                Fresh Quality Overview
               </h3>
               <p style="font-size:0.95rem; color:var(--text-muted); line-height:1.6; margin-bottom:1rem;">
                 ${currentProduct.description}
               </p>
               <ul style="font-size:0.88rem; color:var(--secondary); margin-left:1.2rem; line-height:1.7;">
-                <li><strong>Hardware Category:</strong> ${currentProduct.category}</li>
-                <li><strong>Stock Available:</strong> ${currentProduct.stock_qty} Units in Local Fulfillment Center</li>
-                <li><strong>Shipping:</strong> Standard 2-Day Express Tech Courier</li>
+                <li><strong>Category:</strong> ${currentProduct.category}</li>
+                <li><strong>Packaging / Unit:</strong> ${currentProduct.unit || 'Standard Pack'}</li>
+                <li><strong>Stock Available:</strong> ${currentProduct.stock_qty} Units in Local Hub</li>
+                <li><strong>Delivery:</strong> Express 2-Hour Home Delivery</li>
               </ul>
             </div>
 
@@ -199,7 +201,7 @@
             <div style="display:flex; flex-direction:column; gap:0.8rem;">
               ${!inStock ? `
                 <div style="background:#fee2e2; border:1px solid #fecaca; color:#b91c1c; padding:0.8rem 1rem; border-radius:var(--radius-md); font-weight:700; text-align:center;">
-                  ⚠️ OUT OF STOCK — Check back soon as inventory replenishes
+                  ⚠️ OUT OF STOCK — Inventory replenishes every morning
                 </div>
               ` : `
                 <div style="display:flex; gap:0.8rem; align-items:center;">
@@ -248,13 +250,8 @@
       try {
         await api.addToWishlist(currentProdId);
         updateWishlistCount();
-        alert('❤️ Item added to your Wishlist!');
+        alert('❤️ Item saved to your Wishlist!');
       } catch (err) {
-        if (err.status === 401) {
-          alert('Please login to save items to your wishlist.');
-          window.location.href = 'login.html';
-          return;
-        }
         alert('Wishlist: ' + err.message);
       }
     }
@@ -263,8 +260,8 @@
       try {
         const reviews = await api.getProductReviews(currentProdId);
         const container = document.getElementById('reviews-list');
-        if (reviews.length === 0) {
-          container.innerHTML = '<p style="color:var(--text-muted);">No verified reviews yet. Be the first customer to review this tech hardware!</p>';
+        if (!reviews || reviews.length === 0) {
+          container.innerHTML = '<p style="color:var(--text-muted);">No reviews yet. Be the first customer to review this fresh grocery item!</p>';
           return;
         }
 
@@ -272,10 +269,10 @@
           <div style="border-bottom: 1px solid var(--border-color); padding: 1.25rem 0;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
               <strong style="color:var(--secondary);">👤 ${r.user_name}</strong>
-              <span style="color:#f59e0b; font-size:1.1rem;">${'⭐'.repeat(r.rating)}</span>
+              <span style="color:#f59e0b; font-size:1.1rem;">${'⭐'.repeat(r.rating || 5)}</span>
             </div>
             <p style="color:#334155; font-size:0.95rem; line-height:1.5; margin-bottom:0.5rem;">${r.comment}</p>
-            <span style="font-size:0.75rem; color:#94a3b8;">Verified Buyer • Posted: ${r.created_at}</span>
+            <span style="font-size:0.75rem; color:#94a3b8;">Verified Buyer</span>
           </div>
         `).join('');
       } catch (err) {
@@ -289,13 +286,8 @@
       try {
         await api.addToCart(currentProdId, qty);
         updateCartCount();
-        alert('Product added to your cart!');
+        alert('✓ Added to shopping cart!');
       } catch (err) {
-        if (err.status === 401) {
-          alert('Please login to add items to your cart.');
-          window.location.href = 'login.html';
-          return;
-        }
         alert('Failed to add item: ' + err.message);
       }
     }
@@ -308,11 +300,6 @@
         updateCartCount();
         window.location.href = 'checkout.html';
       } catch (err) {
-        if (err.status === 401) {
-          alert('Please login to purchase items.');
-          window.location.href = 'login.html';
-          return;
-        }
         alert('Error: ' + err.message);
       }
     }
@@ -324,20 +311,11 @@
 
       try {
         await api.addReview(currentProdId, rating, comment);
-        alert('Thank you! Your verified review has been submitted.');
+        alert('Thank you! Your review has been submitted.');
         document.getElementById('review-form').reset();
         loadReviews();
       } catch (err) {
-        if (err.status === 401) {
-          alert('Please login to submit a verified review.');
-          window.location.href = 'login.html';
-          return;
-        }
-        if (err.status === 403) {
-          alert('Review Authorization: You can only submit reviews for tech hardware you have purchased in a completed order.');
-        } else {
-          alert('Review error: ' + err.message);
-        }
+        alert('Review error: ' + err.message);
       }
     }
 

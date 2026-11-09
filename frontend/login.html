@@ -3,26 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Dhivagar Mart | Electronics & Technology</title>
+  <title>Login - Dhivagar Mart | Fresh Groceries</title>
   <link rel="stylesheet" href="css/style.css">
   <script>
-    // Prevent flash of login page if already authenticated
     window.skipAutoAuthCheck = true;
   </script>
 </head>
-<body style="background: radial-gradient(circle at top right, #1e293b 0%, #0f172a 100%); min-height: 100vh;">
+<body style="background: radial-gradient(circle at top right, #fce7f3 0%, #fff5f8 100%); min-height: 100vh;">
 
   <!-- Header -->
-  <header style="background: rgba(15, 23, 42, 0.85); border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+  <header style="background: #ffffff; border-bottom: 1px solid var(--border-color);">
     <div class="nav-container">
-      <a href="login.html" class="brand" style="color: white;">
+      <a href="index.html" class="brand">
         <span class="logo-icon">🛒</span>
-        <span>Dhivagar <span class="brand-tech" style="color: #38bdf8;">Mart</span></span>
+        <span>Dhivagar <span class="brand-tech">Mart</span></span>
       </a>
       <ul class="nav-links">
         <li>
-          <a href="register.html" class="btn btn-primary btn-sm" style="border-radius:9999px;">
-            Create Account
+          <a href="index.html" class="btn btn-secondary btn-sm" style="border-radius:9999px;">
+            ← Back to Store
           </a>
         </li>
       </ul>
@@ -31,20 +30,28 @@
 
   <!-- Login Form Container -->
   <main class="auth-wrapper">
-    <div class="form-card" style="box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border: 1px solid rgba(226, 232, 240, 0.8);">
-      <div style="text-align: center; margin-bottom: 2rem;">
-        <div style="width: 52px; height: 52px; background: var(--primary-light); color: var(--primary); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 0.8rem;">
+    <div class="form-card" style="box-shadow: 0 20px 25px -5px rgba(236, 72, 153, 0.15); border: 1px solid var(--border-color);">
+      <div style="text-align: center; margin-bottom: 1.75rem;">
+        <div style="width: 54px; height: 54px; background: var(--bg-subtle); color: var(--primary); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 0.8rem; border: 1px solid var(--border-color);">
           🛒
         </div>
         <h1 style="font-size: 1.85rem; font-weight: 800; color: var(--secondary); letter-spacing: -0.5px;">Welcome Back!</h1>
         <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.25rem;">
-          Sign in to continue shopping with Dhivagar Mart.
+          Sign in to your Dhivagar Mart grocery account
         </p>
       </div>
 
-      <!-- DB Status Warning Banner -->
-      <div id="db-status-banner" style="display: none; background: #fef3c7; color: #92400e; padding: 0.75rem 1rem; border-radius: var(--radius-md); margin-bottom: 1.25rem; font-size: 0.85rem; border: 1px solid #fde68a; font-weight: 500;">
-        ⚠️ <strong>Database Notice:</strong> The PostgreSQL database is currently reconnecting or suspended. If you manage this deployment, check the Render database dashboard.
+      <!-- Quick 1-Click Demo Login Banner & Button -->
+      <div style="background: var(--bg-subtle); border: 1px dashed var(--primary); padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1.5rem; text-align: center;">
+        <div style="font-size: 0.88rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 0.4rem;">
+          💡 2-Day Standalone Demo Mode Active
+        </div>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+          Explore all grocery products, cart, and simulated checkout without any setup.
+        </p>
+        <button type="button" onclick="loginAsDemoGuest()" class="btn btn-primary" style="width: 100%; font-weight: 700; padding: 0.65rem;">
+          🚀 Continue as Demo Guest
+        </button>
       </div>
 
       <!-- Error Banner -->
@@ -53,7 +60,7 @@
       <form id="login-form" onsubmit="handleLoginSubmit(event)">
         <div class="form-group">
           <label for="email">Email Address</label>
-          <input type="email" id="email" class="form-control" placeholder="e.g. name@example.com" required autocomplete="email">
+          <input type="email" id="email" class="form-control" placeholder="guest@dhivagarmart.com" value="guest@dhivagarmart.com" required autocomplete="email">
         </div>
 
         <div class="form-group">
@@ -63,7 +70,7 @@
               Forgot password?
             </a>
           </div>
-          <input type="password" id="password" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+          <input type="password" id="password" class="form-control" placeholder="••••••••" value="demo123" required autocomplete="current-password">
         </div>
 
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
@@ -71,10 +78,10 @@
             <input type="checkbox" id="remember-me" checked style="accent-color: var(--primary); cursor: pointer;">
             Remember me
           </label>
-          <span style="font-size: 0.8rem; color: #10b981; font-weight: 600;">🔒 Secure Argon2id</span>
+          <span style="font-size: 0.8rem; color: var(--primary); font-weight: 600;">✨ Demo Ready</span>
         </div>
 
-        <button type="submit" id="login-btn" class="btn btn-primary btn-lg" style="width: 100%;">
+        <button type="submit" id="login-btn" class="btn btn-secondary btn-lg" style="width: 100%; font-weight: 700;">
           Sign In
         </button>
       </form>
@@ -97,11 +104,11 @@
         <button onclick="closeForgotModal()" style="background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--text-muted);">✕</button>
       </div>
       <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.25rem; line-height: 1.5;">
-        Enter your registered email address and we'll send you instructions to safely reset your password.
+        Enter your registered email address to receive demo recovery link.
       </p>
       <div class="form-group">
         <label for="reset-email">Registered Email Address</label>
-        <input type="email" id="reset-email" class="form-control" placeholder="name@example.com">
+        <input type="email" id="reset-email" class="form-control" placeholder="name@example.com" value="guest@dhivagarmart.com">
       </div>
       <button onclick="handlePasswordResetRequest()" class="btn btn-primary" style="width: 100%; font-weight:700;">
         Send Recovery Link
@@ -110,24 +117,24 @@
   </div>
 
   <footer>
-    <p>© 2026 Dhivagar Mart. All rights reserved. Native C++20 • Drogon • PostgreSQL</p>
+    <p>© 2026 Dhivagar Mart. All rights reserved. Fast & Fresh Groceries • Standalone Demo Mode</p>
   </footer>
 
   <script src="js/api.js"></script>
   <script src="js/auth.js"></script>
   <script>
-    // Redirect immediately if already logged in
-    document.addEventListener('DOMContentLoaded', () => {
-      redirectIfAuthenticated();
-    });
+    async function loginAsDemoGuest() {
+      await api.login({ email: 'guest@dhivagarmart.com', password: 'demo' });
+      window.location.href = 'index.html';
+    }
 
     function handlePasswordResetRequest() {
       const email = document.getElementById('reset-email')?.value.trim();
       if (!email) {
-        alert('Please enter your registered email address.');
+        alert('Please enter your email address.');
         return;
       }
-      alert('Password reset instructions have been dispatched to ' + email + '. Please check your inbox.');
+      alert('Password reset instructions dispatched to ' + email + ' (Demo simulated).');
       closeForgotModal();
     }
 
@@ -148,41 +155,18 @@
 
       errorDiv.style.display = 'none';
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Verifying credentials...';
+      submitBtn.textContent = 'Signing in...';
 
       try {
-        const user = await api.login({ email, password });
-        // Role-based navigation
-        if (user.role === 'SELLER') {
-          window.location.href = 'seller.html';
-        } else if (user.role === 'ADMIN') {
-          window.location.href = 'admin.html';
-        } else {
-          window.location.href = 'index.html';
-        }
+        await api.login({ email, password });
+        window.location.href = 'index.html';
       } catch (err) {
-        errorDiv.textContent = err.message || 'Invalid email or password. Please try again.';
+        errorDiv.textContent = err.message || 'Login error. Please try again.';
         errorDiv.style.display = 'block';
         submitBtn.disabled = false;
         submitBtn.textContent = 'Sign In';
       }
     }
-
-    async function checkDbLiveness() {
-      try {
-        const res = await fetch('/api/v1/health');
-        if (res.ok) {
-          const json = await res.json();
-          const banner = document.getElementById('db-status-banner');
-          if (banner && json.data && json.data.db === 'DOWN') {
-            banner.style.display = 'block';
-          } else if (banner) {
-            banner.style.display = 'none';
-          }
-        }
-      } catch (e) {}
-    }
-    document.addEventListener('DOMContentLoaded', checkDbLiveness);
   </script>
 </body>
 </html>

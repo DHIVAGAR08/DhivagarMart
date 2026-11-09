@@ -12,18 +12,10 @@ async function initCheckout() {
   const summaryBox = document.getElementById('checkout-summary');
   if (!summaryBox) return;
 
-  // Pre-fill user name if logged in
-  if (window.currentUser) {
-    const nameInput = document.getElementById('full-name');
-    if (nameInput && !nameInput.value) {
-      nameInput.value = window.currentUser.name || '';
-    }
-  }
-
   try {
     currentCart = await api.getCart();
     if (!currentCart.items || currentCart.items.length === 0) {
-      alert('Your cart is empty. Please add items before checking out.');
+      alert('Your cart is empty. Please add some fresh groceries first!');
       window.location.href = 'products.html';
       return;
     }
@@ -42,8 +34,12 @@ async function initCheckout() {
         `).join('')}
       </div>
       <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-muted);">
-        <span>Shipping:</span>
+        <span>Delivery:</span>
         <span style="color: var(--success); font-weight: 700;">FREE Express</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-muted);">
+        <span>Fresh Quality Guarantee:</span>
+        <span style="color: var(--success); font-weight: 700;">Included</span>
       </div>
       <hr style="border: 0; border-top: 1px solid var(--border-color); margin-bottom: 1rem;">
       <div style="display: flex; justify-content: space-between; font-size: 1.25rem; font-weight: 800;">
@@ -52,28 +48,19 @@ async function initCheckout() {
       </div>
     `;
   } catch (err) {
-    if (err.status === 401) {
-      window.location.href = 'login.html';
-    } else {
-      summaryBox.innerHTML = `<div style="color: red;">Error: ${err.message}</div>`;
-    }
+    summaryBox.innerHTML = `<div style="color: red;">Error: ${err.message}</div>`;
   }
 }
 
 async function handlePlaceOrder(e) {
   e.preventDefault();
 
-  const fullName = document.getElementById('full-name')?.value.trim() || '';
-  const phone = document.getElementById('phone-number')?.value.trim() || '';
-  const street = document.getElementById('shipping-address')?.value.trim() || '';
-  const city = document.getElementById('city')?.value.trim() || '';
-  const state = document.getElementById('state')?.value.trim() || '';
-  const pincode = document.getElementById('pincode')?.value.trim() || '';
-
-  if (!fullName || !phone || !street || !city || !state || !pincode) {
-    alert('Please fill out all recipient, contact, and delivery address fields.');
-    return;
-  }
+  const fullName = document.getElementById('full-name')?.value.trim() || 'Demo Guest';
+  const phone = document.getElementById('phone-number')?.value.trim() || '+91 98765 43210';
+  const street = document.getElementById('shipping-address')?.value.trim() || 'Demo Street';
+  const city = document.getElementById('city')?.value.trim() || 'Chennai';
+  const state = document.getElementById('state')?.value.trim() || 'Tamil Nadu';
+  const pincode = document.getElementById('pincode')?.value.trim() || '600001';
 
   const selectedPaymentRadio = document.querySelector('input[name="payment-method"]:checked');
   const paymentMethod = selectedPaymentRadio ? selectedPaymentRadio.value : 'CASH_ON_DELIVERY';
@@ -81,7 +68,7 @@ async function handlePlaceOrder(e) {
   const submitBtn = document.getElementById('place-order-btn');
   if (submitBtn) {
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Processing Transaction Safe Checkout...';
+    submitBtn.textContent = 'Processing Demo Order...';
   }
 
   try {
@@ -97,7 +84,7 @@ async function handlePlaceOrder(e) {
 
     const order = await api.checkout(payload);
 
-    updateCartCount();
+    if (typeof updateCartCount === 'function') updateCartCount();
 
     // Show Confirmation Modal
     const modal = document.getElementById('order-confirm-modal');
@@ -106,8 +93,8 @@ async function handlePlaceOrder(e) {
       document.getElementById('confirm-payment-method').textContent = order.payment_method || paymentMethod;
       const statusBadge = document.getElementById('confirm-payment-status');
       if (statusBadge) {
-        statusBadge.textContent = order.payment_status || 'PENDING';
-        statusBadge.style.background = (order.payment_status === 'PAID') ? '#10b981' : '#f59e0b';
+        statusBadge.textContent = order.payment_status || 'PAID (Demo)';
+        statusBadge.style.background = '#10b981';
       }
       document.getElementById('confirm-address').textContent = order.delivery_address || `${street}, ${city}`;
       document.getElementById('confirm-total').textContent = formatINR(order.total_amount_cents);
@@ -120,7 +107,7 @@ async function handlePlaceOrder(e) {
     alert('Order checkout failed: ' + err.message);
     if (submitBtn) {
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Place Order Now';
+      submitBtn.textContent = 'Place Demo Order Now';
     }
   }
 }

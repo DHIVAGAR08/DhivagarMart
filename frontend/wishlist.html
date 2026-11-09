@@ -21,11 +21,11 @@
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="products.html">Products</a></li>
-        <li><a href="products.html#categories-section">Categories</a></li>
-        <li><a href="products.html">Offers</a></li>
+        <li><a href="index.html#categories-section">Categories</a></li>
+        <li><a href="products.html?offers=true">Offers</a></li>
         <li>
           <a href="wishlist.html" class="active">
-            ❤️ Wishlist <span id="wishlist-badge" class="badge" style="background:#e11d48;">0</span>
+            ❤️ Wishlist <span id="wishlist-badge" class="badge" style="background:var(--primary);">0</span>
           </a>
         </li>
         <li>
@@ -41,10 +41,10 @@
   <main class="container">
     <div style="margin-bottom: 2rem;">
       <h1 style="font-size:2rem; font-weight:800; color:var(--secondary); letter-spacing:-0.5px;">
-        ❤️ My Wishlist & Saved Electronics
+        ❤️ My Wishlist & Saved Groceries
       </h1>
       <p style="color:var(--text-muted); font-size:0.95rem;">
-        Keep track of hardware you love and move items directly into your shopping cart
+        Keep track of items you love and move them directly into your shopping cart
       </p>
     </div>
 
@@ -56,14 +56,14 @@
   </main>
 
   <!-- Floating AI Assistant -->
-  <button class="chat-launcher" onclick="toggleChat()" title="Ask Dhivagar Mart Tech Assistant">🤖</button>
+  <button class="chat-launcher" onclick="toggleChat()" title="Ask Dhivagar Mart Grocery Assistant">🤖</button>
   <div id="chat-panel" class="chat-panel">
     <div class="chat-header">
-      <h3>⚡ Tech Shopping Assistant</h3>
+      <h3>⚡ Grocery Assistant</h3>
       <button onclick="toggleChat()" style="background:transparent; border:none; color:white; font-size:1.2rem; cursor:pointer;">✕</button>
     </div>
     <div id="chat-messages" class="chat-messages">
-      <div class="chat-bubble bot">Need advice on items in your wishlist or alternative hardware? Ask me!</div>
+      <div class="chat-bubble bot">Need advice on items in your wishlist? Ask me!</div>
     </div>
     <div class="chat-input-bar">
       <input type="text" id="chat-input" placeholder="Ask a question..." onkeypress="handleChatKeyPress(event)">
@@ -72,7 +72,7 @@
   </div>
 
   <footer>
-    <p>© 2026 Dhivagar Mart. All rights reserved. Native C++20 • Drogon • PostgreSQL</p>
+    <p>© 2026 Dhivagar Mart. All rights reserved. Fast & Fresh Groceries • Standalone Demo Mode</p>
   </footer>
 
   <script src="js/api.js"></script>
@@ -81,11 +81,9 @@
   <script src="js/chat.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
-      const user = await requireAuth();
-      if (user) {
-        loadWishlistPage();
-        updateWishlistCount();
-      }
+      await checkAuthState();
+      loadWishlistPage();
+      updateWishlistCount();
     });
   </script>
 </body>

@@ -25,7 +25,7 @@
         <li><a href="products.html?offers=true">Offers</a></li>
         <li>
           <a href="wishlist.html">
-            ❤️ Wishlist <span id="wishlist-badge" class="badge" style="background:#e11d48;">0</span>
+            ❤️ Wishlist <span id="wishlist-badge" class="badge" style="background:var(--primary);">0</span>
           </a>
         </li>
         <li>
@@ -41,11 +41,19 @@
   <main class="container">
     <div style="margin-bottom:2rem;">
       <h1 style="font-size:2rem; font-weight:800; color:var(--secondary); letter-spacing:-0.5px;">
-        ⚡ Instant Express Checkout
+        ⚡ Instant Grocery Checkout
       </h1>
       <p style="color:var(--text-muted); font-size:0.95rem;">
-        Complete your order with ACID-compliant transaction safety
+        Complete your order with fast local doorstep delivery
       </p>
+    </div>
+
+    <!-- Explicit Demo Mode Notice Banner -->
+    <div style="background:#fce7f3; border:1px solid #fbcfe8; color:#be185d; padding:0.9rem 1.25rem; border-radius:var(--radius-lg); margin-bottom:1.5rem; display:flex; align-items:center; gap:0.75rem; font-weight:600;">
+      <span style="font-size:1.3rem;">ℹ️</span>
+      <div>
+        <strong>Demo Order Mode:</strong> No real payment will be charged. Orders are simulated instantly for presentation and testing.
+      </div>
     </div>
 
     <div style="display:grid; grid-template-columns: 1.5fr 1fr; gap:2.5rem;">
@@ -59,31 +67,31 @@
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
             <div class="form-group" style="margin-bottom:0;">
               <label for="full-name">Full Name:</label>
-              <input type="text" id="full-name" class="form-control" placeholder="e.g. John Doe" required>
+              <input type="text" id="full-name" class="form-control" placeholder="e.g. Dhivagar" value="Dhivagar (Demo Guest)" required>
             </div>
             <div class="form-group" style="margin-bottom:0;">
               <label for="phone-number">Mobile / Contact Phone:</label>
-              <input type="tel" id="phone-number" class="form-control" placeholder="e.g. +91 98765 43210" required>
+              <input type="tel" id="phone-number" class="form-control" placeholder="e.g. +91 98765 43210" value="+91 98765 43210" required>
             </div>
           </div>
 
           <div class="form-group">
-            <label for="shipping-address">Street Address / Building / Area:</label>
-            <textarea id="shipping-address" class="form-control" rows="2" placeholder="House/Flat number, Building name, Street..." required></textarea>
+            <label for="shipping-address">Delivery Address (Street / Area / Apartment):</label>
+            <textarea id="shipping-address" class="form-control" rows="2" placeholder="House/Flat number, Building name, Street..." required>No. 12, Anna Nagar Main Road</textarea>
           </div>
 
           <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; margin-bottom:1.5rem;">
             <div class="form-group" style="margin-bottom:0;">
-              <label for="city">City / District:</label>
-              <input type="text" id="city" class="form-control" placeholder="e.g. Chennai" required>
+              <label for="city">City:</label>
+              <input type="text" id="city" class="form-control" placeholder="e.g. Chennai" value="Chennai" required>
             </div>
             <div class="form-group" style="margin-bottom:0;">
-              <label for="state">State / Region:</label>
-              <input type="text" id="state" class="form-control" placeholder="e.g. Tamil Nadu" required>
+              <label for="state">State:</label>
+              <input type="text" id="state" class="form-control" placeholder="e.g. Tamil Nadu" value="Tamil Nadu" required>
             </div>
             <div class="form-group" style="margin-bottom:0;">
-              <label for="pincode">Postal / PIN Code:</label>
-              <input type="text" id="pincode" class="form-control" placeholder="e.g. 600032" required>
+              <label for="pincode">PIN Code:</label>
+              <input type="text" id="pincode" class="form-control" placeholder="e.g. 600040" value="600040" required>
             </div>
           </div>
 
@@ -97,7 +105,7 @@
               <input type="radio" name="payment-method" value="CASH_ON_DELIVERY" checked onchange="togglePaymentInputs('COD')">
               <div>
                 <strong>💵 Cash on Delivery (COD)</strong>
-                <div style="font-size:0.82rem; color:var(--text-muted);">Pay with cash or digital payment when hardware arrives</div>
+                <div style="font-size:0.82rem; color:var(--text-muted);">Pay with cash or UPI when groceries arrive at your door</div>
               </div>
             </label>
 
@@ -105,50 +113,49 @@
               <input type="radio" name="payment-method" value="UPI" onchange="togglePaymentInputs('UPI')">
               <div>
                 <strong>⚡ Instant UPI (Google Pay / PhonePe / Paytm)</strong>
-                <div style="font-size:0.82rem; color:var(--text-muted);">Direct digital payment via UPI VPA</div>
+                <div style="font-size:0.82rem; color:var(--text-muted);">Instant demo UPI confirmation</div>
               </div>
             </label>
 
             <label style="display:flex; align-items:center; gap:0.75rem; padding:0.9rem 1.1rem; border:1px solid var(--border-color); border-radius:var(--radius-md); cursor:pointer; background:var(--bg-subtle);">
               <input type="radio" name="payment-method" value="CARD" onchange="togglePaymentInputs('CARD')">
               <div>
-                <strong>💳 Credit / Debit Card (Visa, MasterCard, RuPay)</strong>
-                <div style="font-size:0.82rem; color:var(--text-muted);">Secure payment via Credit or Debit Card</div>
+                <strong>💳 Credit / Debit Card</strong>
+                <div style="font-size:0.82rem; color:var(--text-muted);">Demo Card payment simulation</div>
               </div>
             </label>
           </div>
 
-          <!-- Conditional Payment Sub-Inputs -->
           <div id="payment-input-upi" style="display:none; background:white; border:1px dashed var(--primary); padding:1rem; border-radius:var(--radius-md); margin-bottom:1.5rem;">
             <label for="upi-id" style="font-size:0.88rem; font-weight:600;">Virtual Payment Address (VPA / UPI ID):</label>
-            <input type="text" id="upi-id" class="form-control" placeholder="username@okhdfcbank" style="margin-top:0.3rem;">
+            <input type="text" id="upi-id" class="form-control" placeholder="dhivagar@okaxis" style="margin-top:0.3rem;" value="demo@okhdfcbank">
           </div>
 
           <div id="payment-input-card" style="display:none; background:white; border:1px dashed var(--primary); padding:1rem; border-radius:var(--radius-md); margin-bottom:1.5rem;">
             <div class="form-group" style="margin-bottom:0.75rem;">
               <label for="mock-card-num" style="font-size:0.88rem; font-weight:600;">Card Number:</label>
-              <input type="text" id="mock-card-num" class="form-control" placeholder="4111 •••• •••• 1111" maxlength="19">
+              <input type="text" id="mock-card-num" class="form-control" placeholder="4111 •••• •••• 1111" maxlength="19" value="4111 2222 3333 4444">
             </div>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
               <div>
                 <label for="mock-card-exp" style="font-size:0.88rem; font-weight:600;">Expiry (MM/YY):</label>
-                <input type="text" id="mock-card-exp" class="form-control" placeholder="12/28" maxlength="5">
+                <input type="text" id="mock-card-exp" class="form-control" placeholder="12/28" maxlength="5" value="12/28">
               </div>
               <div>
                 <label for="mock-card-cvv" style="font-size:0.88rem; font-weight:600;">CVV:</label>
-                <input type="password" id="mock-card-cvv" class="form-control" placeholder="•••" maxlength="4">
+                <input type="password" id="mock-card-cvv" class="form-control" placeholder="•••" maxlength="4" value="123">
               </div>
             </div>
           </div>
 
           <button type="submit" id="place-order-btn" class="btn btn-primary btn-lg" style="width:100%; font-weight:700;">
-            Place Order Now
+            Place Demo Order Now
           </button>
         </form>
       </div>
 
       <div class="form-card" style="margin:0; max-width:none; height:fit-content; box-shadow:var(--shadow-md);" id="checkout-summary">
-        <p style="color:var(--text-muted);">Calculating hardware summary...</p>
+        <p style="color:var(--text-muted);">Calculating grocery order summary...</p>
       </div>
     </div>
   </main>
@@ -158,10 +165,10 @@
     <div class="form-card" style="margin:0; width:92%; max-width:540px; box-shadow:var(--shadow-xl); text-align:center;">
       <div style="font-size:3.5rem; margin-bottom:0.5rem;">🎉</div>
       <h2 style="font-size:1.6rem; font-weight:800; color:var(--secondary); margin-bottom:0.5rem;">
-        Order Placed Successfully!
+        Grocery Order Placed Successfully!
       </h2>
       <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:1.5rem;">
-        Thank you for shopping with Dhivagar Mart. Your electronics are being prepared.
+        Thank you for shopping at Dhivagar Mart. Your fresh grocery package is being packed for delivery.
       </p>
 
       <div style="background:var(--bg-subtle); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:1.25rem; text-align:left; margin-bottom:1.5rem;">
@@ -175,7 +182,7 @@
         </div>
         <div style="display:flex; justify-content:space-between; margin-bottom:0.6rem;">
           <span style="color:var(--text-muted);">Payment Status:</span>
-          <span id="confirm-payment-status" class="badge" style="background:#10b981;">PAID</span>
+          <span id="confirm-payment-status" class="badge" style="background:#10b981;">PAID (Demo)</span>
         </div>
         <div style="display:flex; justify-content:space-between; margin-bottom:0.6rem;">
           <span style="color:var(--text-muted);">Delivery Address:</span>
@@ -197,10 +204,9 @@
       </div>
     </div>
   </div>
-  </main>
 
   <footer>
-    <p>© 2026 Dhivagar Mart. All rights reserved. Native C++20 • Drogon • PostgreSQL</p>
+    <p>© 2026 Dhivagar Mart. All rights reserved. Fast & Fresh Groceries • Standalone Demo Mode</p>
   </footer>
 
   <script src="js/api.js"></script>
@@ -208,10 +214,8 @@
   <script src="js/checkout.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
-      const user = await requireAuth();
-      if (user) {
-        initCheckout();
-      }
+      await checkAuthState();
+      initCheckout();
     });
   </script>
 </body>

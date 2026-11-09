@@ -127,7 +127,7 @@ async function loadOrders() {
             <table style="box-shadow: none; border: 1px solid var(--border-color);">
               <thead>
                 <tr>
-                  <th>Product Hardware</th>
+                  <th>Product</th>
                   <th>Quantity</th>
                   <th>Unit Price</th>
                   <th>Subtotal</th>
@@ -223,7 +223,7 @@ function openOrderModal(orderId) {
         </div>
       </div>
 
-      <h4 style="margin-bottom:0.6rem; color:var(--secondary);">Purchased Hardware:</h4>
+      <h4 style="margin-bottom:0.6rem; color:var(--secondary);">Purchased Groceries:</h4>
       <div style="border:1px solid var(--border-color); border-radius:var(--radius-md); padding:0.8rem; margin-bottom:1.2rem;">
         ${ord.items.map(i => `
           <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem; font-size:0.88rem;">

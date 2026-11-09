@@ -8,7 +8,7 @@ async function loadProducts(category = currentCategory, search = '') {
   const grid = document.getElementById('products-grid');
   if (!grid) return;
 
-  grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-muted);"><span style="font-size:2rem;">⏳</span><br>Loading products...</div>';
+  grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-muted);"><span style="font-size:2rem;">⏳</span><br>Loading fresh products...</div>';
 
   try {
     rawProducts = await api.getProducts(category, search);
@@ -53,7 +53,7 @@ function renderProductGrid() {
       <div style="grid-column: 1/-1; text-align: center; padding: 4rem 1rem; color: var(--text-muted);">
         <div style="font-size:3rem; margin-bottom:1rem;">🔍</div>
         <h3 style="font-size:1.25rem; font-weight:700; color:var(--secondary); margin-bottom:0.5rem;">No products found.</h3>
-        <p>Try clearing your search terms or unchecking the "In Stock Only" option.</p>
+        <p>Try clearing your search terms or selecting another category.</p>
         <button onclick="filterCategory('All', null)" class="btn btn-secondary btn-sm" style="margin-top:1rem;">
           Show All Products
         </button>
@@ -71,19 +71,20 @@ function renderProductGrid() {
           : `<span class="stock-tag stock-in">In Stock</span>`)
       : `<span class="stock-tag stock-out">Out of Stock</span>`;
 
-    const ratings = ['★ 4.8 (128)', '★ 4.9 (245)', '★ 4.7 (89)', '★ 4.6 (64)', '★ 5.0 (320)'];
+    const ratings = ['★ 4.8 (128)', '★ 4.9 (245)', '★ 4.7 (89)', '★ 4.9 (164)', '★ 4.8 (95)', '★ 5.0 (310)'];
     const rating = ratings[p.id % ratings.length];
 
-    const discountPercents = [12, 15, 18, 20, 10];
+    const discountPercents = [10, 15, 12, 18, 10, 14];
     const discountPct = discountPercents[p.id % discountPercents.length];
     const originalPriceCents = Math.round(p.price_cents / (1 - (discountPct / 100)));
     const formattedPrice = formatINR(p.price_cents);
     const formattedOriginalPrice = formatINR(originalPriceCents);
+    const unitText = p.unit ? `<span style="font-size:0.85rem; color:var(--text-muted); font-weight:normal;"> / ${p.unit}</span>` : '';
 
     return `
       <div class="product-card" style="position:relative;">
         <button onclick="handleQuickWishlist(event, ${p.id})" title="Save to Wishlist" 
-                style="position:absolute; top:12px; right:12px; z-index:3; background:rgba(255,255,255,0.85); border:1px solid #cbd5e1; border-radius:50%; width:34px; height:34px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1rem; box-shadow:var(--shadow-sm); transition:transform 0.15s ease;">
+                style="position:absolute; top:12px; right:12px; z-index:3; background:rgba(255,255,255,0.9); border:1px solid #fbcfe8; border-radius:50%; width:34px; height:34px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1rem; box-shadow:var(--shadow-sm); transition:transform 0.15s ease;">
           ❤️
         </button>
         <div class="product-image-container" onclick="window.location.href='product-details.html?id=${p.id}'" style="cursor:pointer;">
@@ -105,9 +106,9 @@ function renderProductGrid() {
           <div class="product-desc">${p.description}</div>
           
           <div class="product-price-row" style="display:flex; align-items:baseline; gap:0.5rem; flex-wrap:wrap; margin:0.4rem 0;">
-            <span class="product-price" style="font-weight:800; font-size:1.25rem; color:var(--primary);">${formattedPrice}</span>
+            <span class="product-price" style="font-weight:800; font-size:1.3rem; color:var(--primary);">${formattedPrice}${unitText}</span>
             <span style="font-size:0.85rem; color:var(--text-muted); text-decoration:line-through;">${formattedOriginalPrice}</span>
-            <span class="badge" style="background:#dcfce7; color:#15803d; font-size:0.75rem; font-weight:700;">${discountPct}% OFF</span>
+            <span class="badge" style="background:#fce7f3; color:#be185d; font-size:0.75rem; font-weight:700;">${discountPct}% OFF</span>
           </div>
 
           <div class="product-footer-actions" style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; margin-top:0.75rem;">
@@ -128,45 +129,30 @@ async function handleQuickWishlist(e, productId) {
   if (e) e.stopPropagation();
   try {
     await api.addToWishlist(productId);
-    updateWishlistCount();
+    if (typeof updateWishlistCount === 'function') updateWishlistCount();
     showNotification('❤️ Item saved to your Wishlist!');
   } catch (err) {
-    if (err.status === 401) {
-      alert('Please log in to save items to your wishlist.');
-      window.location.href = 'login.html';
-    } else {
-      showNotification('ℹ️ ' + err.message);
-    }
+    showNotification('ℹ️ ' + err.message);
   }
 }
 
 async function handleAddToCart(productId) {
   try {
     await api.addToCart(productId, 1);
-    updateCartCount();
+    if (typeof updateCartCount === 'function') updateCartCount();
     showNotification('✓ Added to shopping cart!');
   } catch (err) {
-    if (err.status === 401) {
-      alert('Please log in to add items to your shopping cart.');
-      window.location.href = 'login.html';
-    } else {
-      alert('Error: ' + err.message);
-    }
+    alert('Error: ' + err.message);
   }
 }
 
 async function handleBuyNow(productId) {
   try {
     await api.addToCart(productId, 1);
-    updateCartCount();
+    if (typeof updateCartCount === 'function') updateCartCount();
     window.location.href = 'checkout.html';
   } catch (err) {
-    if (err.status === 401) {
-      alert('Please log in to checkout.');
-      window.location.href = 'login.html';
-    } else {
-      alert('Error: ' + err.message);
-    }
+    alert('Error: ' + err.message);
   }
 }
 
@@ -176,7 +162,7 @@ function filterCategory(cat, element) {
   // Update category chips
   document.querySelectorAll('.category-chip').forEach(el => {
     const text = el.textContent.replace(/[^a-zA-Z &]/g, '').trim().toLowerCase();
-    if (text === cat.toLowerCase() || (cat === 'All' && text.includes('all'))) {
+    if (text === cat.toLowerCase() || (cat === 'All' && (text.includes('all') || text === 'all products'))) {
       el.classList.add('active');
     } else {
       el.classList.remove('active');
@@ -196,8 +182,8 @@ function filterCategory(cat, element) {
   const subtitle = document.getElementById('catalog-subtitle');
   if (subtitle) {
     subtitle.textContent = cat === 'All' 
-      ? 'Showing latest electronics with verified warranty' 
-      : `Browsing ${cat} hardware with fast express shipping`;
+      ? 'Showing fresh farm groceries with instant home delivery' 
+      : `Browsing ${cat} with fresh farm delivery`;
   }
 
   const searchInput = document.getElementById('nav-search-input') || document.getElementById('search-input');
@@ -224,12 +210,12 @@ function showNotification(msg) {
   toast.style.bottom = '95px';
   toast.style.left = '50%';
   toast.style.transform = 'translateX(-50%)';
-  toast.style.backgroundColor = '#0f172a';
-  toast.style.color = '#38bdf8';
-  toast.style.border = '1px solid #1e3a8a';
+  toast.style.backgroundColor = '#be185d';
+  toast.style.color = '#ffffff';
+  toast.style.border = '1px solid #f472b6';
   toast.style.padding = '0.75rem 1.6rem';
   toast.style.borderRadius = '9999px';
-  toast.style.boxShadow = '0 10px 25px rgba(0,0,0,0.3)';
+  toast.style.boxShadow = '0 10px 25px rgba(236,72,153,0.3)';
   toast.style.zIndex = '9999';
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 2500);

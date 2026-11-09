@@ -11,7 +11,7 @@ async function loadWishlistPage() {
         <div style="text-align: center; padding: 4rem 1rem;">
           <div style="font-size: 3rem; margin-bottom: 1rem;">❤️</div>
           <h2>Your wishlist is empty</h2>
-          <p style="color: var(--text-muted); margin: 1rem 0 2rem;">Save your favorite electronics, laptops, and gadgets for later!</p>
+          <p style="color: var(--text-muted); margin: 1rem 0 2rem;">Save your favorite groceries and daily essentials for later!</p>
           <a href="products.html" class="btn btn-primary">Explore Products</a>
         </div>
       `;
@@ -23,7 +23,7 @@ async function loadWishlistPage() {
         <table>
           <thead>
             <tr>
-              <th>Product Hardware</th>
+              <th>Product</th>
               <th>Category</th>
               <th>Price</th>
               <th>Stock Status</th>
