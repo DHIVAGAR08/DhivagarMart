@@ -67,12 +67,16 @@ public:
     static bool CheckHealth();
 
     [[nodiscard]] static std::string BuildConnectionString();
+    [[nodiscard]] static std::string GetLastError();
+    [[nodiscard]] static std::string GetDatabaseHost();
 
 private:
     std::shared_ptr<pqxx::connection> AcquireInternal();
     void ReleaseInternal(std::shared_ptr<pqxx::connection> conn);
 
     static DatabasePlugin* instance_;
+    static std::string last_error_;
+    static std::string database_host_;
     std::string connection_string_;
     size_t min_connections_{4};
     size_t max_connections_{20};

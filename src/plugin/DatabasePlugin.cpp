@@ -8,6 +8,16 @@
 namespace dhivagar::dhivagarmart::plugin {
 
 DatabasePlugin* DatabasePlugin::instance_ = nullptr;
+std::string DatabasePlugin::last_error_ = "Not initialized";
+std::string DatabasePlugin::database_host_ = "unknown";
+
+std::string DatabasePlugin::GetLastError() {
+    return last_error_;
+}
+
+std::string DatabasePlugin::GetDatabaseHost() {
+    return database_host_;
+}
 
 DatabasePlugin::DatabasePlugin() {
     instance_ = this;
@@ -24,6 +34,17 @@ std::string DatabasePlugin::BuildConnectionString() {
     util::Environment::LoadEnvFile(".env");
     std::string db_url = util::Environment::Get("DATABASE_URL", "");
     if (!db_url.empty()) {
+        auto at_pos = db_url.find('@');
+        if (at_pos != std::string::npos) {
+            auto colon_pos = db_url.find(':', at_pos + 1);
+            auto slash_pos = db_url.find('/', at_pos + 1);
+            auto end_pos = (colon_pos != std::string::npos) ? colon_pos : slash_pos;
+            if (end_pos != std::string::npos && end_pos > at_pos + 1) {
+                database_host_ = db_url.substr(at_pos + 1, end_pos - (at_pos + 1));
+            } else {
+                database_host_ = db_url.substr(at_pos + 1);
+            }
+        }
         if (db_url.find("connect_timeout") == std::string::npos) {
             if (db_url.find('?') == std::string::npos) {
                 db_url += "?connect_timeout=5";
@@ -34,6 +55,7 @@ std::string DatabasePlugin::BuildConnectionString() {
         return db_url;
     }
     std::string host = util::Environment::Get("DATABASE_HOST", util::Environment::Get("DB_HOST", "127.0.0.1"));
+    database_host_ = host;
     std::string port = util::Environment::Get("DATABASE_PORT", util::Environment::Get("DB_PORT", "5432"));
     std::string dbname = util::Environment::Get("DATABASE_NAME", util::Environment::Get("DB_NAME", "dhivagarmart"));
     std::string user = util::Environment::Get("DATABASE_USER", util::Environment::Get("DB_USER", "postgres"));
@@ -74,6 +96,7 @@ void DatabasePlugin::initAndStart(const Json::Value &config) {
             // Required exact specification log output
             std::cout << "PostgreSQL connected successfully" << std::endl;
             spdlog::info("PostgreSQL connected successfully");
+            last_error_ = "None (Connected)";
 
             {
                 std::lock_guard<std::mutex> lock(mutex_);
@@ -94,6 +117,7 @@ void DatabasePlugin::initAndStart(const Json::Value &config) {
             }
             return;
         } catch (const std::exception& e) {
+            last_error_ = e.what();
             spdlog::warn("Database connection attempt {}/{} failed: {}", attempt, max_retries, e.what());
             if (attempt == max_retries) {
                 // Safe user-readable error without exposing database passwords

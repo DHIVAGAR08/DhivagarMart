@@ -11,7 +11,9 @@ void HealthController::CheckHealth(const drogon::HttpRequestPtr &/*req*/,
 
     nlohmann::json data = {
         {"status", "UP"},
-        {"db", db_ok ? "UP" : "DOWN"}
+        {"db", db_ok ? "UP" : "DOWN"},
+        {"db_host", plugin::DatabasePlugin::GetDatabaseHost()},
+        {"db_error", db_ok ? "None" : plugin::DatabasePlugin::GetLastError()}
     };
 
     nlohmann::json response_body = {
