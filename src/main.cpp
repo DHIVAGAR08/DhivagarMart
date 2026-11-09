@@ -56,23 +56,17 @@ int main() {
         drogon::app()
             .addListener(host, port)
             .setDocumentRoot("frontend")
-            .setHomePage("login.html")
+            .setHomePage("index.html")
             .enableSession(session_timeout)
             .setServerHeaderField("DhivagarMart/1.0.0");
 
-        // Map root / to login.html or redirect based on session
+        // Map root / to index.html (premium electronics marketplace homepage)
         drogon::app().registerHandler(
             "/",
             [](const drogon::HttpRequestPtr &req,
                std::function<void(const drogon::HttpResponsePtr &)> &&callback) {
-                auto session = req->session();
-                if (session && session->find("user_id")) {
-                    auto resp = drogon::HttpResponse::newRedirectionResponse("/index.html");
-                    callback(resp);
-                } else {
-                    auto resp = drogon::HttpResponse::newFileResponse("frontend/login.html");
-                    callback(resp);
-                }
+                auto resp = drogon::HttpResponse::newFileResponse("frontend/index.html");
+                callback(resp);
             },
             {drogon::Get}
         );

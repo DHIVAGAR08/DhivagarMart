@@ -1,4 +1,7 @@
 // Dhivagar Mart - Premium Electronics Marketplace API Client & Store
+window.api = window.api || {};
+var api = window.api;
+
 const API_BASE = '/api/v1';
 
 // Universal Indian Rupee Currency Formatter
@@ -20,6 +23,7 @@ function formatINR(cents) {
     maximumFractionDigits: 2
   }).format(rupees);
 }
+window.formatINR = formatINR;
 
 // Canonical Premium Electronics Catalog
 const ELECTRONICS_PRODUCTS = [
@@ -468,46 +472,77 @@ const DemoStore = {
 
   getCurrentUser() {
     let user = getStorageJSON(STORAGE_KEYS.USER, null);
-    if (!user) {
-      // Default customer profile
-      user = {
-        id: 101,
-        name: 'Dhivagar Customer',
-        email: 'customer@dhivagarmart.com',
+    return Promise.resolve(user);
+  },
+
+  async login(payload) {
+    try {
+      const response = await fetch('/api/v1/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        if (response.status >= 500) {
+          throw new Error('Authentication service is currently offline (Database connection unavailable). You can continue browsing products and test shopping as a guest.');
+        }
+        throw new Error(data.message || 'Invalid email or password.');
+      }
+      const user = data.data || {
+        id: Math.floor(100 + Math.random() * 900),
+        name: payload?.email?.split('@')[0] || 'Customer',
+        email: payload.email,
         role: 'BUYER'
       };
       setStorageJSON(STORAGE_KEYS.USER, user);
+      return user;
+    } catch (err) {
+      if (err.message && (err.message.includes('offline') || err.message.includes('Invalid') || err.message.includes('failed'))) {
+        throw err;
+      }
+      throw new Error('Authentication service is currently offline (Database connection unavailable). You can continue browsing products and test shopping as a guest.');
     }
-    return Promise.resolve(user);
   },
 
-  login(payload) {
-    const email = payload?.email || 'customer@dhivagarmart.com';
-    const name = email.split('@')[0] || 'Customer';
-    const user = {
-      id: Math.floor(100 + Math.random() * 900),
-      name: name.charAt(0).toUpperCase() + name.slice(1),
-      email: email,
-      role: 'BUYER'
-    };
-    setStorageJSON(STORAGE_KEYS.USER, user);
-    return Promise.resolve(user);
+  async register(payload) {
+    try {
+      const response = await fetch('/api/v1/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        if (response.status >= 500) {
+          throw new Error('Authentication service is currently offline (Database connection unavailable). You can continue browsing products and test shopping as a guest.');
+        }
+        throw new Error(data.message || 'Registration failed. Please check your details.');
+      }
+      const user = data.data || {
+        id: Math.floor(100 + Math.random() * 900),
+        name: payload.name || 'Customer',
+        email: payload.email,
+        role: payload.role || 'BUYER'
+      };
+      setStorageJSON(STORAGE_KEYS.USER, user);
+      return user;
+    } catch (err) {
+      if (err.message && (err.message.includes('offline') || err.message.includes('failed') || err.message.includes('check'))) {
+        throw err;
+      }
+      throw new Error('Authentication service is currently offline (Database connection unavailable). You can continue browsing products and test shopping as a guest.');
+    }
   },
 
-  register(payload) {
-    const user = {
-      id: Math.floor(100 + Math.random() * 900),
-      name: payload?.name || 'Customer',
-      email: payload?.email || 'customer@dhivagarmart.com',
-      role: payload?.role || 'BUYER'
-    };
-    setStorageJSON(STORAGE_KEYS.USER, user);
-    return Promise.resolve(user);
-  },
-
-  logout() {
+  async logout() {
+    try {
+      await fetch('/api/v1/auth/logout', { method: 'POST' }).catch(() => {});
+    } catch {
+      // Ignore network errors on logout
+    }
     localStorage.removeItem(STORAGE_KEYS.USER);
-    return Promise.resolve({ success: true });
+    return { success: true };
   },
 
   getWishlist() {
@@ -709,8 +744,15 @@ const api = {
 
   // Reviews
   getProductReviews: (productId) => DemoStore.getProductReviews(productId),
-  addReview(productId, rating, comment) => DemoStore.addReview(productId, rating, comment),
+  addReview: (productId, rating, comment) => DemoStore.addReview(productId, rating, comment),
 
   // AI Chat
   sendChatMessage: (message) => DemoStore.sendChatMessage(message)
 };
+
+// Global Exposure
+window.api = api;
+var api = window.api;
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = api;
+}
